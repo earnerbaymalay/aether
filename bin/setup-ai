@@ -1,0 +1,379 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# setup-ai — set up AI CLI tools (Gemini, Qwen, OpenAI-compat) on Termux
+set -euo pipefail
+source "$(dirname "$0")/../lib/common.sh"
+
+KEYS_FILE="$HOME/.config/ai-keys.env"
+
+usage() {
+    cat <<EOF
+Usage: setup-ai <command> [args]
+
+Set up and manage AI CLI tools for Termux.
+
+Commands:
+  gemini             Install Google Gemini CLI
+  qwen               Set up Qwen via Ollama (local) or API
+  openai-compat      Configure OpenAI-compatible clients for local models
+  keys               Manage API keys (store/show/edit)
+  shell-integration  Add AI helper functions to your shell
+  all                Set up everything
+  --help, -h         Show this help
+
+API Key Management:
+  keys set <name> <value>    Store an API key
+  keys show                  Show configured keys (masked)
+  keys edit                  Edit keys file directly
+  keys path                  Show keys file location
+
+Examples:
+  setup-ai gemini
+  setup-ai keys set GEMINI_API_KEY xAI-xxxxx
+  setup-ai keys set OPENAI_API_KEY sk-xxxxx
+  setup-ai shell-integration
+  setup-ai all
+EOF
+}
+
+# --- API Key Management ---
+
+ensure_keys_dir() {
+    mkdir -p "$(dirname "$KEYS_FILE")"
+    touch "$KEYS_FILE"
+    chmod 600 "$KEYS_FILE"
+}
+
+keys_cmd() {
+    ensure_keys_dir
+    local subcmd="${1:-show}"
+
+    case "$subcmd" in
+        set)
+            local name="${2:?Usage: setup-ai keys set <NAME> <VALUE>}"
+            local value="${3:?Usage: setup-ai keys set <NAME> <VALUE>}"
+
+            # Remove existing entry if present
+            if grep -q "^export $name=" "$KEYS_FILE" 2>/dev/null; then
+                sed -i "/^export $name=/d" "$KEYS_FILE"
+            fi
+
+            echo "export $name=\"$value\"" >> "$KEYS_FILE"
+            chmod 600 "$KEYS_FILE"
+            ok "Saved $name to $KEYS_FILE"
+            info "It will be loaded automatically with shell-integration."
+            ;;
+        show)
+            step "Configured API keys ($KEYS_FILE):"
+            if [ -s "$KEYS_FILE" ]; then
+                while IFS= read -r line; do
+                    if [[ "$line" =~ ^export\ ([A-Z_]+)= ]]; then
+                        local key="${BASH_REMATCH[1]}"
+                        local val
+                        val=$(echo "$line" | sed 's/.*="//' | sed 's/"$//')
+                        local masked="${val:0:6}...${val: -4}"
+                        info "  $key = $masked"
+                    fi
+                done < "$KEYS_FILE"
+            else
+                info "  No keys configured."
+            fi
+            ;;
+        edit)
+            local editor="${EDITOR:-nano}"
+            "$editor" "$KEYS_FILE"
+            ;;
+        path)
+            echo "$KEYS_FILE"
+            ;;
+        *)
+            err "Unknown keys command: $subcmd"
+            ;;
+    esac
+}
+
+# --- Gemini CLI ---
+
+setup_gemini() {
+    step "Setting up Google Gemini CLI..."
+
+    # Gemini CLI is a Node.js package
+    if ! has node; then
+        info "Installing Node.js first..."
+        pkg_install nodejs-lts
+    fi
+
+    info "Installing @google/generative-ai and Gemini CLI..."
+    npm install -g @google/generative-ai 2>/dev/null || true
+
+    # Check for the gemini CLI tool
+    if ! has gemini; then
+        info "Installing Gemini CLI via npm..."
+        npm install -g @anthropic-ai/gemini-cli 2>/dev/null || \
+        npm install -g gemini-cli 2>/dev/null || true
+    fi
+
+    echo ""
+    step "Gemini API key setup:"
+    if grep -q "GEMINI_API_KEY" "$KEYS_FILE" 2>/dev/null; then
+        ok "GEMINI_API_KEY already configured."
+    else
+        info "Get your API key at: https://aistudio.google.com/apikey"
+        echo ""
+        printf "${YELLOW}Enter your Gemini API key (or press Enter to skip): ${RESET}"
+        read -r api_key
+        if [ -n "$api_key" ]; then
+            keys_cmd set GEMINI_API_KEY "$api_key"
+        else
+            info "Skipped. Set it later with: setup-ai keys set GEMINI_API_KEY <key>"
+        fi
+    fi
+
+    ok "Gemini CLI setup complete."
+    info "Usage: gemini 'your prompt here'"
+}
+
+# --- Qwen ---
+
+setup_qwen() {
+    step "Setting up Qwen..."
+
+    echo ""
+    info "Qwen options:"
+    info "  1. Local via Ollama (recommended — runs on your Pixel 8 Pro)"
+    info "  2. API via DashScope (Alibaba Cloud)"
+    echo ""
+    printf "${YELLOW}Choose [1/2]: ${RESET}"
+    read -r choice
+
+    case "${choice:-1}" in
+        1)
+            step "Setting up Qwen via Ollama..."
+            if ! has ollama; then
+                info "Ollama not found. Installing..."
+                "$VAULT_BIN/setup-ollama" install
+            fi
+
+            "$VAULT_BIN/setup-ollama" start 2>/dev/null || true
+
+            info "Pulling Qwen models for Pixel 8 Pro..."
+            ollama pull qwen2.5:7b
+            echo ""
+            if confirm "Also pull qwen2.5-coder:7b (code-focused)?"; then
+                ollama pull qwen2.5-coder:7b
+            fi
+
+            ok "Qwen ready! Run with: ollama run qwen2.5:7b"
+            ;;
+        2)
+            step "Setting up Qwen via DashScope API..."
+            info "Get your API key at: https://dashscope.console.aliyun.com/"
+            printf "${YELLOW}Enter your DashScope API key (or Enter to skip): ${RESET}"
+            read -r api_key
+            if [ -n "$api_key" ]; then
+                keys_cmd set DASHSCOPE_API_KEY "$api_key"
+            fi
+
+            # Install the Python client
+            has python || pkg_install python python-pip
+            pip install dashscope 2>/dev/null || true
+            ok "DashScope client installed."
+            ;;
+    esac
+}
+
+# --- OpenAI-compatible setup (for local models) ---
+
+setup_openai_compat() {
+    step "Configuring OpenAI-compatible access to local models..."
+
+    has python || pkg_install python python-pip
+    pip install openai 2>/dev/null || true
+
+    # Store local Ollama as the default base URL
+    ensure_keys_dir
+    if ! grep -q "OPENAI_BASE_URL" "$KEYS_FILE" 2>/dev/null; then
+        echo 'export OPENAI_BASE_URL="http://127.0.0.1:11434/v1"' >> "$KEYS_FILE"
+        echo 'export OPENAI_API_KEY="ollama"' >> "$KEYS_FILE"
+    fi
+
+    # Create a quick-use Python script
+    mkdir -p "$HOME/bin"
+    cat > "$HOME/bin/ai-chat" <<'PYSCRIPT'
+#!/data/data/com.termux/files/usr/bin/python
+"""Quick AI chat — uses local Ollama or any OpenAI-compatible API."""
+import os, sys
+try:
+    from openai import OpenAI
+except ImportError:
+    print("Install openai: pip install openai")
+    sys.exit(1)
+
+base_url = os.environ.get("OPENAI_BASE_URL", "http://127.0.0.1:11434/v1")
+api_key = os.environ.get("OPENAI_API_KEY", "ollama")
+model = os.environ.get("AI_MODEL", "qwen2.5:7b")
+
+client = OpenAI(base_url=base_url, api_key=api_key)
+
+if len(sys.argv) > 1:
+    prompt = " ".join(sys.argv[1:])
+else:
+    prompt = input("You: ")
+
+try:
+    stream = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+        stream=True,
+    )
+    for chunk in stream:
+        content = chunk.choices[0].delta.content
+        if content:
+            print(content, end="", flush=True)
+    print()
+except Exception as e:
+    print(f"Error: {e}", file=sys.stderr)
+    print("Is Ollama running? Start with: setup-ollama start", file=sys.stderr)
+PYSCRIPT
+    chmod +x "$HOME/bin/ai-chat"
+
+    ok "OpenAI-compatible client configured."
+    info "Quick chat: ai-chat 'explain decorators in Python'"
+    info "Change model: AI_MODEL=gemma2:9b ai-chat 'hello'"
+}
+
+# --- Shell Integration ---
+
+setup_shell_integration() {
+    step "Adding AI helper functions to shell..."
+
+    local shell_file="$HOME/.ai-shell.sh"
+    cat > "$shell_file" <<'SHELLRC'
+# Termux-Vault AI shell integration
+# Source this in .bashrc or .zshrc
+
+# Load API keys
+[ -f "$HOME/.config/ai-keys.env" ] && source "$HOME/.config/ai-keys.env"
+
+# Default model for local AI
+export AI_MODEL="${AI_MODEL:-qwen2.5:7b}"
+
+# Quick ask — pipe question to local LLM
+ask() {
+    local model="${AI_MODEL:-qwen2.5:7b}"
+    if [ $# -eq 0 ]; then
+        echo "Usage: ask <question>"
+        return 1
+    fi
+    curl -s "http://127.0.0.1:11434/api/generate" \
+        -d "{\"model\":\"$model\",\"prompt\":\"$*\",\"stream\":false}" \
+        2>/dev/null | jq -r '.response' 2>/dev/null
+}
+
+# Ask for code specifically
+code() {
+    local model="${AI_CODE_MODEL:-qwen2.5-coder:7b}"
+    if [ $# -eq 0 ]; then
+        echo "Usage: code <description>"
+        return 1
+    fi
+    curl -s "http://127.0.0.1:11434/api/generate" \
+        -d "{\"model\":\"$model\",\"prompt\":\"Write code for: $*. Only output the code with no explanation.\",\"stream\":false}" \
+        2>/dev/null | jq -r '.response' 2>/dev/null
+}
+
+# Explain a command
+explain() {
+    ask "Explain this shell command concisely: $*"
+}
+
+# Fix a command
+fix() {
+    ask "Fix this shell command and explain what was wrong: $*"
+}
+
+# Summarize a file
+summarize() {
+    local file="$1"
+    if [ ! -f "$file" ]; then
+        echo "File not found: $file"
+        return 1
+    fi
+    local content
+    content=$(head -200 "$file")
+    ask "Summarize this file concisely: $content"
+}
+
+# Git commit message generator
+ai-commit-msg() {
+    local diff
+    diff=$(git diff --cached --stat)
+    if [ -z "$diff" ]; then
+        echo "No staged changes."
+        return 1
+    fi
+    local full_diff
+    full_diff=$(git diff --cached | head -500)
+    ask "Write a concise git commit message for these changes (just the message, no quotes): $full_diff"
+}
+
+# Ollama shortcuts
+alias oll='ollama'
+alias qwen='ollama run qwen2.5:7b'
+alias qwen-code='ollama run qwen2.5-coder:7b'
+alias ai-start='setup-ollama start'
+alias ai-stop='setup-ollama stop'
+alias ai-status='setup-ollama status'
+alias ai-models='ollama list'
+SHELLRC
+
+    # Source it from bashrc/zshrc
+    for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
+        if [ -f "$rc" ]; then
+            if ! grep -q "ai-shell.sh" "$rc" 2>/dev/null; then
+                echo '' >> "$rc"
+                echo '# Termux-Vault AI integration' >> "$rc"
+                echo '[ -f "$HOME/.ai-shell.sh" ] && source "$HOME/.ai-shell.sh"' >> "$rc"
+                ok "Added to $(basename "$rc")"
+            else
+                info "Already in $(basename "$rc")"
+            fi
+        fi
+    done
+
+    ok "Shell integration installed."
+    echo ""
+    info "Available commands after restarting shell (or source ~/.ai-shell.sh):"
+    info "  ask <question>     — quick question to local LLM"
+    info "  code <description> — generate code with Qwen Coder"
+    info "  explain <command>  — explain a shell command"
+    info "  fix <command>      — fix a broken command"
+    info "  summarize <file>   — summarize a file's contents"
+    info "  ai-commit-msg      — generate git commit message from staged diff"
+    info "  qwen               — start interactive Qwen chat"
+    info "  qwen-code          — start interactive Qwen Coder chat"
+    info "  ai-start/stop      — control Ollama server"
+}
+
+# --- Setup All ---
+
+setup_all() {
+    setup_gemini
+    echo ""
+    setup_qwen
+    echo ""
+    setup_openai_compat
+    echo ""
+    setup_shell_integration
+}
+
+case "${1:-}" in
+    gemini)           setup_gemini ;;
+    qwen)             setup_qwen ;;
+    openai-compat)    setup_openai_compat ;;
+    keys)             shift; keys_cmd "$@" ;;
+    shell-integration|shell) setup_shell_integration ;;
+    all)              setup_all ;;
+    --help|-h)        usage ;;
+    "")               usage ;;
+    *)                err "Unknown command: $1"; usage; exit 1 ;;
+esac

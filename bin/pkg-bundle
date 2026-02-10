@@ -14,6 +14,7 @@ BUNDLES_DESC=$(cat <<'TABLE'
   media         ffmpeg, imagemagick, sox, exiftool
   security      hydra, sqlmap, nmap, whois, openssl-tool
   storage       rclone, rsync, android-tools
+  ai-dev        python, python-pip, golang, cmake, jq, libopenblas (AI/ML prereqs)
 TABLE
 )
 
@@ -58,6 +59,8 @@ bundle_packages() {
             echo "hydra nmap whois openssl-tool" ;;
         storage)
             echo "rclone rsync android-tools" ;;
+        ai-dev)
+            echo "python python-pip golang cmake jq libopenblas" ;;
         *)
             err "Unknown bundle: $1"
             return 1 ;;

@@ -1,0 +1,343 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# setup-ollama — install and manage Ollama + models on Termux
+set -euo pipefail
+source "$(dirname "$0")/../lib/common.sh"
+
+# Ollama data lives here by default
+export OLLAMA_HOST="${OLLAMA_HOST:-127.0.0.1:11434}"
+OLLAMA_MODELS_DIR="$HOME/.ollama/models"
+
+usage() {
+    cat <<EOF
+Usage: setup-ollama <command> [args]
+
+Install and manage Ollama on Termux (Pixel 8 Pro optimized).
+
+Commands:
+  install            Install Ollama for Termux (aarch64)
+  start              Start the Ollama server (background)
+  stop               Stop the Ollama server
+  status             Check if Ollama is running
+  pull <model>       Download a model
+  run <model>        Run a model interactively
+  list               List downloaded models
+  remove <model>     Delete a downloaded model
+  recommend          Show recommended models for Pixel 8 Pro (12GB RAM)
+  bench <model>      Quick benchmark (tokens/sec) on a model
+  serve-api          Start Ollama and show API endpoint info
+  --help, -h         Show this help
+
+Recommended models for Pixel 8 Pro (12GB RAM):
+  qwen2.5:7b         Best general-purpose (your primary)
+  qwen2.5-coder:7b   Code-focused Qwen variant
+  gemma2:9b           Google's Gemma 2 — good on Pixel hardware
+  llama3.1:8b         Meta's Llama 3.1 8B
+  deepseek-coder:6.7b Code generation specialist
+  phi3:3.8b           Microsoft Phi-3 — fast, small footprint
+  mistral:7b          Mistral 7B — solid all-rounder
+
+Examples:
+  setup-ollama install
+  setup-ollama pull qwen2.5:7b
+  setup-ollama run qwen2.5:7b
+  setup-ollama bench qwen2.5:7b
+EOF
+}
+
+install_ollama() {
+    step "Installing Ollama for Termux (aarch64)..."
+
+    if has ollama; then
+        local ver
+        ver=$(ollama --version 2>&1 || echo "unknown")
+        warn "Ollama already installed: $ver"
+        if ! confirm "Reinstall/update?"; then
+            return
+        fi
+    fi
+
+    # Dependencies
+    info "Installing dependencies..."
+    pkg_install cmake golang git
+
+    # Method 1: Try the official install script adapted for Termux
+    info "Downloading Ollama..."
+    if curl -fsSL https://ollama.com/install.sh | sed 's|/usr/local|$PREFIX|g' | bash 2>/dev/null; then
+        ok "Ollama installed via official script."
+    else
+        # Method 2: Build from source (more reliable on Termux)
+        warn "Official installer failed — building from source..."
+        local build_dir="$HOME/.cache/ollama-build"
+        mkdir -p "$build_dir"
+
+        if [ -d "$build_dir/ollama" ]; then
+            git -C "$build_dir/ollama" pull
+        else
+            git clone https://github.com/ollama/ollama.git "$build_dir/ollama"
+        fi
+
+        cd "$build_dir/ollama"
+        info "Building (this may take a while on device)..."
+        go generate ./... 2>/dev/null || true
+        go build -o "$PREFIX/bin/ollama" .
+
+        cd "$HOME"
+        ok "Ollama built and installed to $PREFIX/bin/ollama"
+    fi
+
+    # Create data directory
+    mkdir -p "$OLLAMA_MODELS_DIR"
+
+    # Create a systemd-like startup helper
+    mkdir -p "$HOME/.config/ollama"
+    cat > "$HOME/.config/ollama/env" <<ENVEOF
+# Ollama environment for Termux on Pixel 8 Pro
+export OLLAMA_HOST=${OLLAMA_HOST}
+export OLLAMA_MODELS=${OLLAMA_MODELS_DIR}
+# Limit memory to leave headroom for Android (Pixel 8 Pro = 12GB)
+export OLLAMA_MAX_LOADED_MODELS=1
+export OLLAMA_NUM_PARALLEL=2
+# Use all performance cores
+export OLLAMA_NUM_THREAD=8
+ENVEOF
+
+    ok "Ollama installed!"
+    info "Run 'setup-ollama start' to start the server."
+    info "Then 'setup-ollama pull qwen2.5:7b' to download your first model."
+}
+
+load_env() {
+    [ -f "$HOME/.config/ollama/env" ] && source "$HOME/.config/ollama/env"
+}
+
+start_server() {
+    load_env
+
+    if curl -s "$OLLAMA_HOST/api/version" >/dev/null 2>&1; then
+        ok "Ollama is already running at $OLLAMA_HOST"
+        return
+    fi
+
+    step "Starting Ollama server..."
+    nohup ollama serve > "$HOME/.ollama/server.log" 2>&1 &
+    local pid=$!
+    echo "$pid" > "$HOME/.ollama/server.pid"
+
+    # Wait for startup
+    for i in $(seq 1 10); do
+        if curl -s "$OLLAMA_HOST/api/version" >/dev/null 2>&1; then
+            ok "Ollama running (PID $pid) at $OLLAMA_HOST"
+            return
+        fi
+        sleep 1
+    done
+
+    warn "Server may still be starting. Check: setup-ollama status"
+}
+
+stop_server() {
+    if [ -f "$HOME/.ollama/server.pid" ]; then
+        local pid
+        pid=$(cat "$HOME/.ollama/server.pid")
+        if kill "$pid" 2>/dev/null; then
+            ok "Ollama stopped (PID $pid)"
+            rm -f "$HOME/.ollama/server.pid"
+        else
+            warn "Process $pid not found. Cleaning up."
+            rm -f "$HOME/.ollama/server.pid"
+        fi
+    else
+        # Try pkill as fallback
+        pkill -f "ollama serve" 2>/dev/null && ok "Ollama stopped." || info "Ollama not running."
+    fi
+}
+
+check_status() {
+    step "Ollama status:"
+    if curl -s "$OLLAMA_HOST/api/version" >/dev/null 2>&1; then
+        local ver
+        ver=$(curl -s "$OLLAMA_HOST/api/version" | jq -r '.version' 2>/dev/null || echo "unknown")
+        ok "Running at $OLLAMA_HOST (version: $ver)"
+
+        # Show loaded models
+        local running
+        running=$(curl -s "$OLLAMA_HOST/api/ps" 2>/dev/null)
+        if [ -n "$running" ] && echo "$running" | jq -e '.models[0]' >/dev/null 2>&1; then
+            info "Loaded models:"
+            echo "$running" | jq -r '.models[] | "  \(.name) — \(.size / 1073741824 | floor)GB VRAM"' 2>/dev/null
+        fi
+    else
+        warn "Not running. Start with: setup-ollama start"
+    fi
+
+    echo ""
+    info "Downloaded models:"
+    ollama list 2>/dev/null || info "  (none or ollama not installed)"
+
+    echo ""
+    info "Disk usage: $(du -sh "$OLLAMA_MODELS_DIR" 2>/dev/null | cut -f1 || echo "0")"
+}
+
+pull_model() {
+    local model="${1:?Usage: setup-ollama pull <model>}"
+    load_env
+    start_server 2>/dev/null
+
+    step "Pulling $model..."
+    ollama pull "$model"
+    ok "$model downloaded."
+}
+
+run_model() {
+    local model="${1:?Usage: setup-ollama run <model>}"
+    load_env
+    start_server 2>/dev/null
+
+    ollama run "$model"
+}
+
+list_models() {
+    load_env
+    ollama list 2>/dev/null || info "No models found or Ollama not running."
+}
+
+remove_model() {
+    local model="${1:?Usage: setup-ollama remove <model>}"
+    load_env
+
+    if confirm "Remove model $model?"; then
+        ollama rm "$model"
+        ok "$model removed."
+    fi
+}
+
+recommend_models() {
+    cat <<EOF
+Recommended models for Pixel 8 Pro (12GB RAM, Tensor G3):
+
+Performance tier (fast, fits easily):
+  phi3:3.8b              3.8B params — very fast, good for quick tasks
+  qwen2.5:3b             3B params — lightweight Qwen
+  gemma2:2b              2B params — Google's smallest, snappy
+
+Balanced tier (best quality/speed tradeoff):
+  qwen2.5:7b             7B params — excellent general purpose
+  qwen2.5-coder:7b       7B params — code-focused, your best bet for dev
+  llama3.1:8b            8B params — strong all-rounder
+  gemma2:9b              9B params — Google's best at this size
+  mistral:7b             7B params — solid reasoning
+
+Code-focused:
+  qwen2.5-coder:7b       Best code model at this size
+  deepseek-coder:6.7b    Strong at code generation
+  codellama:7b           Meta's code specialist
+
+Pushing it (will be slow, may OOM):
+  qwen2.5:14b            14B params — try with q4_0 quantization
+  llama3.1:13b           13B params — needs careful memory management
+
+Tips for Pixel 8 Pro:
+  - Stick to 7B or smaller for interactive use
+  - Use q4_K_M quantization (default) for best size/quality
+  - Keep OLLAMA_MAX_LOADED_MODELS=1 to avoid OOM
+  - Close other apps before running larger models
+  - Monitor with: cat /proc/meminfo | grep MemAvailable
+
+Quick start:
+  setup-ollama pull qwen2.5:7b
+  setup-ollama pull qwen2.5-coder:7b
+EOF
+}
+
+bench_model() {
+    local model="${1:?Usage: setup-ollama bench <model>}"
+    load_env
+    start_server 2>/dev/null
+
+    step "Benchmarking $model..."
+    info "Prompt: 'Write a Python function that checks if a number is prime.'"
+    echo ""
+
+    local start_time end_time
+    start_time=$(date +%s%N)
+
+    local response
+    response=$(curl -s "$OLLAMA_HOST/api/generate" -d "{
+        \"model\": \"$model\",
+        \"prompt\": \"Write a Python function that checks if a number is prime. Only output the code.\",
+        \"stream\": false
+    }" 2>/dev/null)
+
+    end_time=$(date +%s%N)
+
+    if [ -z "$response" ]; then
+        err "No response. Is the model pulled? Is Ollama running?"
+        return 1
+    fi
+
+    local total_duration eval_count eval_duration
+    total_duration=$(echo "$response" | jq '.total_duration // 0' 2>/dev/null)
+    eval_count=$(echo "$response" | jq '.eval_count // 0' 2>/dev/null)
+    eval_duration=$(echo "$response" | jq '.eval_duration // 0' 2>/dev/null)
+
+    if [ "$eval_duration" -gt 0 ] 2>/dev/null; then
+        local tokens_per_sec
+        tokens_per_sec=$(echo "scale=1; $eval_count * 1000000000 / $eval_duration" | bc 2>/dev/null || echo "N/A")
+        local total_sec
+        total_sec=$(echo "scale=2; $total_duration / 1000000000" | bc 2>/dev/null || echo "N/A")
+
+        echo "Results for $model:"
+        echo "  Tokens generated: $eval_count"
+        echo "  Speed:            ${tokens_per_sec} tokens/sec"
+        echo "  Total time:       ${total_sec}s"
+    else
+        local elapsed_ms=$(( (end_time - start_time) / 1000000 ))
+        echo "Results for $model:"
+        echo "  Wall time: ${elapsed_ms}ms"
+        echo "  (Detailed stats not available)"
+    fi
+}
+
+serve_api() {
+    load_env
+    start_server
+
+    echo ""
+    step "Ollama API ready at: http://$OLLAMA_HOST"
+    echo ""
+    info "OpenAI-compatible endpoint: http://$OLLAMA_HOST/v1"
+    echo ""
+    info "Usage examples:"
+    echo "  # Chat completion (OpenAI compatible)"
+    echo "  curl $OLLAMA_HOST/v1/chat/completions -d '{"
+    echo "    \"model\": \"qwen2.5:7b\","
+    echo "    \"messages\": [{\"role\": \"user\", \"content\": \"Hello\"}]"
+    echo "  }'"
+    echo ""
+    echo "  # Generate"
+    echo "  curl $OLLAMA_HOST/api/generate -d '{"
+    echo "    \"model\": \"qwen2.5:7b\","
+    echo "    \"prompt\": \"Explain quantum computing\""
+    echo "  }'"
+    echo ""
+    info "Use with Python:"
+    echo "  from openai import OpenAI"
+    echo "  client = OpenAI(base_url='http://$OLLAMA_HOST/v1', api_key='ollama')"
+}
+
+case "${1:-}" in
+    install)     install_ollama ;;
+    start)       start_server ;;
+    stop)        stop_server ;;
+    status)      check_status ;;
+    pull)        pull_model "${2:-}" ;;
+    run)         run_model "${2:-}" ;;
+    list)        list_models ;;
+    remove|rm)   remove_model "${2:-}" ;;
+    recommend)   recommend_models ;;
+    bench)       bench_model "${2:-}" ;;
+    serve-api)   serve_api ;;
+    --help|-h)   usage ;;
+    "")          usage ;;
+    *)           err "Unknown command: $1"; usage; exit 1 ;;
+esac
