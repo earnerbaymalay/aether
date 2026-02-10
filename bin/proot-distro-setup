@@ -1,0 +1,135 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# proot-distro-setup — automated Linux distro install via proot-distro
+set -euo pipefail
+source "$(dirname "$0")/../lib/common.sh"
+
+usage() {
+    cat <<EOF
+Usage: proot-distro-setup <command> [distro]
+
+Install and manage full Linux distributions inside Termux using proot-distro.
+
+Commands:
+  install <distro>   Install a Linux distro (with useful defaults)
+  login <distro>     Login to an installed distro
+  list               List available distros
+  installed          List installed distros
+  remove <distro>    Remove an installed distro
+  --help, -h         Show this help
+
+Supported distros:
+  ubuntu       Ubuntu (latest LTS)
+  debian       Debian stable
+  arch         Arch Linux
+  fedora       Fedora
+  alpine       Alpine Linux
+  void         Void Linux
+  opensuse     openSUSE Tumbleweed
+
+Post-install setup (done automatically):
+  - Updates package manager
+  - Installs: sudo, curl, wget, git, vim, htop
+  - Creates a non-root user
+  - Configures locale
+
+Examples:
+  proot-distro-setup install ubuntu
+  proot-distro-setup login ubuntu
+  proot-distro-setup list
+EOF
+}
+
+ensure_proot() {
+    if ! has proot-distro; then
+        step "Installing proot-distro..."
+        pkg_install proot-distro
+    fi
+}
+
+install_distro() {
+    local distro="${1:?Usage: proot-distro-setup install <distro>}"
+
+    ensure_proot
+
+    step "Installing $distro..."
+    proot-distro install "$distro"
+
+    step "Running post-install setup..."
+    proot-distro login "$distro" -- bash -c "
+        set -e
+
+        # Detect package manager and update
+        if command -v apt-get >/dev/null 2>&1; then
+            apt-get update -y -qq
+            apt-get install -y sudo curl wget git vim htop locales
+            # Locale
+            if [ -f /etc/locale.gen ]; then
+                sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
+                locale-gen 2>/dev/null || true
+            fi
+        elif command -v pacman >/dev/null 2>&1; then
+            pacman -Syu --noconfirm
+            pacman -S --noconfirm --needed sudo curl wget git vim htop
+        elif command -v dnf >/dev/null 2>&1; then
+            dnf update -y -q
+            dnf install -y sudo curl wget git vim htop
+        elif command -v apk >/dev/null 2>&1; then
+            apk update
+            apk add sudo curl wget git vim htop
+        elif command -v zypper >/dev/null 2>&1; then
+            zypper refresh
+            zypper install -y sudo curl wget git vim htop
+        fi
+
+        # Create user
+        if ! id termux >/dev/null 2>&1; then
+            useradd -m -s /bin/bash -G sudo,wheel termux 2>/dev/null || \
+            useradd -m -s /bin/bash termux 2>/dev/null || true
+            echo 'termux ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers 2>/dev/null || true
+        fi
+
+        echo 'Post-install setup complete.'
+    "
+
+    ok "$distro installed and configured!"
+    info "Login with: proot-distro-setup login $distro"
+    info "Or as user: proot-distro login $distro --user termux"
+}
+
+login_distro() {
+    local distro="${1:?Usage: proot-distro-setup login <distro>}"
+    ensure_proot
+    proot-distro login "$distro"
+}
+
+list_distros() {
+    ensure_proot
+    step "Available distributions:"
+    proot-distro list
+}
+
+installed_distros() {
+    ensure_proot
+    step "Installed distributions:"
+    proot-distro list --installed 2>/dev/null || proot-distro list
+}
+
+remove_distro() {
+    local distro="${1:?Usage: proot-distro-setup remove <distro>}"
+    ensure_proot
+    if confirm "Remove $distro? This cannot be undone."; then
+        proot-distro remove "$distro"
+        ok "$distro removed."
+    fi
+}
+
+case "${1:-}" in
+    install)   install_distro "${2:-}" ;;
+    login)     login_distro "${2:-}" ;;
+    list)      list_distros ;;
+    installed) installed_distros ;;
+    remove)    remove_distro "${2:-}" ;;
+    --help|-h) usage ;;
+    "")        usage ;;
+    *)         err "Unknown command: $1"; usage; exit 1 ;;
+esac

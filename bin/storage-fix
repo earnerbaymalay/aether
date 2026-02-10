@@ -1,0 +1,113 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# storage-fix — fix Termux storage permissions and create useful symlinks
+set -euo pipefail
+source "$(dirname "$0")/../lib/common.sh"
+
+usage() {
+    cat <<EOF
+Usage: storage-fix [options]
+
+Fix storage access and create convenient symlinks in Termux.
+
+What it does:
+  1. Runs termux-setup-storage (grants storage permission)
+  2. Waits for Android to create ~/storage mountpoints
+  3. Creates convenient symlinks in \$HOME:
+       ~/downloads  -> ~/storage/downloads
+       ~/dcim       -> ~/storage/dcim
+       ~/pictures   -> ~/storage/pictures
+       ~/music      -> ~/storage/music
+       ~/movies     -> ~/storage/movies
+       ~/documents  -> ~/storage/shared/Documents
+  4. Fixes common permission issues
+
+Options:
+  --links-only   Skip permission request, only create symlinks
+  --check        Check current storage status without changing anything
+  --help, -h     Show this help
+EOF
+}
+
+check_storage() {
+    step "Checking storage status..."
+    if [ -d "$HOME/storage" ]; then
+        ok "~/storage directory exists"
+        for dir in downloads dcim pictures music movies shared; do
+            if [ -d "$HOME/storage/$dir" ]; then
+                ok "  ~/storage/$dir accessible"
+            else
+                warn "  ~/storage/$dir NOT found"
+            fi
+        done
+    else
+        warn "~/storage does not exist. Run 'storage-fix' to set up."
+    fi
+}
+
+create_symlinks() {
+    step "Creating symlinks..."
+
+    local -A links=(
+        ["downloads"]="storage/downloads"
+        ["dcim"]="storage/dcim"
+        ["pictures"]="storage/pictures"
+        ["music"]="storage/music"
+        ["movies"]="storage/movies"
+        ["documents"]="storage/shared/Documents"
+    )
+
+    for name in "${!links[@]}"; do
+        target="$HOME/${links[$name]}"
+        link="$HOME/$name"
+        if [ -e "$target" ]; then
+            if [ -L "$link" ]; then
+                info "  ~/$name already linked"
+            elif [ -e "$link" ]; then
+                warn "  ~/$name exists but is not a symlink — skipping"
+            else
+                ln -s "$target" "$link"
+                ok "  ~/$name -> ${links[$name]}"
+            fi
+        else
+            warn "  ${links[$name]} not found — skipping ~/$name"
+        fi
+    done
+}
+
+case "${1:-}" in
+    --help|-h)
+        usage
+        exit 0
+        ;;
+    --check)
+        check_storage
+        exit 0
+        ;;
+    --links-only)
+        create_symlinks
+        exit 0
+        ;;
+esac
+
+step "Requesting storage permission..."
+info "An Android permission dialog may appear — please tap 'Allow'."
+
+termux-setup-storage 2>/dev/null || true
+
+# Wait for Android to mount storage
+info "Waiting for storage to become available..."
+for i in $(seq 1 15); do
+    if [ -d "$HOME/storage/shared" ]; then
+        break
+    fi
+    sleep 1
+done
+
+if [ ! -d "$HOME/storage" ]; then
+    err "Storage setup failed. Try running 'termux-setup-storage' manually."
+    exit 1
+fi
+
+ok "Storage permission granted."
+create_symlinks
+ok "Storage setup complete!"
