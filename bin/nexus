@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+import argparse, sys, requests, os, subprocess
+
+C, G, R, Y, B, NC = '\033[1;36m', '\033[1;32m', '\033[1;31m', '\033[1;33m', '\033[1m', '\033[0m'
+BASE = os.path.expanduser("~/termux-ai-workspace")
+BRAIN = os.path.join(BASE, "core/brain.md")
+
+def call_ai(prompt, context="You are the Nexus AI."):
+    token = os.environ.get("NEXUS_API_TOKEN", "nexus-dev-2026")
+    try:
+        res = requests.post("http://127.0.0.1:5000/ai/process", 
+                            json={"input": prompt, "system": context},
+                            headers={"Authorization": f"Bearer {token}"}, timeout=300)
+        return res.json().get("output", "Error")
+    except: return f"{R}Hub Offline. Run 'nexus start'{NC}"
+
+def main():
+    parser = argparse.ArgumentParser()
+    sub = parser.add_subparsers(dest="cmd")
+    for c in ["start", "health", "chat", "recall", "sync"]: sub.add_parser(c)
+    p_ask = sub.add_parser("ask"); p_ask.add_argument("q")
+    p_rem = sub.add_parser("remember"); p_rem.add_argument("f")
+    p_sum = sub.add_parser("summarize"); p_sum.add_argument("file")
+    args = parser.parse_args()
+
+    if args.cmd == "start":
+        # Self-healing boot
+        subprocess.run("lsof -t -i:5000 | xargs kill -9", shell=True, stderr=subprocess.DEVNULL)
+        subprocess.Popen(["python3", os.path.join(BASE, "core/hub.py")], stdout=subprocess.DEVNULL)
+        print(f"{G}🚀 Nexus Hub Starting...{NC}")
+    elif args.cmd == "health":
+        try:
+            requests.get("http://127.0.0.1:5000/health", timeout=2)
+            print(f"{G}✓ Online{NC}")
+        except: print(f"{R}✗ Offline{NC}")
+    elif args.cmd == "remember":
+        with open(BRAIN, "a") as f: f.write(f"- {args.f}\n")
+        print(f"{G}✓ Etched into memory.{NC}")
+    elif args.cmd == "recall":
+        if os.path.exists(BRAIN):
+            with open(BRAIN, "r") as f: print(f"{C}🧠 Memory:{NC}\n{f.read()}")
+        else: print("Memory empty.")
+    elif args.cmd == "ask": print(f"{G}Nexus:{NC} {call_ai(args.q)}")
+    elif args.cmd == "sync":
+        subprocess.run(["git", "add", "."], cwd=BASE)
+        subprocess.run(["git", "commit", "-m", "Auto-Sync"], cwd=BASE)
+        print(f"{G}✓ Workspace versioned.{NC}")
+    elif args.cmd == "chat":
+        print(f"{Y}Chat Mode (exit to quit){NC}")
+        while True:
+            u = input(f"{C}User > {NC}")
+            if u.lower() in ['exit', 'quit']: break
+            print(f"{G}Nexus > {NC}{call_ai(u)}")
+    else: parser.print_help()
+
+if __name__ == "__main__": main()
