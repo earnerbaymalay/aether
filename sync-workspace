@@ -1,0 +1,12 @@
+TARGET="$HOME/Documents-Link/obsidian/dev-vault/Projects"
+
+echo "📤 Syncing to GitHub..."
+git add .
+git commit -m "Automated Portfolio Sync"
+git push
+
+echo "📂 Syncing logs to Obsidian..."
+cp ~/termux-ai-workspace/README.md "$TARGET/termux-ai-workspace.md" 2>/dev/null
+cp ~/termux-ai-workspace/PORTFOLIO_LOG.md "$TARGET/Nexus-Activity-Log.md" 2>/dev/null
+
+echo "✨ Sync Complete."
