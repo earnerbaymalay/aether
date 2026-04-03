@@ -1,0 +1,6 @@
+backups/*
+!backups/.gitkeep
+*.swp
+*.swo
+*~
+.DS_Store

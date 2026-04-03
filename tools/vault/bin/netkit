@@ -1,0 +1,174 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# netkit — network utilities for Termux
+set -euo pipefail
+source "$(dirname "$0")/../lib/common.sh"
+
+usage() {
+    cat <<EOF
+Usage: netkit <command> [args]
+
+Network utilities for Termux.
+
+Commands:
+  serve [port]       Start a simple HTTP server (default: 8080)
+  proxy <port>       Start a SOCKS5 proxy via SSH
+  forward <local>:<remote-host>:<remote-port>
+                     SSH port forward
+  scan <host>        Quick nmap scan of a host
+  myip               Show public and local IP addresses
+  speed              Quick internet speed test
+  api <method> <url> [data]
+                     Simple API testing (curl wrapper)
+  dns <domain>       DNS lookup
+  ports              Show listening ports
+  --help, -h         Show this help
+
+Examples:
+  netkit serve 3000
+  netkit scan 192.168.1.1
+  netkit api GET https://httpbin.org/get
+  netkit api POST https://httpbin.org/post '{"key":"value"}'
+EOF
+}
+
+serve() {
+    local port="${1:-8080}"
+    step "Starting HTTP server on port $port..."
+    info "Serving $(pwd)"
+    info "Press Ctrl+C to stop"
+
+    if has python; then
+        python -m http.server "$port"
+    elif has busybox; then
+        busybox httpd -f -p "$port"
+    else
+        err "No HTTP server available. Install python."
+        exit 1
+    fi
+}
+
+proxy_socks() {
+    local port="${1:-1080}"
+    step "Starting SOCKS5 proxy on port $port..."
+    has ssh || pkg_install openssh
+    info "Usage: connect apps via SOCKS5 proxy at 127.0.0.1:$port"
+    ssh -D "$port" -C -N -f localhost 2>/dev/null || {
+        err "SSH proxy failed. Make sure sshd is running: sshd"
+        exit 1
+    }
+    ok "SOCKS5 proxy running on port $port"
+}
+
+port_forward() {
+    local spec="$1"
+    local local_port remote_spec
+    local_port="${spec%%:*}"
+    remote_spec="${spec#*:}"
+
+    step "Forwarding localhost:$local_port -> $remote_spec"
+    info "Press Ctrl+C to stop"
+    ssh -L "$local_port:$remote_spec" -N localhost
+}
+
+scan_host() {
+    local host="$1"
+    has nmap || pkg_install nmap
+    step "Scanning $host..."
+    nmap -sV --top-ports 100 "$host"
+}
+
+show_ip() {
+    step "IP Addresses:"
+
+    # Public IP
+    local pub
+    pub=$(curl -s --connect-timeout 5 ifconfig.me 2>/dev/null || echo "unavailable")
+    info "Public IP:  $pub"
+
+    # Local IP
+    local local_ip
+    local_ip=$(ip -4 addr show 2>/dev/null | grep -oP 'inet \K[\d.]+' | grep -v '127.0.0.1' | head -1)
+    info "Local IP:   ${local_ip:-unavailable}"
+}
+
+speed_test() {
+    step "Running speed test..."
+    if has speedtest-go; then
+        speedtest-go
+    elif has curl; then
+        info "Download speed (rough estimate)..."
+        curl -s -o /dev/null -w "Download: %{speed_download} bytes/sec (%{time_total}s)\n" \
+            https://speed.cloudflare.com/__down?bytes=10000000
+    else
+        err "Install curl or speedtest-go for speed testing."
+        exit 1
+    fi
+}
+
+api_test() {
+    local method="${1:-GET}"
+    local url="${2:-}"
+    local data="${3:-}"
+
+    if [ -z "$url" ]; then
+        err "URL required. Usage: netkit api <METHOD> <URL> [data]"
+        exit 1
+    fi
+
+    step "$method $url"
+
+    local args=(-s -w '\n--- Response ---\nHTTP %{http_code} | %{time_total}s | %{size_download} bytes\n')
+    args+=(-X "$method")
+    args+=(-H "Content-Type: application/json")
+    args+=(-H "Accept: application/json")
+
+    if [ -n "$data" ]; then
+        args+=(-d "$data")
+    fi
+
+    curl "${args[@]}" "$url" | {
+        if has jq; then
+            jq . 2>/dev/null || cat
+        else
+            cat
+        fi
+    }
+    echo ""
+}
+
+dns_lookup() {
+    local domain="$1"
+    has dig || pkg_install dnsutils
+
+    step "DNS lookup: $domain"
+    dig +short "$domain" A
+    dig +short "$domain" AAAA
+    dig +short "$domain" MX
+    dig +short "$domain" NS
+}
+
+show_ports() {
+    step "Listening ports:"
+    if has ss; then
+        ss -tuln
+    elif has netstat; then
+        netstat -tuln
+    else
+        err "No network tools found. Install iproute2."
+    fi
+}
+
+case "${1:-}" in
+    serve)    serve "${2:-}" ;;
+    proxy)    proxy_socks "${2:-}" ;;
+    forward)  port_forward "${2:?Usage: netkit forward local:host:port}" ;;
+    scan)     scan_host "${2:?Usage: netkit scan <host>}" ;;
+    myip)     show_ip ;;
+    speed)    speed_test ;;
+    api)      shift; api_test "$@" ;;
+    dns)      dns_lookup "${2:?Usage: netkit dns <domain>}" ;;
+    ports)    show_ports ;;
+    --help|-h) usage ;;
+    "")       usage ;;
+    *)        err "Unknown command: $1"; usage; exit 1 ;;
+esac

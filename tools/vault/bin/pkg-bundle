@@ -1,0 +1,100 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# pkg-bundle — install curated groups of packages in one command
+set -euo pipefail
+source "$(dirname "$0")/../lib/common.sh"
+
+BUNDLES_DESC=$(cat <<'TABLE'
+  dev-core      git, curl, wget, openssh, man, tar, zip, unzip, jq, tree
+  build-essential  clang, make, cmake, pkg-config, binutils, autoconf, automake, libtool
+  python-full   python, python-pip, python-numpy, libxml2, libxslt, openssl
+  node-full     nodejs-lts, yarn
+  network       nmap, traceroute, dnsutils, netcat-openbsd, iproute2, socat
+  editors       vim, neovim, micro, nano
+  shell-extras  zsh, fish, tmux, screen, fzf, ripgrep, fd, bat, exa
+  media         ffmpeg, imagemagick, sox, exiftool
+  security      hydra, sqlmap, nmap, whois, openssl-tool
+  storage       rclone, rsync, android-tools
+  ai-dev        python, python-pip, golang, cmake, jq, libopenblas (AI/ML prereqs)
+TABLE
+)
+
+usage() {
+    cat <<EOF
+Usage: pkg-bundle <bundle> [bundle...]
+
+Install a curated set of packages by bundle name.
+
+Available bundles:
+$BUNDLES_DESC
+
+Options:
+  list         Show available bundles
+  --help, -h   Show this help
+
+Examples:
+  pkg-bundle dev-core build-essential
+  pkg-bundle python-full node-full
+EOF
+}
+
+bundle_packages() {
+    case "$1" in
+        dev-core)
+            echo "git curl wget openssh man tar zip unzip jq tree" ;;
+        build-essential)
+            echo "clang make cmake pkg-config binutils autoconf automake libtool" ;;
+        python-full)
+            echo "python python-pip libxml2 libxslt openssl" ;;
+        node-full)
+            echo "nodejs-lts yarn" ;;
+        network)
+            echo "nmap traceroute dnsutils netcat-openbsd iproute2 socat" ;;
+        editors)
+            echo "vim neovim micro nano" ;;
+        shell-extras)
+            echo "zsh fish tmux screen fzf ripgrep fd bat" ;;
+        media)
+            echo "ffmpeg imagemagick sox exiftool" ;;
+        security)
+            echo "hydra nmap whois openssl-tool" ;;
+        storage)
+            echo "rclone rsync android-tools" ;;
+        ai-dev)
+            echo "python python-pip golang cmake jq libopenblas" ;;
+        *)
+            err "Unknown bundle: $1"
+            return 1 ;;
+    esac
+}
+
+if [ $# -eq 0 ] || [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
+    usage
+    exit 0
+fi
+
+if [ "$1" = "list" ]; then
+    echo "Available bundles:"
+    echo "$BUNDLES_DESC"
+    exit 0
+fi
+
+# Collect all packages from requested bundles
+ALL_PKGS=""
+for bundle in "$@"; do
+    step "Bundle: $bundle"
+    pkgs=$(bundle_packages "$bundle") || exit 1
+    info "  Packages: $pkgs"
+    ALL_PKGS="$ALL_PKGS $pkgs"
+done
+
+# Deduplicate
+ALL_PKGS=$(echo "$ALL_PKGS" | tr ' ' '\n' | sort -u | tr '\n' ' ')
+
+step "Updating package index..."
+pkg update -y -q 2>/dev/null || true
+
+step "Installing ${#ALL_PKGS} packages..."
+# shellcheck disable=SC2086
+pkg install -y $ALL_PKGS
+
+ok "All bundles installed successfully."
