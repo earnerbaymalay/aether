@@ -1,11 +1,14 @@
-# 🌌 Aether-AI: Neural Operating Interface (v8.2)
+# 🌌 Aether-AI: Silicon Stability Edition (v8.3)
 
-Superior AI environment for Termux. Now featuring **Adaptive GPU Offloading**.
+A high-performance, agentic AI workspace for Termux. 
 
-## 🛠️ Hardware Adaptation
-Version 8.2 implements a "Safe-Vulkan" strategy. If a mobile GPU does not support 16-bit storage, Aether-AI automatically utilizes partial offloading to ensure stability without sacrificing speed.
+## 🛡️ Stability First
+Version 8.3 implements **Silicon-Stable** logic. It detects hardware that lacks 16-bit Vulkan storage support (standard on many mid-range mobile GPUs) and automatically optimizes CPU-threading and Memory Mapping (`mmap`) to maintain high-speed inference without system crashes.
 
-## 🚀 Features
-- **Adaptive GPU:** Uses Vulkan where possible, CPU where necessary.
+## ✨ Features
+- **ARM64 Optimized:** Uses 6-thread parallel processing for Nokia/Snapdragon chips.
 - **Agentic Power:** Full Hermes-3-8B Tool-use integration.
-- **Nokia Optimized:** Low-heat, high-efficiency threading.
+- **TUI Dashboard:** Nordic Minimalist aesthetic.
+
+## 🚀 Usage
+Type `ai` to launch the Neural Interface.
