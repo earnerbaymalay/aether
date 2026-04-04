@@ -1,18 +1,18 @@
-# 🌌 Aether-AI: The Neural Operating Interface
+# 🌌 Aether-AI: Neural Operating Interface
 
-[![Status](https://img.shields.io/badge/Status-Superior-81a1c1?style=for-the-badge)]()
-[![Platform](https://img.shields.io/badge/Platform-Termux-4c566a?style=for-the-badge)]()
+![Status](https://img.shields.io/badge/Status-Superior-81a1c1?style=for-the-badge)
+![Engine](https://img.shields.io/badge/Engine-Llama.cpp-4c566a?style=for-the-badge)
 
 A high-performance, tool-capable AI ecosystem for Android. Optimized for Nokia hardware and native C++ execution.
 
 ---
 
-### 📑 Table of Contents
-1. [🚀 Quick Start](#-quick-start)
-2. [🧠 Neural Tier System](#-neural-tier-system)
-3. [🛠 Key Features](#-key-features)
-4. [📈 Development Roadmap](#-development-roadmap)
-5. [📦 Requirements](#-requirements)
+## 📑 Contents
+- [🚀 Quick Start](#-quick-start)
+- [🧠 Neural Tier System](#-neural-tier-system)
+- [🛠 Key Features](#-key-features)
+- [📈 Roadmap](#-roadmap)
+- [📦 Requirements](#-requirements)
 
 ---
 
@@ -23,34 +23,34 @@ cd termux-ai-workspace
 ./aether.sh
 
 🧠 Neural Tier System
-Mode	Model	Specialty	Speed
-Turbo	Llama-3.2-3B	Instant Tasks	⚡ 30+ t/s
-Agent	Hermes-3-8B	Shell/Tool Agency	🚀 High
-Logic	Gemma-2-9B	Complex Reasoning	🧠 Standard
+Mode	Model	Specialty	Capacity
+Turbo	Llama-3.2-3B	Speed/Quick Tasks	⚡ Instant
+Agent	Hermes-3-8B	Uncensored Shell/Tools	🤖 Superior
+Logic	Gemma-2-9B	Complex Reasoning	🧠 Deep
 
-    Note: Tool-usage in Logic Mode is functional but may be throttled by hardware constraints. Use Agent Mode for primary system tasks.
+    Advisory: Agent Mode is recommended for all Termux system tasks. Logic mode provides higher reasoning but may experience latency on mobile hardware.
 
 🛠 Key Features
 
-    Agency: Native bash execution via Hermes-3.
+    Executor Bridge: AI can generate and run Termux bash commands.
 
-    Memory: RAG (Retrieval-Augmented Generation) via local .txt knowledge vault.
+    Local Memory: Persistent context via .txt knowledge vault.
 
-    Voice: Integrated offline Android TTS (Text-to-Speech).
+    Voice UI: Native Android TTS integration for eyes-free operation.
 
-    Native: Zero-overhead C++ llama.cpp backend.
+    Silicon Native: Compiled directly for ARM64 NEON instructions.
 
-📈 Development Roadmap
+📈 Roadmap
 
-    Native Vulkan/CPU Adaptive Engine
+    3-Tier Model Hub
 
-    3-Tier Multi-Model Support
+    Agentic Execution Bridge
 
-    Native Voice Integration
+    Compact Studio TUI
 
-    Multimodal Vision (LLaVA)
+    Multimodal Vision Support
 
-    Web-Search Tool Bridge
+    Real-time Web Search Bridge
 
 📦 Requirements
 
@@ -58,6 +58,6 @@ Logic	Gemma-2-9B	Complex Reasoning	🧠 Standard
 
     RAM: 6GB+ recommended
 
-    Storage: 12GB+ free space
+    Software: Termux + Termux:API App
 
-Aether-AI: Beyond the Clouds.
+Aether-AI: The upper regions of air beyond the clouds.
