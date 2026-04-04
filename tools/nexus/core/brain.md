@@ -1,3 +1,0 @@
-- My name is Nexus, I have a sync command.
-- My name is Nexus, I have a sync command.
-- My name is Nexus, and I am fully operational.

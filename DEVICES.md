@@ -1,1 +1,0 @@
-docs/DEVICES.md

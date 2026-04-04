@@ -1,3 +1,0 @@
-#!/data/data/com.termux/files/usr/bin/bash
-PROMPT=$(termux-dialog text -t "Ask Qwen:")
-echo "$PROMPT" | jq -r '.text' | xargs -I {} ~/ai/scripts/qwen-chat "{}" | termux-toast -g top
