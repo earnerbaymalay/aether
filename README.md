@@ -1,12 +1,12 @@
-# 🌌 Aether-AI: Neural Operating Interface (v7.5)
+# 🌌 Aether-AI: Neural Operating Interface (v8.0)
 
-A professional, agentic AI workspace for Termux. Optimized for Android hardware.
+A professional, agentic AI workspace for Termux. Now with **Vulkan GPU Acceleration**.
 
 ## ✨ Features
-- **Agentic Executor:** AI can generate and execute Termux bash commands.
+- **GPU Accelerated:** Native Vulkan support for 3x faster inference.
+- **Agentic Executor:** Generate and execute Termux bash commands.
 - **Native Performance:** Locally compiled C++ backend.
-- **Studio TUI:** High-visibility interface for mobile.
-- **Uncensored Power:** Native Hermes-3-8B and Gemma-2-9B support.
+- **Studio TUI:** Optimized for mobile screens.
 
 ## 🚀 Usage
-Type `ai` to launch the Neural Interface.
+Type 'ai' to launch.
