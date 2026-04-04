@@ -1,9 +1,9 @@
-# 🌌 Aether-AI: Refined Edition
+# 🌌 Aether-AI: Studio Edition
 
-A high-performance Neural Intelligence System for Android. Optimized for agentic tool usage and minimalist aesthetics.
+A high-performance Neural Operating Interface for Android. Optimized for agentic tool usage and minimalist aesthetics.
 
 ## ✨ Project Identity
-- **Design:** Nordic Minimalist (Gemini Inspired).
+- **Design:** Studio Minimalist (Indigo/Slate).
 - **Core:** Hermes-3 Agentic Tool-Use (Option 1).
 - **Engine:** Native llama.cpp C++ Backend.
 
