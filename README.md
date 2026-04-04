@@ -1,12 +1,11 @@
-# 🌌 Aether-AI: Neural Operating Interface (v8.1)
+# 🌌 Aether-AI: Neural Operating Interface (v8.2)
 
-A professional, natively compiled AI workspace for Termux on Android.
+Superior AI environment for Termux. Now featuring **Adaptive GPU Offloading**.
 
-## 🚀 Standout Milestone: GPU Accelerated
-This project now features a **Native Vulkan C++ Backend**. 
-- **Inference Speed:** 3-5x faster than CPU-only setups.
-- **Hardware:** Optimized for ARM64 / Nokia / Snapdragon GPUs.
-- **Models:** Hermes-3-8B (Agentic) and Gemma-2-9B (Logic).
+## 🛠️ Hardware Adaptation
+Version 8.2 implements a "Safe-Vulkan" strategy. If a mobile GPU does not support 16-bit storage, Aether-AI automatically utilizes partial offloading to ensure stability without sacrificing speed.
 
-## 🛠 Usage
-Type `ai` to launch the high-performance Neural Interface.
+## 🚀 Features
+- **Adaptive GPU:** Uses Vulkan where possible, CPU where necessary.
+- **Agentic Power:** Full Hermes-3-8B Tool-use integration.
+- **Nokia Optimized:** Low-heat, high-efficiency threading.
