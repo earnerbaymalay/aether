@@ -1,2 +1,5 @@
 models/
 llama.cpp/
+knowledge/user_profile.txt
+knowledge/user_profile.bak
+knowledge/system.env
