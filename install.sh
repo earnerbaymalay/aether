@@ -62,13 +62,18 @@ cd ~/aether && ./aether.sh
 SHORTCUT
 chmod +x $PREFIX/bin/ai
 
-# 6. Finalize & Benchmark
+# 6. Finalize & Optimize
 header
 gum style --foreground "$SUC" --border double "DEPLOYMENT COMPLETE"
-echo -e "\nYou can now launch the interface by typing: \033[1;32mai\033[0m"
+echo -e "\n\033[1;34m[*]\033[0m Aether requires a hardware profile to optimize its neural engine."
 
-if gum confirm "Would you like to run a hardware benchmark now?"; then
+if gum confirm "Run hardware profiling now? (Highly Recommended)"; then
     ./bench.sh
+else
+    echo -e "\033[1;33m[!]\033[0m Skipping profiling. Aether will use generic (slower) settings."
+    echo "TIER=GENERIC" > "$DIR/.aether_config"
+    echo "THREADS=4" >> "$DIR/.aether_config"
 fi
 
-echo -e "\n\033[1;34m[*]\033[0m Aether is ready. Beyond the clouds."
+echo -e "\n\033[1;32m[+]\033[0m You can now launch the interface by typing: \033[1;32mai\033[0m"
+echo -e "\033[1;34m[*]\033[0m Aether is ready. Beyond the clouds."

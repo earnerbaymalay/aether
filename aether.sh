@@ -8,8 +8,16 @@ ACCENT="#81a1c1"; DIM="#4c566a"; WHITE="#eceff4"; RED="#ff5555"
 DIR="$HOME/aether"
 BIN="$HOME/llama.cpp/build/bin/llama-cli"
 MODELS="$DIR/models"
-THREADS=6
 SESSION_DIR="$HOME/.aether/sessions"
+CONFIG_FILE="$DIR/.aether_config"
+
+# Load Dynamic Config
+if [ -f "$CONFIG_FILE" ]; then
+    source "$CONFIG_FILE"
+else
+    TIER="UNKNOWN"
+    THREADS=6
+fi
 
 # --- Dependencies Check ---
 check_deps() {
@@ -74,16 +82,26 @@ launch_ai() {
     if [ "$is_agent" == "true" ]; then
         python3 "$DIR/agent/aether_agent.py" --model "$mod"
     else
-        # LOAD KNOWLEDGE & SKILLS
-        KNOWLEDGE=$(cat "$DIR/knowledge"/*.txt 2>/dev/null | tr '\n' ' ' | cut -c 1-1000)
+        # LOAD KNOWLEDGE & RAG CONTEXT
+        clear
+        gum spin --spinner dots --title "Analyzing Context7 Vault..." -- sleep 0.5
+        
+        # EXTRACT DYNAMIC KEYWORDS FROM LAST SESSION
+        if [ -f "$SESSION_DIR/last_session.log" ]; then
+            KEYWORDS=$(tail -c 500 "$SESSION_DIR/last_session.log" | tr -cs '[:alpha:]' '\n' | awk 'length($0)>4' | sort | uniq -c | sort -nr | head -n 5 | awk '{print $2}' | tr '\n' ' ')
+        fi
+        
+        # Pull relevant vault context based on dynamic keywords
+        VAULT_CONTEXT=$(python3 "$DIR/scripts/rag_engine.py" "${KEYWORDS:-neural operating interface}" | tr '\n' ' ' | cut -c 1-2000)
+        
         SKILL_LIST=$(ls "$DIR/skills" 2>/dev/null | tr '\n' ',' | sed 's/,$//')
         CONTEXT=$(get_context)
         
         clear
         gum style --foreground "$ACCENT" --border double "Connecting to Aether Neural Pathway: $mod..."
         
-        # SYSTEM PROMPT BRANDING
-        SYSTEM_PROMPT="You are Aether-AI, a local-first Neural Operating Interface. $role. Current Environment: ARM64 Termux. Status: High Performance. Skills: [$SKILL_LIST]. Previous Session Context: $CONTEXT."
+        # SYSTEM PROMPT BRANDING (Dynamic RAG injected)
+        SYSTEM_PROMPT="You are Aether-AI, a local-first Neural Operating Interface. $role. Current Environment: ARM64 Termux. Profile: $TIER. Skills: [$SKILL_LIST]. Relevant Vault Context: $VAULT_CONTEXT. Previous Session Context: $CONTEXT."
 
         $BIN -m "$MODELS/$mod" -cnv -t $THREADS --mmap \
           --log-file "$SESSION_DIR/last_session.log" \
@@ -111,7 +129,7 @@ while true; do
 
     # SYSTEM STATUS COMPACT
     gum style --foreground "$ACCENT" --border rounded --border-foreground "$DIM" --padding "0 2" --width 50 \
-      " 🔋 BATT: ${BATT:-N/A}%  •  💾 STR: $STR  •  🧠 VAULT: ACTIVE "
+      " 🔋 BATT: ${BATT:-N/A}%  •  💾 STR: $STR  •  🏆 TIER: $TIER "
 
     echo -e "\n"
     CHOICE=$(gum choose --cursor.foreground "$ACCENT" --header "      [ SELECT NEURAL PATHWAY ]" \
@@ -131,12 +149,13 @@ while true; do
         *"CODE"*)  launch_ai "qwen-coder-3b.gguf" "https://huggingface.co/bartowski/Qwen2.5-Coder-3B-Instruct-GGUF/resolve/main/Qwen2.5-Coder-3B-Instruct-Q4_K_M.gguf" "Expert Coder" "false" ;;
         *"SECURITY"*) ./scripts/launch_sentinel.sh ;;
         *"TOOLS"*) 
-            TOOL=$(gum choose " 🧹 PURGE (Clear Memory) " " 📖 LIBRARIAN (Audit Vault) " " 📏 BENCHMARK (Hardware) " " 📘 SKILLS (View Installed) " " 🔙 BACK ")
+            TOOL=$(gum choose " 🧹 PURGE (Clear Memory) " " 📖 LIBRARIAN (Audit Vault) " " 📏 BENCHMARK (Hardware) " " 📘 SKILLS (View Installed) " " 🛠️ DEBUG (System Health) " " 🔙 BACK ")
             case "$TOOL" in
                 *"PURGE"*) rm -f "$SESSION_DIR/last_session.log" && gum toast "Memory Wiped." ;;
                 *"LIBRARIAN"*) python3 "$DIR/scripts/librarian.py" | gum pager ;;
                 *"BENCHMARK"*) ./bench.sh ;;
                 *"SKILLS"*) ls -R skills/ | gum pager ;;
+                *"DEBUG"*) bash "$DIR/scripts/debug_console.sh" ;;
             esac
             ;;
         *) exit 0 ;;
