@@ -1,66 +1,228 @@
 <div align="center">
 
 # 🌌 A E T H E R — A I
-### *The Neural Operating Interface for High-Performance ARM64*
 
-[![Status](https://img.shields.io/badge/Status-Superior-81a1c1?style=for-the-badge)]()
-[![Engine](https://img.shields.io/badge/Engine-Llama.cpp_Native-565f89?style=for-the-badge&logo=c%2B%2B)]()
-[![Hardware](https://img.shields.io/badge/Hardware-Snapdragon_Native-4c566a?style=for-the-badge&logo=android)]()
+### *Your Phone. Your AI. Your Rules.*
 
-[**The Journey**](#-the-journey) • [**Neural Architecture**](#-neural-tier-system) • [**Context7 Memory**](#-context7-brain) • [**Getting Started**](USAGE.md)
+[![Status](https://img.shields.io/badge/Status-Production_Ready-50fa7b?style=for-the-badge)]()
+[![Engine](https://img.shields.io/badge/Engine-Llama.cpp_Native-81a1c1?style=for-the-badge&logo=c%2B%2B)]()
+[![Platform](https://img.shields.io/badge/Platform-Android_%7C_Termux-4c566a?style=for-the-badge&logo=android)]()
+[![License](https://img.shields.io/badge/License-MIT-f1fa8c?style=for-the-badge)]()
+[![Privacy](https://img.shields.io/badge/Privacy-100%25_Local_Offline-bd93f9?style=for-the-badge)]()
+
+[**⚡ Quick Start**](#-get-started-in-60-seconds) • [**📖 Full Guide**](USAGE.md) • [**🗺️ Roadmap**](ROADMAP.md) • [**💬 Community**](https://github.com/earnerbaymalay/aether/discussions)
 
 ---
+
+### 🤔 What even *is* this?
+
+Imagine running **powerful AI models** — the same technology behind ChatGPT and Claude — **entirely on your phone**. No subscriptions. No internet required. No data leaving your device.
+
+**Aether transforms your Android phone into a fully offline AI workstation** that can write code, analyze systems, manage files, answer questions, and even learn from your workflows — all running locally through [Termux](https://termux.dev/).
+
+> **Your phone is more powerful than you think.** Aether proves it.
+
+### 🔥 Why should you care?
+
+| | **Cloud AI** (ChatGPT, Claude) | **Aether** (Local AI) |
+|---|---|---|
+| 💰 Cost | $20–200/month | **Free forever** |
+| 🔒 Privacy | Your data goes to their servers | **100% on-device, zero transmission** |
+| 🌐 Internet | Required | **Not needed — works in airplane mode** |
+| 🚫 Censorship | Corporate guardrails | **Uncensored — your AI, your rules** |
+| ⚡ Latency | Network-dependent | **Instant — limited only by your hardware** |
+| 🧠 Memory | Per-session, reset daily | **Persistent — learns and grows with you** |
+
+---
+
+### 👋 Who is this for?
+
+> **Everyone.** Seriously.
+
+| If you are... | What Aether does for you |
+|---|---|
+| 🟢 **Complete beginner** | One install command → instant AI chat. Type a question, get an answer. Like having a genius in your pocket. |
+| 🟡 **Curious tinkerer** | Explore multi-model routing, a skill marketplace, and a persistent knowledge vault that connects to Obsidian. |
+| 🔴 **Power developer** | Swarm orchestration, tool-use agents, shell-level system control, automated code review, and hardware-tuned inference. |
+
+---
+
 </div>
 
-## 💎 The Philosophy
-Most mobile AI experiences are mere wrappers around corporate APIs. They are data-extractive, internet-dependent, and latency-heavy. 
+## 🚀 Get Started in 60 Seconds
 
-**Aether-AI** is a **Neural Operating Interface (NOI)** built from the ground up for the local-first era. It doesn't just "chat"; it operates your device, learns your technical workflows, and evolves into a persistent extension of your own intelligence—all without a single byte leaving your hardware.
+**Prerequisites:** An Android phone with [Termux](https://termux.dev/) installed. That's it.
 
----
+```bash
+# 1. Clone the repo
+git clone https://github.com/earnerbaymalay/aether.git
+cd aether
 
-## 🚀 The Journey: Beyond the Shell
-Welcome to the terminal-native future. Aether transforms your Termux environment into a high-performance neural workstation.
+# 2. Run the guided installer (it handles everything)
+./install.sh
 
-1. **Self-Contained Power**: Native C++ execution tuned for **ARMv8 NEON** instructions.
-2. **Autonomous Agency**: The **Swarm Orchestrator** leverages multi-tier models for complex task-solving.
-3. **Evolving Context**: **Context7** is a living, Markdown-based vault that grows as you work.
-4. **Marketable UX**: A premium TUI designed for clarity, speed, and focus.
+# 3. Launch your neural interface
+ai
+```
 
----
+The installer will:
+- ✅ Install all dependencies (Termux packages, llama.cpp engine)
+- ✅ Set up the `ai` shortcut so you can launch from anywhere
+- ✅ Offer to benchmark your hardware for optimal performance
+- ✅ Leave you at a beautiful menu — ready to go
 
-## 🧠 Neural Tier System
-Aether routes your requests to the optimal "brain" for the task:
-
-| Tier | Model | specialty | Performance |
-| :--- | :--- | :--- | :--- |
-| **⚡ TURBO** | Llama-3.2-3B | Instant Daily Tasks | 25+ t/s |
-| **🤖 AGENT** | Hermes-3-8B | Shell & Tool-Use | 10-15 t/s |
-| **💻 CODE** | Qwen-Coder-3B | Expert Refactoring | 18+ t/s |
-| **🧠 LOGIC** | DeepSeek-R1 | Architectural Planning | 22+ t/s |
+> **No configuration files to edit. No environment variables. Just `ai`.**
 
 ---
 
-## 💾 Context7: Your Persistent Brain
-Aether doesn't forget.
-- **Location**: `~/aether/knowledge/context7/`
-- **Mechanism**: The **AGENT** uses a specialized `learn` tool to archive technical insights and custom syntax.
-- **Obsidian Ready**: Your memory is stored in standard Markdown, compatible with any knowledge management tool.
+## 🧠 What You Get
+
+### The Neural Interface (Main Menu)
+
+When you type `ai`, you're greeted with a premium terminal UI:
+
+```
+   AETHER
+   NEURAL OPERATING INTERFACE // V 18.0
+   🔋 BATT: 78%  •  💾 STR: 42G  •  🧠 VAULT: ACTIVE
+
+      [ SELECT NEURAL PATHWAY ]
+   🤖 AGENT   (Hermes-8B)   — Smartest. Writes code, uses tools.
+   ⚡ TURBO   (Llama-3B)    — Fastest. Daily questions, summaries.
+   🧠 LOGIC   (DeepSeek)    — Deep thinker. Architecture & planning.
+   💻 CODE    (Qwen-3B)     — Coding specialist. Refactor, debug.
+   🛡️ SECURITY (Sentinel)   — System auditor. Scan for issues.
+   🛠 TOOLS   (Skills)      — Plugins, maintenance, benchmark.
+   ❌ EXIT
+```
+
+### Four AI "Brains" — Auto-Routed to the Right One
+
+Aether doesn't use a one-size-fits-all model. It intelligently routes your request:
+
+| Tier | Model | Speed | Best For |
+|---|---|---|---|
+| ⚡ **TURBO** | Llama-3.2-3B | 25+ t/s | Quick questions, summaries, translations |
+| 🤖 **AGENT** | Hermes-3-8B | 10-15 t/s | Complex tasks, code writing, tool use |
+| 💻 **CODE** | Qwen-Coder-3B | 18+ t/s | Code review, refactoring, debugging |
+| 🧠 **LOGIC** | DeepSeek-R1 | 22+ t/s | Architecture design, deep reasoning |
+
+### 🔧 The Toolbox — AI That *Does* Things
+
+Unlike chat-only AI, Aether's agent can **interact with your actual device**:
+
+- **`get_date`** — Check the current time
+- **`get_battery`** — Monitor battery level
+- **`list_files`** — Browse your filesystem
+- **`web_search`** — Privacy-first DuckDuckGo search
+- **`web_read`** — Fetch and read any webpage
+- **`obsidian_*`** — Full Obsidian vault integration
+- **`learn`** — Teach the AI new knowledge that persists forever
+
+### 📂 Persistent Memory — The Context7 Vault
+
+> **Most AI forgets everything when you close the tab. Not this one.**
+
+Every insight you teach Aether is saved as a Markdown file in `knowledge/context7/`. The AI reads these files on every session — building a personalized knowledge base that grows with you.
+
+Connect it to [Obsidian](https://obsidian.md/) on Android and **watch your AI's brain visually grow** as a networked knowledge graph.
 
 ---
 
-## 📂 Architecture at a Glance
-- `aether.sh`: The master UI and neural orchestrator.
-- `agent/`: Python-based agent core with real-time tool execution.
-- `scripts/`: System auditors, swarms, and self-healing modules.
-- `skills/`: Extensible marketplace for local neural tools.
-- `toolbox/`: A suite of native shell tools for system interaction.
+## 🏗️ Architecture at a Glance
+
+```
+aether/
+├── aether.sh              ← Main TUI / Neural Orchestrator
+├── install.sh             ← One-command guided installer
+├── bench.sh               ← Hardware benchmark & profiler
+├── agent/
+│   └── aether_agent.py    ← Python agent with tool-use & API server
+├── toolbox/               ← Shell tools the AI can execute
+│   ├── manifest.json      ← Tool registry (auto-discovered)
+│   ├── get_battery.sh
+│   ├── web_search.sh
+│   ├── obsidian_*.sh      ← Obsidian vault tools
+│   └── ...
+├── scripts/
+│   ├── librarian.py       ← Knowledge vault auditor
+│   ├── skill_market.sh    ← Plugin marketplace
+│   ├── debug_console.sh   ← Self-healing diagnostics
+│   └── launch_sentinel.sh ← Security scanner
+├── skills/                ← Extensible AI skills (drop-in)
+├── knowledge/
+│   ├── bio.txt            ← Your profile & preferences
+│   └── context7/          ← Persistent AI memory (git-tracked)
+├── legacy/                ← Archived versions (reference)
+└── docs/
+    └── terminal-setup/    ← Setup guides for Claude, Gemini, etc.
+```
 
 ---
 
-## 🏆 Why Aether?
-In a world of subscription-locked intelligence, Aether offers **Uncensored Freedom**. No corporate guardrails, zero latency, and 100% privacy.
+## 💡 "Okay, But What Can I Actually *Do* With It?"
+
+Here are real scenarios people are using Aether for **right now**:
+
+| Scenario | How Aether Helps |
+|---|---|
+| 📝 **Writing code on the bus** | Open TURBO → describe what you need → get working code. No wifi needed. |
+| 🔍 **Debugging a script** | Paste the error into CODE tier → get a fix with explanation. |
+| 📱 **Checking system health** | AGENT runs toolbox tools → "What's my battery health? Storage?" |
+| 📚 **Learning a new technology** | "Teach me Rust" → the AI uses LOGIC tier for deep explanations. |
+| 🗂️ **Managing knowledge** | Tell the AI to `learn` something → it's saved forever in Context7. |
+| 🛡️ **Security auditing** | Launch Sentinel → scan your Termux environment for vulnerabilities. |
+| 🤖 **Automating repetitive tasks** | AGENT can chain tools → search the web, read a page, summarize it. |
+| 📊 **Benchmarking your phone** | Run `bench.sh` → see tokens/sec → compare with other devices. |
+
+---
+
+## 📋 Requirements
+
+- **Android 8+** device
+- **[Termux](https://termux.dev/)** (install from [F-Droid](https://f-droid.org/en/packages/com.termux/), *not* Play Store)
+- **~3-5 GB free storage** (for AI models)
+- **At least 4 GB RAM** (6+ GB recommended)
+- **Patience for the first setup** (~10-15 min for the installer + model download)
+
+> **No root required.** Aether runs entirely in Termux's user space.
+
+---
+
+## 🗺️ Roadmap
+
+We're building toward something big. Here's where we're headed:
+
+- ✅ **Phase 1** — Core engine, multi-model routing, Context7 vault → **Done**
+- ✅ **Phase 2** — Self-healing, skill marketplace, guided installer → **Done**
+- 🔄 **Phase 3** — Android shortcuts, voice interface, advanced RAG → **In Progress**
+- 🔮 **Phase 4** — Distributed mesh networking, NPU/GPU acceleration → **Vision**
+
+See the full [ROADMAP.md](ROADMAP.md) for details.
+
+---
+
+## 🤝 Contributing
+
+Aether is built by people who believe AI should be **free, private, and local**. Whether you're a developer, writer, or just someone with a cool idea — you're welcome here.
+
+- 🐛 Found a bug? [Open an issue](https://github.com/earnerbaymalay/aether/issues)
+- 💡 Have an idea? [Start a discussion](https://github.com/earnerbaymalay/aether/discussions)
+- 🔧 Want to code? Fork the repo and submit a PR!
+- 📖 Know a niche? Write a [Skill](aether/skills/) and share it
+
+---
+
+## 📜 License
+
+[MIT License](LICENSE) — Use it. Modify it. Share it. No restrictions.
+
+---
 
 <div align="center">
-*Aether-AI: Develop natively. Think locally. Evolve autonomously.*
+
+### 🌌 *Develop natively. Think locally. Evolve autonomously.*
+
+**⭐ If this project impressed you, give it a star — it helps more people discover local AI.**
+
 </div>

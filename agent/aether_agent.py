@@ -116,7 +116,10 @@ def build_system_prompt(knowledge="", skills=""):
     c7_knowledge = ""
     if CONTEXT7_DIR.exists():
         for p in list(CONTEXT7_DIR.glob("**/*.md"))[:5]:
-            try: c7_knowledge += f"### {p.name}\n{p.read_text()[:300]}\n\n"            except: continue
+            try:
+                c7_knowledge += f"### {p.name}\n{p.read_text()[:300]}\n\n"
+            except:
+                continue
 
     return f"""You are AetherAI, a local-first neural interface running on Android.
 Current Date: {datetime.now().strftime('%A, %d %B %Y')}
