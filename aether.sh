@@ -131,12 +131,12 @@ while true; do
         *"CODE"*)  launch_ai "qwen-coder-3b.gguf" "https://huggingface.co/bartowski/Qwen2.5-Coder-3B-Instruct-GGUF/resolve/main/Qwen2.5-Coder-3B-Instruct-Q4_K_M.gguf" "Expert Coder" "false" ;;
         *"SECURITY"*) ./scripts/launch_sentinel.sh ;;
         *"TOOLS"*) 
-            TOOL=$(gum choose " 🧹 PURGE (Clear Memory) " " 📖 LIBRARIAN (Audit Vault) " " 📏 BENCHMARK (Hardware) " " 📘 SKILLS (View Installed) " " 🐞 DEBUG CONSOLE (Self-Healing) " " 🔙 BACK ")
+            TOOL=$(gum choose " 🧹 PURGE (Clear Memory) " " 📖 LIBRARIAN (Audit Vault) " " 📏 BENCHMARK (Hardware) " " 🛒 SKILL MARKET (Extensions) " " 🐞 DEBUG CONSOLE (Self-Healing) " " 🔙 BACK ")
             case "$TOOL" in
                 *"PURGE"*) rm -f "$SESSION_DIR/last_session.log" && gum toast "Memory Wiped." ;;
                 *"LIBRARIAN"*) python3 "$DIR/scripts/librarian.py" | gum pager ;;
                 *"BENCHMARK"*) ./bench.sh ;;
-                *"SKILLS"*) ls -R skills/ | gum pager ;;
+                *"MARKET"*) ./scripts/skill_market.sh ;;
                 *"DEBUG"*) ./scripts/debug_console.sh ;;
             esac
             ;;
