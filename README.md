@@ -22,6 +22,12 @@ Imagine running **powerful AI models** — the same technology behind ChatGPT an
 
 > **Your phone is more powerful than you think.** Aether proves it.
 
+### 📸 What It Looks Like
+
+<p align="center">
+  <img src="docs/media/terminal-screenshot.svg" alt="Aether Terminal UI" width="800"/>
+</p>
+
 ### 🔥 Why should you care?
 
 | | **Cloud AI** (ChatGPT, Claude) | **Aether** (Local AI) |
@@ -107,6 +113,10 @@ Aether doesn't use a one-size-fits-all model. It intelligently routes your reque
 | 💻 **CODE** | Qwen-Coder-3B | 18+ t/s | Code review, refactoring, debugging |
 | 🧠 **LOGIC** | DeepSeek-R1 | 22+ t/s | Architecture design, deep reasoning |
 
+<p align="center">
+  <img src="docs/media/tier-comparison.svg" alt="Tier Comparison" width="800"/>
+</p>
+
 ### 🔧 The Toolbox — AI That *Does* Things
 
 Unlike chat-only AI, Aether's agent can **interact with your actual device**:
@@ -130,6 +140,10 @@ Connect it to [Obsidian](https://obsidian.md/) on Android and **watch your AI's 
 ---
 
 ## 🏗️ Architecture at a Glance
+
+<p align="center">
+  <img src="docs/media/architecture.svg" alt="Aether Architecture" width="820"/>
+</p>
 
 ```
 aether/
@@ -207,6 +221,10 @@ See the full [ROADMAP.md](ROADMAP.md) for details.
 **Got a Mac or iPad?** We've built a streamlined version for the Apple ecosystem too — same local-first, private, free AI philosophy, adapted for macOS and iPadOS.
 
 👉 **[Get Aether Apple Edition →](https://github.com/earnerbaymalay/aether-apple)**
+
+<p align="center">
+  <img src="docs/media/cross-platform.svg" alt="Cross Platform" width="800"/>
+</p>
 
 | | 📱 Android (this repo) | 🖥️ Mac | 📱 iPad (iSH) | 📱 iPad (a-Shell) |
 |---|---|---|---|---|
