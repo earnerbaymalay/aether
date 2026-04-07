@@ -6,6 +6,8 @@
     {"name": "gh_status", "description": "Check git/gh status", "script": "gh_status.sh", "enabled": true},
     {"name": "obsidian_list_notes", "description": "List all markdown notes in Obsidian vault", "script": "obsidian_list_notes.sh", "enabled": true},
     {"name": "obsidian_read_note", "description": "Read a specific note from Obsidian", "script": "obsidian_read_note.sh", "enabled": true},
-    {"name": "obsidian_search_notes", "description": "Search Obsidian vault for a keyword", "script": "obsidian_search_notes.sh", "enabled": true}
+    {"name": "obsidian_search_notes", "description": "Search Obsidian vault for a keyword", "script": "obsidian_search_notes.sh", "enabled": true},
+    {"name": "web_search", "description": "Privacy-first web search using DuckDuckGo", "script": "web_search.sh", "enabled": true},
+    {"name": "web_read", "description": "Read content of a URL as plain text", "script": "web_read.sh", "enabled": true}
   ]
 }

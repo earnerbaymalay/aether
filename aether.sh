@@ -97,6 +97,7 @@ while true; do
         " ⚡ TURBO   (Llama-3B) " \
         " 🧠 LOGIC   (DeepSeek) " \
         " 💻 CODE    (Qwen-3B) " \
+        " 🛡️ SECURITY (Sentinel Hub) " \
         " 🛠 TOOLS   (Skills & Maintenance) " \
         " ❌ EXIT ")
 
@@ -105,6 +106,7 @@ while true; do
         *"TURBO"*) launch_ai "llama-3.2-3b.gguf" "https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q4_K_M.gguf" "Fast Assistant" "false" ;;
         *"LOGIC"*) launch_ai "deepseek-r1-1.5b.gguf" "https://huggingface.co/unsloth/DeepSeek-R1-Distill-Qwen-1.5B-GGUF/resolve/main/DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M.gguf" "Deep Thinker" "false" ;;
         *"CODE"*)  launch_ai "qwen-coder-3b.gguf" "https://huggingface.co/bartowski/Qwen2.5-Coder-3B-Instruct-GGUF/resolve/main/Qwen2.5-Coder-3B-Instruct-Q4_K_M.gguf" "Expert Coder" "false" ;;
+        *"SECURITY"*) ./scripts/launch_sentinel.sh ;;
         *"TOOLS"*) 
             TOOL=$(gum choose " 🧹 PURGE (Clear Memory) " " 📖 LIBRARIAN (Audit Vault) " " 📏 BENCHMARK (Hardware) " " 📘 SKILLS (View Installed) " " 🔙 BACK ")
             case "$TOOL" in
