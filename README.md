@@ -204,20 +204,19 @@ See the full [ROADMAP.md](ROADMAP.md) for details.
 
 ## 🍎 Also Available: Aether Apple Edition
 
-**Got a Mac?** We've built a streamlined version for macOS too — same local-first, private, free AI philosophy, adapted for Apple Silicon.
+**Got a Mac or iPad?** We've built a streamlined version for the Apple ecosystem too — same local-first, private, free AI philosophy, adapted for macOS and iPadOS.
 
 👉 **[Get Aether Apple Edition →](https://github.com/earnerbaymalay/aether-apple)**
 
-| | 📱 Android (this repo) | 🍎 Apple Edition |
-|---|---|---|
-| **Platform** | Termux on Android | macOS Terminal |
-| **AI Models** | 4 tiers (TURBO/AGENT/CODE/LOGIC) | 2 modes (CHAT/TURBO) |
-| **Agent Tools** | 10+ tools (Termux:API) | 5 tools (macOS native) |
-| **Advanced Features** | Swarm, Sentinel, Debug Console | Chat + Toolbox |
-| **Price** | Free | Free |
-| **Privacy** | 100% local | 100% local |
+| | 📱 Android (this repo) | 🖥️ Mac | 📱 iPad (iSH) | 📱 iPad (a-Shell) |
+|---|---|---|---|---|
+| **AI Models** | 4 tiers | 2 modes | 2 modes | 2 modes |
+| **Tools** | 10+ (Termux:API) | 6 (macOS native) | 5 | 5 |
+| **Advanced** | Swarm, Sentinel, Agent | Chat + Toolbox | Chat + Toolbox | Chat + Toolbox |
+| **Price** | Free | Free | Free | Free |
+| **Privacy** | 100% local | 100% local | 100% local | 100% local |
 
-> The Apple Edition is perfect for quick AI sessions on your Mac. The Android version is the full power experience. **Use both — they share the same knowledge format.**
+> **One philosophy across every device:** Free, private, offline AI for everyone. The Android version is the full-power experience. The Apple edition covers Mac (full), iPad via iSH (medium), and iPad via a-Shell (lite). **Use them together — they share the same knowledge format.**
 
 ---
 
