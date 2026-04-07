@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/badge/License-MIT-f1fa8c?style=for-the-badge)]()
 [![Privacy](https://img.shields.io/badge/Privacy-100%25_Local_Offline-bd93f9?style=for-the-badge)]()
 
-[**⚡ Quick Start**](#-get-started-in-60-seconds) • [**📖 Full Guide**](USAGE.md) • [**🗺️ Roadmap**](ROADMAP.md) • [**💬 Community**](https://github.com/earnerbaymalay/aether/discussions)
+[**⚡ Quick Start**](#-get-started-in-60-seconds) • [**📖 Full Guide**](USAGE.md) • [**🗺️ Roadmap**](ROADMAP.md) • [**🍎 Apple Edition**](https://github.com/earnerbaymalay/aether-apple) • [**💬 Community**](https://github.com/earnerbaymalay/aether/discussions)
 
 ---
 
@@ -199,6 +199,25 @@ We're building toward something big. Here's where we're headed:
 - 🔮 **Phase 4** — Distributed mesh networking, NPU/GPU acceleration → **Vision**
 
 See the full [ROADMAP.md](ROADMAP.md) for details.
+
+---
+
+## 🍎 Also Available: Aether Apple Edition
+
+**Got a Mac?** We've built a streamlined version for macOS too — same local-first, private, free AI philosophy, adapted for Apple Silicon.
+
+👉 **[Get Aether Apple Edition →](https://github.com/earnerbaymalay/aether-apple)**
+
+| | 📱 Android (this repo) | 🍎 Apple Edition |
+|---|---|---|
+| **Platform** | Termux on Android | macOS Terminal |
+| **AI Models** | 4 tiers (TURBO/AGENT/CODE/LOGIC) | 2 modes (CHAT/TURBO) |
+| **Agent Tools** | 10+ tools (Termux:API) | 5 tools (macOS native) |
+| **Advanced Features** | Swarm, Sentinel, Debug Console | Chat + Toolbox |
+| **Price** | Free | Free |
+| **Privacy** | 100% local | 100% local |
+
+> The Apple Edition is perfect for quick AI sessions on your Mac. The Android version is the full power experience. **Use both — they share the same knowledge format.**
 
 ---
 
