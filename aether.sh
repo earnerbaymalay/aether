@@ -40,6 +40,22 @@ get_context() {
     fi
 }
 
+# --- PREMIUM BOOT SEQUENCE ---
+boot_sequence() {
+    clear
+    echo -e "\n\n"
+    figlet -f small "  AETHER" | gum style --foreground "$ACCENT"
+    echo -e "   \033[1;30mNEURAL OPERATING INTERFACE // INITIALIZING\033[0m\n"
+    
+    local steps=("Kernel Check" "Neural Pathways" "Context7 Vault" "Hardware Sync")
+    for step in "${steps[@]}"; do
+        echo -ne "  \033[1;34m[●]\033[0m $step..."
+        sleep 0.2
+        echo -e " \033[1;32mDONE\033[0m"
+    done
+    sleep 0.5
+}
+
 launch_ai() {
     local mod="$1"
     local url="$2"
@@ -64,16 +80,20 @@ launch_ai() {
         CONTEXT=$(get_context)
         
         clear
-        gum style --foreground "$ACCENT" --border double "Connecting to $mod..."
+        gum style --foreground "$ACCENT" --border double "Connecting to Aether Neural Pathway: $mod..."
         
+        # SYSTEM PROMPT BRANDING
+        SYSTEM_PROMPT="You are Aether-AI, a local-first Neural Operating Interface. $role. Current Environment: ARM64 Termux. Status: High Performance. Skills: [$SKILL_LIST]. Previous Session Context: $CONTEXT."
+
         $BIN -m "$MODELS/$mod" -cnv -t $THREADS --mmap \
           --log-file "$SESSION_DIR/last_session.log" \
-          -p "Role: $role. System State: Aether V18.0. Knowledge: $KNOWLEDGE. Skills: [$SKILL_LIST]. Previous Context: $CONTEXT"
+          -p "$SYSTEM_PROMPT"
     fi
 }
 
 # --- Main Entry ---
 check_deps
+boot_sequence
 
 BATT=$(termux-battery-status 2>/dev/null | grep percentage | cut -d: -f2 | tr -d ' ,%')
 STR=$(df -h /data | awk 'NR==2 {print $4}')
@@ -87,12 +107,15 @@ while true; do
     
     echo -ne "\033[1;34m"
     figlet -f small "   AETHER"
-    echo -e "\033[0;34m   NEURAL INTERFACE SYSTEM // V 18.0\033[0m\n"
-    
-    gum style --foreground "$ACCENT" --border rounded --border-foreground "$DIM" --padding "0 1" --width 40 \
-      " PWR: ${BATT:-N/A}%  •  STR: $STR  •  VAULT: ON "
-    
+    echo -e "\033[0;34m   NEURAL OPERATING INTERFACE // V 18.0\033[0m\n"
+
+    # SYSTEM STATUS COMPACT
+    gum style --foreground "$ACCENT" --border rounded --border-foreground "$DIM" --padding "0 2" --width 50 \
+      " 🔋 BATT: ${BATT:-N/A}%  •  💾 STR: $STR  •  🧠 VAULT: ACTIVE "
+
+    echo -e "\n"
     CHOICE=$(gum choose --cursor.foreground "$ACCENT" --header "      [ SELECT NEURAL PATHWAY ]" \
+
         " 🤖 AGENT   (Hermes-8B) " \
         " ⚡ TURBO   (Llama-3B) " \
         " 🧠 LOGIC   (DeepSeek) " \

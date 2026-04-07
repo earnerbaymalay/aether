@@ -7,7 +7,7 @@
 [![Engine](https://img.shields.io/badge/Engine-Llama.cpp_C%2B%2B-565f89?style=for-the-badge&logo=c%2B%2B)]()
 [![Hardware](https://img.shields.io/badge/Hardware-ARM64_Native-4c566a?style=for-the-badge&logo=android)]()
 
-[**Quick Start**](#-quick-start) • [**Neural Tiers**](#-neural-tier-system) • [**Context7 Brain**](#-context7-local-memory) • [**The Librarian**](#-the-librarian)
+[**Quick Start**](#-quick-start) • [**Neural Tiers**](#-neural-tier-system) • [**Usage Guide**](USAGE.md) • [**Roadmap**](ROADMAP.md)
 
 ---
 </div>
@@ -33,7 +33,7 @@ cd aether
 
 2. **Launch**:
 ```bash
-./aether.sh
+ai
 ```
 *Type `ai` from anywhere in your terminal to return to the interface.*
 
@@ -73,6 +73,14 @@ To ensure your Context7 brain doesn't get cluttered with "junk," Aether includes
 - `skills/`: Specialized modules for Obsidian, Humanizing text, and more.
 - `toolbox/`: A suite of local shell tools the AI can execute.
 - `models/`: High-performance GGUF neural weights.
+
+---
+
+## 🏆 Why Aether?
+In a world of subscription-locked, data-harvesting AI, Aether offers:
+1. **Uncensored Intelligence**: No corporate guardrails on your own hardware.
+2. **Infinite Context**: Your local memory vault grows with you, indefinitely.
+3. **Zero Latency**: Instant response times, even in airplane mode.
 
 ---
 <div align="center">
