@@ -29,8 +29,8 @@ Most mobile AI tools are slow Python wrappers. **Aether-AI** uses a custom-compi
 1. **Prerequisites**: Install [Termux (F-Droid)](https://f-droid.org/packages/com.termux/).
 2. **Deploy**:
 ```bash
-git clone https://github.com/earnerbaymalay/termux-ai-workspace
-cd termux-ai-workspace
+git clone https://github.com/earnerbaymalay/aether.git
+cd aether
 ./aether.sh
 <div align="center">
 Aether-AI: Beyond the Clouds.
