@@ -15,6 +15,8 @@
 
 [**⚡ Quick Start**](#-get-started-in-60-seconds) · [**📖 Full Guide**](USAGE.md) · [**🗺️ Roadmap**](ROADMAP.md) · [**🍎 Apple Edition**](https://github.com/earnerbaymalay/aether-apple) · [**💬 Community**](https://github.com/earnerbaymalay/aether/discussions)
 
+> 📲 **Install on any device — phone, Mac, or iPad — from one place:** [**sideload**](https://earnerbaymalay.github.io/sideload/)
+
 </div>
 
 ---
