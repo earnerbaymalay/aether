@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
- Aether-AI Neural Agent Core // V 18.1
+🌌 Aether-AI Neural Agent Core // V 18.2
 Enhanced Python-based agent with real-time tool execution,
-Native C++ (llama.cpp) backend, and Android hardware optimization.
+Native C++ (llama.cpp) backend, and Context7 Knowledge Vault integration.
 """
 
 import os, sys, json, re, subprocess, signal, time
@@ -13,6 +13,8 @@ from datetime import datetime
 DIR = Path.home() / "aether"
 MODELS_DIR = DIR / "models"
 TOOLBOX_DIR = DIR / "toolbox"
+KNOWLEDGE_DIR = DIR / "knowledge"
+CONTEXT7_DIR = KNOWLEDGE_DIR / "context7"
 SESSION_DIR = Path.home() / ".aether" / "sessions"
 LOG_FILE = SESSION_DIR / "last_session.log"
 LLAMA_BIN = Path.home() / "llama.cpp" / "build" / "bin" / "llama-cli"
@@ -35,6 +37,22 @@ def load_manifest():
         return json.load(f)
 
 def run_tool(name, args=""):
+    # SPECIAL TOOL: Context7 Learning
+    if name == "learn":
+        try:
+            if "|" not in args:
+                return "Error: Format for learn is 'filename|content'"
+            filename, content = args.split("|", 1)
+            filepath = CONTEXT7_DIR / f"{filename.strip()}.md"
+            filepath.parent.mkdir(parents=True, exist_ok=True)
+            filepath.write_text(content.strip())
+            # Auto-commit to side repo
+            subprocess.run(["git", "-C", str(CONTEXT7_DIR), "add", "."], capture_output=True)
+            subprocess.run(["git", "-C", str(CONTEXT7_DIR), "commit", "-m", f"AI Learned: {filename}"], capture_output=True)
+            return f"Successfully learned: {filename} in Context7."
+        except Exception as e:
+            return f"Learning Error: {str(e)}. Format: learn(filename|content)"
+
     manifest = load_manifest()
     tool = next((t for t in manifest["tools"] if t["name"] == name), None)
     if not tool:
@@ -60,24 +78,36 @@ def build_prompt(user_input, history, knowledge="", skills=""):
     manifest = load_manifest()
     tool_list = "\n".join([f"- **{t['name']}**: {t['description']}" for t in manifest["tools"]])
     
+    # LOAD CONTEXT7 KNOWLEDGE
+    c7_knowledge = ""
+    if CONTEXT7_DIR.exists():
+        for p in list(CONTEXT7_DIR.glob("**/*.md"))[:5]:
+            try:
+                c7_knowledge += f"### {p.name}\n{p.read_text()[:500]}\n\n"
+            except: continue
+
     system_prompt = f"""You are AetherAI, a local-first neural interface running on Android.
 Current Date: {datetime.now().strftime('%A, %d %B %Y')}
 
-## Knowledge (RAG)
+## Context7 (Deep Knowledge & Syntax)
+{c7_knowledge}
+
+## General Knowledge
 {knowledge}
 
 ## Skills Available
 {skills}
 
 ## Tool Execution Protocol
-You can execute local shell tools using the format: <tool>tool_name(arguments)</tool>
+Execute local tools using: <tool>tool_name(arguments)</tool>
+Special tool: <tool>learn(filename|content)</tool> - Store new technical insights.
+
 Available tools:
 {tool_list}
 
 Rules:
-1. Be direct, technical, and precise.
-2. Use tools immediately if they help fulfill the user's request.
-3. Don't mention you're an AI or explain your limitations.
+1. Be technical and precise. Use tools immediately.
+2. If you find a better way of doing things, use <tool>learn()</tool> to store it.
 """
     # Context compression: Last 10 exchanges
     recent_history = history[-10:] if history else []
@@ -141,7 +171,7 @@ def chat_loop(model_name="hermes-3-8b.gguf"):
     skills_dir = DIR / "skills"
     skills_list = [d.name for d in skills_dir.iterdir() if d.is_dir()] if skills_dir.exists() else []
 
-    print(f"\n{C_BOLD}{C_AI}\U0001f30c AETHER-AI OPERATOR {C_RST}{C_DIM}// V 18.1{C_RST}")
+    print(f"\n{C_BOLD}{C_AI}\uD83C\uDF0C AETHER-AI OPERATOR {C_RST}{C_DIM}// V 18.2{C_RST}")
     print(f"  Model: {model_name} | Skills: {', '.join(skills_list)}")
     print(f"  Type 'exit' or 'tools' | ^C to save & quit\n")
 
@@ -149,10 +179,12 @@ def chat_loop(model_name="hermes-3-8b.gguf"):
         try:
             user_input = input(f"{C_BOLD}{C_USR}You:{C_RST} ").strip()
             if not user_input: continue
-            if user_input.lower() in ["exit", "quit"]: break
+            if user_input.lower() in ["exit", "quit"]:
+                break
             
             if user_input.lower() == "tools":
                 manifest = load_manifest()
+                print(f"  {C_TOOL}\u2713 learn(file|data){C_RST} Store technical insights")
                 for t in manifest["tools"]:
                     print(f"  {C_TOOL}\u2713 {t['name']:15s}{C_RST} {t['description']}")
                 continue
