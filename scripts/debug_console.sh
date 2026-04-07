@@ -1,51 +1,39 @@
 #!/usr/bin/env bash
 # 🌌 Aether-AI Debug Console // V 1.0
-# Comprehensive system health check and troubleshooting suite.
+# Real-time monitoring and self-healing for the Neural Interface.
 
-ACCENT="#81a1c1"; SUC="#50fa7b"; ERR="#ff5555"
-DIR="$HOME/aether"
+ACCENT="#81a1c1"; RED="#ff5555"; SUC="#50fa7b"
+LOG_DIR="$HOME/.aether/sessions"
+AETHER_LOG="$LOG_DIR/last_session.log"
+SENTINEL_LOG="$LOG_DIR/sentinel.log"
 
 header() {
     clear
-    figlet -f small " DEBUG CONSOLE " | gum style --foreground "$ACCENT"
+    figlet -f small "  DEBUG" | gum style --foreground "$RED"
+    echo -e "   \033[1;30mNEURAL INTERFACE // MONITORING CONSOLE\033[0m\n"
 }
 
-check_file() {
-    if [ -f "$1" ]; then
-        echo -e "  [✓] $1 \033[1;32mFOUND\033[0m"
+check_errors() {
+    if grep -Eiq "error|fail|oom|panic" "$AETHER_LOG" 2>/dev/null; then
+        echo -e "\033[1;31m[!] Critical Error Detected in Aether Session.\033[0m"
+        gum confirm "Initiate Self-Healing (Reset Session)?" && {
+            rm -f "$AETHER_LOG"
+            gum toast "Neural State Reset. Memory Flushed."
+        }
     else
-        echo -e "  [!] $1 \033[1;31mMISSING\033[0m"
+        echo -e "\033[1;32m[✓] Neural Pathways Healthy.\033[0m"
     fi
 }
 
 header
-echo -e "\033[1;34m=== SYSTEM STATUS ===\033[0m"
-echo -e "Device: $(getprop ro.product.model)"
-echo -e "Profile: $(grep TIER "$DIR/.aether_config" | cut -d= -f2 || echo "NONE")"
-echo -e "Engine: $([ -f "$HOME/llama.cpp/build/bin/llama-cli" ] && echo "ACTIVE" || echo "INACTIVE")"
+check_errors
 
-echo -e "\n\033[1;34m=== CORE FILE CHECK ===\033[0m"
-check_file "$DIR/aether.sh"
-check_file "$DIR/install.sh"
-check_file "$DIR/bench.sh"
-check_file "$DIR/.aether_config"
-check_file "$DIR/scripts/rag_engine.py"
-check_file "$DIR/scripts/librarian.py"
+echo -e "\n\033[1;34m[ MONITORING CHANNELS ]\033[0m"
+CHANNEL=$(gum choose " 🌌 AETHER (Main Session) " " 🛡️ SENTINEL (Security Hub) " " ⚙️ SYSTEM (Termux Logs) " " 🔙 BACK ")
 
-echo -e "\n\033[1;34m=== NEURAL PATHWAY CHECK ===\033[0m"
-for mod in "llama-3.2-3b.gguf" "hermes-3-8b.gguf" "deepseek-r1-1.5b.gguf" "qwen-coder-3b.gguf"; do
-    if [ -f "$DIR/models/$mod" ]; then
-        echo -e "  [✓] $mod \033[1;32mREADY\033[0m"
-    else
-        echo -e "  [ ] $mod \033[1;33mPENDING\033[0m"
-    fi
-done
-
-echo -e "\n\033[1;34m=== RAG ENGINE TEST ===\033[0m"
-python3 "$DIR/scripts/rag_engine.py" "neural" | head -n 3
-
-echo -e "\n\033[1;34m=== LIBRARIAN TEST ===\033[0m"
-python3 "$DIR/scripts/librarian.py" | grep "Vault Status" || echo "Librarian Active."
-
-echo -e "\n\033[1;30mPress any key to exit debug console...\033[0m"
-read -n 1
+case "$CHANNEL" in
+    *"AETHER"*) tail -f "$AETHER_LOG" | gum pager ;;
+    *"SENTINEL"*) tail -f "$SENTINEL_LOG" | gum pager ;;
+    *"SYSTEM"*) logcat -d | tail -n 50 | gum pager ;;
+    *) exit 0 ;;
+esac
