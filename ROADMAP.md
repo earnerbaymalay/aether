@@ -1,44 +1,45 @@
 # 🌌 A E T H E R — R O A D M A P
-### *The Evolution of the Neural Operating Interface*
+### *The Strategic Evolution of the Neural Operating Interface*
 
-This document outlines the strategic vision for **Aether-AI**, from its current state to a fully autonomous, hardware-integrated ecosystem.
+This document outlines the four-phase vision for **Aether-AI**, from foundational performance to a fully autonomous, hardware-integrated ecosystem.
 
 ---
 
-## ⚡ Phase 1: Foundations (Current)
-*Focus: Performance, Stability, and Core Orchestration.*
-- [x] **Neural Tiers**: Multi-model routing system (Llama-3.2, Hermes-3, Qwen-Coder, DeepSeek-R1).
-- [x] **Local Execution**: C++ native backend with `llama.cpp` for ARM64.
-- [x] **Context7**: Markdown-based persistent memory vault (Obsidian-ready).
+## ⚡ Phase 1: Foundations (The Core)
+*Status: Complete & Stable*
+- [x] **Neural Tier Routing**: Native C++ execution (Llama-3.2, Hermes-3, Qwen-Coder, DeepSeek-R1).
+- [x] **Context7 Vaulting**: Markdown-based persistent memory (Obsidian-ready).
+- [x] **Premium TUI UI**: Unified orchestrator with real-time health metrics.
 - [x] **The Librarian**: Automated knowledge deduplication and auditing.
 
 ---
 
-## 🚀 Phase 2: Orchestration & UX (Q2 2026)
-*Focus: Marketable UX and Advanced Tooling.*
-- [ ] **Guided Onboarding**: Smart installer with auto-benchmarking and hardware optimization.
-- [ ] **Interactive Dashboard**: Move from simple TUI menus to a more rich, reactive dashboard (using `Textual` or `Rich` for Python).
-- [ ] **Android Intent Integration**: Trigger Aether via Android shortcuts or "Share to Aether" intents.
-- [ ] **Advanced RAG**: Integrate `chromadb` or `faiss` for vector-based search within Context7.
+## 🚀 Phase 2: Orchestration (The Interface)
+*Status: Current Development*
+- [x] **Debug & Self-Healing**: Real-time log monitoring and session recovery.
+- [x] **Guided Onboarding**: High-fidelity interactive installer and benchmarker.
+- [x] **Skill Marketplace**: Extensible registry for local AI tools and plugins.
+- [ ] **Android Shortcuts**: One-tap Aether activation via Termux:Widget.
 
 ---
 
-## 🧠 Phase 3: Autonomy & Agency (Q3 2026)
-*Focus: Self-Evolving Systems.*
-- [ ] **Background Sentinel**: A passive agent that audits system logs and provides proactive insights.
-- [ ] **Multi-Agent Swarms**: Collaborative task-solving (e.g., Logic tier plans, Code tier writes, Agent tier executes).
-- [ ] **Skill Marketplace**: A registry of local tools (scripts/plugins) that users can easily install and the Agent can utilize.
-- [ ] **Voice Interface**: Local STT (Speech-to-Text) and TTS (Text-to-Speech) for hands-free interaction.
+## 🧠 Phase 3: Agency (The Swarm)
+*Status: Architecture Planning*
+- [x] **Swarm Orchestrator**: Multi-agent missions using tiered neural reasoning.
+- [x] **Background Sentinel**: Passive monitoring for proactive system insights.
+- [ ] **Advanced RAG**: Vector-based search for massive local knowledge vaults.
+- [ ] **Voice Interface**: Local STT and TTS for hands-free command execution.
 
 ---
 
-## 🌌 Phase 4: Beyond the Shell (2027+)
-*Focus: Ecosystem Integration.*
-- [ ] **AetherOS**: A dedicated, minimal Linux distribution for high-performance AI computation on mobile hardware.
-- [ ] **Distributed Neural Mesh**: Inter-device model execution (e.g., your Phone and Tablet sharing the compute load).
-- [ ] **Hardware Acceleration**: Deep integration with NPU/GPU drivers for real-time video/audio processing.
+## 🌌 Phase 4: Autonomy (The Ecosystem)
+*Status: Research Vision*
+- [ ] **AetherOS**: A minimal, neural-first distribution for ARM64 hardware.
+- [ ] **Distributed Neural Mesh**: Inter-device compute sharing (Phone + Tablet + PC).
+- [ ] **Hardware Acceleration**: NPU/GPU native integration for real-time video/audio processing.
+- [ ] **Self-Coding**: Autonomous agentic refactoring of the Aether core itself.
 
 ---
 <div align="center">
-*Aether is more than a tool; it's the start of a local-first neural future.*
+*Aether is more than a tool; it's a living ecosystem. Join the evolution.*
 </div>

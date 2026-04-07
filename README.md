@@ -1,88 +1,66 @@
 <div align="center">
 
 # 🌌 A E T H E R — A I
-### *The Neural Operating Interface for Android*
+### *The Neural Operating Interface for High-Performance ARM64*
 
 [![Status](https://img.shields.io/badge/Status-Superior-81a1c1?style=for-the-badge)]()
-[![Engine](https://img.shields.io/badge/Engine-Llama.cpp_C%2B%2B-565f89?style=for-the-badge&logo=c%2B%2B)]()
-[![Hardware](https://img.shields.io/badge/Hardware-ARM64_Native-4c566a?style=for-the-badge&logo=android)]()
+[![Engine](https://img.shields.io/badge/Engine-Llama.cpp_Native-565f89?style=for-the-badge&logo=c%2B%2B)]()
+[![Hardware](https://img.shields.io/badge/Hardware-Snapdragon_Native-4c566a?style=for-the-badge&logo=android)]()
 
-[**Quick Start**](#-quick-start) • [**Neural Tiers**](#-neural-tier-system) • [**Usage Guide**](USAGE.md) • [**Roadmap**](ROADMAP.md)
+[**The Journey**](#-the-journey) • [**Neural Architecture**](#-neural-tier-system) • [**Context7 Memory**](#-context7-brain) • [**Getting Started**](USAGE.md)
 
 ---
 </div>
 
 ## 💎 The Philosophy
-Most mobile AI tools are slow, internet-dependent wrappers. **Aether-AI** is a local-first **Neural Operating Interface (NOI)**. It lives entirely on your device, bypasses the cloud, and uses a custom-compiled C++ backend tuned specifically for **ARMv8 NEON** instructions.
+Most mobile AI experiences are mere wrappers around corporate APIs. They are data-extractive, internet-dependent, and latency-heavy. 
 
-- **100% Private**: No data ever leaves your phone.
-- **Hardware Native**: Direct execution on Snapdragon/Pixel silicon.
-- **Self-Evolving**: A persistent memory system that learns as you work.
+**Aether-AI** is a **Neural Operating Interface (NOI)** built from the ground up for the local-first era. It doesn't just "chat"; it operates your device, learns your technical workflows, and evolves into a persistent extension of your own intelligence—all without a single byte leaving your hardware.
 
 ---
 
-## 🚀 Quick Start
-Get up and running in minutes. (Requires [Termux](https://f-droid.org/packages/com.termux/))
+## 🚀 The Journey: Beyond the Shell
+Welcome to the terminal-native future. Aether transforms your Termux environment into a high-performance neural workstation.
 
-1. **Deploy**:
-```bash
-git clone https://github.com/earnerbaymalay/aether.git
-cd aether
-./install.sh
-```
-
-2. **Launch**:
-```bash
-ai
-```
-*Type `ai` from anywhere in your terminal to return to the interface.*
+1. **Self-Contained Power**: Native C++ execution tuned for **ARMv8 NEON** instructions.
+2. **Autonomous Agency**: The **Swarm Orchestrator** leverages multi-tier models for complex task-solving.
+3. **Evolving Context**: **Context7** is a living, Markdown-based vault that grows as you work.
+4. **Marketable UX**: A premium TUI designed for clarity, speed, and focus.
 
 ---
 
 ## 🧠 Neural Tier System
-Aether dynamically routes your requests to the optimal "brain" for the task:
+Aether routes your requests to the optimal "brain" for the task:
 
-| Tier | Model | Specialty | Performance |
+| Tier | Model | specialty | Performance |
 | :--- | :--- | :--- | :--- |
-| **⚡ TURBO** | Llama-3.2-3B | Instant Chat & Daily Tasks | 25+ t/s |
-| **🤖 AGENT** | Hermes-3-8B | Shell Execution & Tool-Use | 10-15 t/s |
-| **💻 CODE** | Qwen-Coder-3B | Scripting, Debugging & Refactoring | 18+ t/s |
-| **🧠 LOGIC** | DeepSeek-R1 | Complex Reasoning & Auditing | 22+ t/s |
+| **⚡ TURBO** | Llama-3.2-3B | Instant Daily Tasks | 25+ t/s |
+| **🤖 AGENT** | Hermes-3-8B | Shell & Tool-Use | 10-15 t/s |
+| **💻 CODE** | Qwen-Coder-3B | Expert Refactoring | 18+ t/s |
+| **🧠 LOGIC** | DeepSeek-R1 | Architectural Planning | 22+ t/s |
 
 ---
 
-## 💾 Context7: The Local Brain
-Aether isn't just a chatbot; it has a **Persistent Memory Vault**.
+## 💾 Context7: Your Persistent Brain
+Aether doesn't forget.
 - **Location**: `~/aether/knowledge/context7/`
-- **Mechanism**: The **AGENT** tier uses a specialized `learn` tool to write technical insights, syntax rules, and examples into this vault.
-- **Compatibility**: All memory is stored as Markdown, fully compatible with **Obsidian**.
+- **Mechanism**: The **AGENT** uses a specialized `learn` tool to archive technical insights and custom syntax.
+- **Obsidian Ready**: Your memory is stored in standard Markdown, compatible with any knowledge management tool.
 
 ---
 
-## 📖 The Librarian
-To ensure your Context7 brain doesn't get cluttered with "junk," Aether includes a dedicated **Librarian** (powered by the Logic tier). 
-- **Deduplication**: Merges similar knowledge entries.
-- **Audit**: Archives low-value or outdated info.
-- **Standardization**: Ensures all learned notes follow a professional technical format.
-
----
-
-## 📂 Project Structure
+## 📂 Architecture at a Glance
 - `aether.sh`: The master UI and neural orchestrator.
 - `agent/`: Python-based agent core with real-time tool execution.
-- `skills/`: Specialized modules for Obsidian, Humanizing text, and more.
-- `toolbox/`: A suite of local shell tools the AI can execute.
-- `models/`: High-performance GGUF neural weights.
+- `scripts/`: System auditors, swarms, and self-healing modules.
+- `skills/`: Extensible marketplace for local neural tools.
+- `toolbox/`: A suite of native shell tools for system interaction.
 
 ---
 
 ## 🏆 Why Aether?
-In a world of subscription-locked, data-harvesting AI, Aether offers:
-1. **Uncensored Intelligence**: No corporate guardrails on your own hardware.
-2. **Infinite Context**: Your local memory vault grows with you, indefinitely.
-3. **Zero Latency**: Instant response times, even in airplane mode.
+In a world of subscription-locked intelligence, Aether offers **Uncensored Freedom**. No corporate guardrails, zero latency, and 100% privacy.
 
----
 <div align="center">
-Aether-AI: Beyond the Clouds. Developed for the High-Performance ARM64 Ecosystem.
+*Aether-AI: Develop natively. Think locally. Evolve autonomously.*
 </div>
