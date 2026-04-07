@@ -106,9 +106,10 @@ while true; do
         *"LOGIC"*) launch_ai "deepseek-r1-1.5b.gguf" "https://huggingface.co/unsloth/DeepSeek-R1-Distill-Qwen-1.5B-GGUF/resolve/main/DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M.gguf" "Deep Thinker" "false" ;;
         *"CODE"*)  launch_ai "qwen-coder-3b.gguf" "https://huggingface.co/bartowski/Qwen2.5-Coder-3B-Instruct-GGUF/resolve/main/Qwen2.5-Coder-3B-Instruct-Q4_K_M.gguf" "Expert Coder" "false" ;;
         *"TOOLS"*) 
-            TOOL=$(gum choose " 🧹 PURGE (Clear Memory) " " 📏 BENCHMARK (Hardware) " " 📘 SKILLS (View Installed) " " 🔙 BACK ")
+            TOOL=$(gum choose " 🧹 PURGE (Clear Memory) " " 📖 LIBRARIAN (Audit Vault) " " 📏 BENCHMARK (Hardware) " " 📘 SKILLS (View Installed) " " 🔙 BACK ")
             case "$TOOL" in
                 *"PURGE"*) rm -f "$SESSION_DIR/last_session.log" && gum toast "Memory Wiped." ;;
+                *"LIBRARIAN"*) python3 "$DIR/scripts/librarian.py" | gum pager ;;
                 *"BENCHMARK"*) ./bench.sh ;;
                 *"SKILLS"*) ls -R skills/ | gum pager ;;
             esac
