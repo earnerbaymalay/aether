@@ -4,7 +4,7 @@
 
 ### *Your Phone. Your AI. Your Rules.*
 
-[![Status](https://img.shields.io/badge/Status-Production_Ready-50fa7b?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Active_Development-50fa7b?style=for-the-badge)]()
 [![Engine](https://img.shields.io/badge/Engine-Llama.cpp_Native-81a1c1?style=for-the-badge&logo=c%2B%2B)]()
 [![Platform](https://img.shields.io/badge/Platform-Android_%7C_Termux-4c566a?style=for-the-badge&logo=android)]()
 [![License](https://img.shields.io/badge/License-MIT-f1fa8c?style=for-the-badge)]()
@@ -227,7 +227,7 @@ Aether is built by people who believe AI should be **free, private, and local**.
 - 🐛 Found a bug? [Open an issue](https://github.com/earnerbaymalay/aether/issues)
 - 💡 Have an idea? [Start a discussion](https://github.com/earnerbaymalay/aether/discussions)
 - 🔧 Want to code? Fork the repo and submit a PR!
-- 📖 Know a niche? Write a [Skill](aether/skills/) and share it
+- 📖 Know a niche? Write a [Skill](skills/) and share it
 
 ---
 
