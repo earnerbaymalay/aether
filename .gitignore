@@ -14,18 +14,46 @@ storage/
 .npm/
 .cargo/
 .ollama/
+.cache/
+.pip/
 
 # Generated
 *.log
 *.pyc
 __pycache__/
 .session.*
+node_modules/
 
 # OS
 .DS_Store
 Thumbs.db
 
+# Shell history
+.bash_history
+.wget-hsts
+.lesshst
+
 # Aether
 knowledge/user_profile.txt
 knowledge/user_profile.bak
 knowledge/system.env
+
+# Nested git repos (each has its own repo)
+aether/
+aether-apple/
+aether-desktop/
+edge-sentinel/
+e2eecc/
+gloam/
+meshtouch/
+sideload/
+CYBERSEC-AI-TAFE-PROJECTS/
+Edge-Sentinel-Mobile/
+Termux-Vault/
+ai-hub-widget/
+cascad-mobile/
+maskphish/
+multi-ai-terminal-setup/
+nexus11-optimizer.py/
+ollama-source/
+Documents-Link/
