@@ -4,11 +4,23 @@
 # Repository: https://github.com/earnerbaymalay/aether
 
 # --- Configuration ---
-ACCENT="#81a1c1"; DIM="#4c566a"; WHITE="#eceff4"; RED="#ff5555"
+# Load settings from config file if available
+SETTINGS_FILE="$DIR/settings/config.json"
+if [ -f "$SETTINGS_FILE" ]; then
+    ACCENT=$(python3 -c "import json; print(json.load(open('$SETTINGS_FILE')).get('appearance',{}).get('accent_color','#00ff9d'))" 2>/dev/null || echo "#00ff9d")
+    THREADS=$(python3 -c "import json; print(json.load(open('$SETTINGS_FILE')).get('model',{}).get('threads',6))" 2>/dev/null || echo 6)
+    CTX_SIZE=$(python3 -c "import json; print(json.load(open('$SETTINGS_FILE')).get('model',{}).get('context_size',2048))" 2>/dev/null || echo 2048)
+    TEMP=$(python3 -c "import json; print(json.load(open('$SETTINGS_FILE')).get('model',{}).get('temperature',0.7))" 2>/dev/null || echo 0.7)
+else
+    ACCENT="#00ff9d"; DIM="#4c566a"; WHITE="#eceff4"; RED="#ff5555"
+    THREADS=6; CTX_SIZE=2048; TEMP=0.7
+fi
+
 DIR="$HOME/aether"
 BIN="$HOME/llama.cpp/build/bin/llama-cli"
 MODELS="$DIR/models"
-THREADS=6
+THREADS=${THREADS:-6}
+CTX_SIZE=${CTX_SIZE:-2048}
 SESSION_DIR="$HOME/.aether/sessions"
 
 # --- Dependencies Check ---
@@ -75,17 +87,17 @@ launch_ai() {
         python3 "$DIR/agent/aether_agent.py" --model "$mod"
     else
         # LOAD KNOWLEDGE & SKILLS
-        KNOWLEDGE=$(cat "$DIR/knowledge"/*.txt 2>/dev/null | tr '\n' ' ' | cut -c 1-1000)
+        KNOWLEDGE=$(cat "$DIR/knowledge"/*.txt 2>/dev/null | tr '\n' ' ' | cut -c 1-2000)
         SKILL_LIST=$(ls "$DIR/skills" 2>/dev/null | tr '\n' ',' | sed 's/,$//')
         CONTEXT=$(get_context)
-        
+
         clear
         gum style --foreground "$ACCENT" --border double "Connecting to Aether Neural Pathway: $mod..."
-        
-        # SYSTEM PROMPT BRANDING
-        SYSTEM_PROMPT="You are Aether-AI, a local-first Neural Operating Interface. $role. Current Environment: ARM64 Termux. Status: High Performance. Skills: [$SKILL_LIST]. Previous Session Context: $CONTEXT."
 
-        $BIN -m "$MODELS/$mod" -cnv -t $THREADS --mmap \
+        # SYSTEM PROMPT BRANDING
+        SYSTEM_PROMPT="You are Aether-AI, a local-first Neural Operating Interface. $role. Current Environment: ARM64 Termux. Status: High Performance. Threads: $THREADS. Context: ${CTX_SIZE}. Skills: [$SKILL_LIST]. Previous Session Context: $CONTEXT."
+
+        $BIN -m "$MODELS/$mod" -cnv -t $THREADS --mmap -c $CTX_SIZE --temp $TEMP \
           --log-file "$SESSION_DIR/last_session.log" \
           -p "$SYSTEM_PROMPT"
     fi
@@ -105,9 +117,9 @@ while true; do
     [ $VPAD -lt 0 ] && VPAD=0
     for i in $(seq 1 $VPAD); do echo ""; done
     
-    echo -ne "\033[1;34m"
+    echo -e "\n\033[1;34m"
     figlet -f small "   AETHER"
-    echo -e "\033[0;34m   NEURAL OPERATING INTERFACE // V 18.0\033[0m\n"
+    echo -e "\033[0;34m   NEURAL OPERATING INTERFACE // V 20.0\033[0m\n"
 
     # SYSTEM STATUS COMPACT
     gum style --foreground "$ACCENT" --border rounded --border-foreground "$DIM" --padding "0 2" --width 50 \
@@ -130,13 +142,27 @@ while true; do
         *"LOGIC"*) launch_ai "deepseek-r1-1.5b.gguf" "https://huggingface.co/unsloth/DeepSeek-R1-Distill-Qwen-1.5B-GGUF/resolve/main/DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M.gguf" "Deep Thinker" "false" ;;
         *"CODE"*)  launch_ai "qwen-coder-3b.gguf" "https://huggingface.co/bartowski/Qwen2.5-Coder-3B-Instruct-GGUF/resolve/main/Qwen2.5-Coder-3B-Instruct-Q4_K_M.gguf" "Expert Coder" "false" ;;
         *"SECURITY"*) ./scripts/launch_sentinel.sh ;;
-        *"TOOLS"*) 
-            TOOL=$(gum choose " 🧹 PURGE (Clear Memory) " " 📖 LIBRARIAN (Audit Vault) " " 📏 BENCHMARK (Hardware) " " 🛒 SKILL MARKET (Extensions) " " 🐞 DEBUG CONSOLE (Self-Healing) " " 🔙 BACK ")
+        *"TOOLS"*)
+            TOOL=$(gum choose \
+                " 🧹 PURGE (Clear Memory) " \
+                " 📖 LIBRARIAN (Audit Vault) " \
+                " 📏 BENCHMARK (Hardware) " \
+                " 🛒 SKILL MARKET (Extensions) " \
+                " ⚙ SETTINGS (Configuration) " \
+                " 📦 CONTEXT IMPORT " \
+                " 🔄 WORKFLOWS " \
+                " 🗜 TOKEN OPTIMIZER " \
+                " 🐞 DEBUG CONSOLE (Self-Healing) " \
+                " 🔙 BACK ")
             case "$TOOL" in
                 *"PURGE"*) rm -f "$SESSION_DIR/last_session.log" && gum toast "Memory Wiped." ;;
                 *"LIBRARIAN"*) python3 "$DIR/scripts/librarian.py" | gum pager ;;
                 *"BENCHMARK"*) ./bench.sh ;;
                 *"MARKET"*) ./scripts/skill_market.sh ;;
+                *"SETTINGS"*) bash "$DIR/settings/settings.sh" ui ;;
+                *"CONTEXT"*) bash "$DIR/contexts/context_manager.sh" list ;;
+                *"WORKFLOWS"*) bash "$DIR/scripts/workflow_engine.sh" list ;;
+                *"TOKEN"*) bash "$DIR/scripts/token_optimizer.sh" stats ;;
                 *"DEBUG"*) ./scripts/debug_console.sh ;;
             esac
             ;;

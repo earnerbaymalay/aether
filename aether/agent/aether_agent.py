@@ -109,26 +109,62 @@ def run_tool(name, args=""):
         return f"Execution Error: {str(e)}"
 
 # --- Inference Engine ---
+def load_skill_content(skill_name):
+    """Load full SKILL.md content instead of just the name."""
+    skill_path = DIR / "skills" / skill_name / "SKILL.md"
+    if skill_path.exists():
+        try:
+            return skill_path.read_text()[:2000]  # Cap at 2000 chars per skill
+        except:
+            return f"[Skill: {skill_name} - content unreadable]"
+    return f"[Skill: {skill_name} - not found]"
+
 def build_system_prompt(knowledge="", skills=""):
     manifest = load_manifest()
     tool_list = "\n".join([f"- **{t['name']}**: {t['description']}" for t in manifest["tools"]])
-    
+
+    # Load actual SKILL.md content, not just names
+    skills_dir = DIR / "skills"
+    skill_content = ""
+    if skills_dir.exists():
+        for skill_dir in skills_dir.iterdir():
+            if skill_dir.is_dir():
+                content = load_skill_content(skill_dir.name)
+                skill_content += f"\n## Skill: {skill_dir.name}\n{content}\n"
+
+    # Load Context7 knowledge with relevance awareness
     c7_knowledge = ""
     if CONTEXT7_DIR.exists():
-        for p in list(CONTEXT7_DIR.glob("**/*.md"))[:5]:
+        for p in list(CONTEXT7_DIR.glob("**/*.md"))[:8]:  # Increased from 5 to 8
             try:
-                c7_knowledge += f"### {p.name}\n{p.read_text()[:300]}\n\n"
+                c7_knowledge += f"### {p.name}\n{p.read_text()[:500]}\n\n"  # Increased from 300 to 500
             except:
                 continue
 
+    # Load settings if available
+    settings_info = ""
+    settings_file = DIR / "settings" / "config.json"
+    if settings_file.exists():
+        try:
+            cfg = json.loads(settings_file.read_text())
+            settings_info = f"## Configuration\nProfile: {cfg.get('profile', 'balanced')}\n"
+            model_cfg = cfg.get('model', {})
+            settings_info += f"Context: {model_cfg.get('context_size', 2048)} tokens, "
+            settings_info += f"Temperature: {model_cfg.get('temperature', 0.7)}, "
+            settings_info += f"Threads: {model_cfg.get('threads', 4)}\n\n"
+        except:
+            pass
+
     return f"""You are AetherAI, a local-first neural interface running on Android.
+Your phone. Your AI. Your rules. No cloud. No tracking. No limits.
 Current Date: {datetime.now().strftime('%A, %d %B %Y')}
 
-## Context7 Knowledge
+{settings_info}
+## Context7 Knowledge Vault
 {c7_knowledge}
 
-## Skills Available
-{skills}
+## Skills (Full Instructions)
+{skill_content}
 
 ## Tool Protocol
 Execute tools via: <tool>name(args)</tool>
@@ -138,9 +174,11 @@ Available tools:
 {tool_list}
 
 Rules:
-1. Be technical and concise. No conversational filler.
-2. Use tools immediately if they help.
-3. If you find a better way, use <tool>learn()</tool>.
+1. Be technical and concise. No conversational filler, no AI-isms.
+2. Use tools immediately if they help answer the query.
+3. Read and follow skill instructions from the Skills section above.
+4. If you discover something valuable, use <tool>learn()</tool> to save it.
+5. NEVER mention being an AI, language model, or assistant.
 """
 
 def generate_completion(prompt, stream=True):

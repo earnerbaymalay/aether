@@ -1,0 +1,206 @@
+# Agentic Workflow Registry
+# Inspired by ThibautMelen's nikas pattern - YAML-declarative multi-agent orchestration
+# 
+# Format: Each workflow is a YAML-like structure with:
+#   name: workflow identifier
+#   description: what it does
+#   stages: ordered list of steps
+#     - name: stage name
+#       agent: which tier/model to use
+#       action: what to do
+#       input: where to get input
+#       output: where to put output
+#       tools: list of tools to use
+#       condition: optional condition for execution
+#
+# Verbs (inspired by nika's 5 YAML verbs):
+#   DEFINE: Set up context/configuration
+#   ROUTE: Direct to appropriate agent/model
+#   EXECUTE: Run the actual operation
+#   EVALUATE: Check results and quality
+#   COMPOSE: Combine outputs into final result
+
+---
+- name: code_review_pipeline
+  description: Multi-stage code review with security, quality, and performance analysis
+  stages:
+    - name: security_scan
+      agent: logic
+      action: DEFINE
+      description: "Scan code for security vulnerabilities"
+      tools: ["dependency_checker", "log_analyzer"]
+      input: "target_code"
+      output: "security_findings"
+    - name: quality_analysis
+      agent: code
+      action: EXECUTE
+      description: "Analyze code quality metrics"
+      tools: ["list_files"]
+      input: "target_code"
+      output: "quality_report"
+      condition: "security_findings.severity < CRITICAL"
+    - name: performance_review
+      agent: logic
+      action: EVALUATE
+      description: "Identify performance bottlenecks"
+      input: "target_code"
+      output: "perf_report"
+    - name: compose_report
+      agent: agent
+      action: COMPOSE
+      description: "Generate unified review report"
+      input: "security_findings,quality_report,perf_report"
+      output: "final_review"
+
+- name: research_analysis
+  description: Systematic research and analysis workflow
+  stages:
+    - name: define_scope
+      agent: logic
+      action: DEFINE
+      description: "Define research objectives and scope"
+      input: "research_question"
+      output: "research_plan"
+    - name: gather_data
+      agent: agent
+      action: EXECUTE
+      description: "Collect relevant information"
+      tools: ["web_search", "web_read", "list_files"]
+      input: "research_plan"
+      output: "raw_data"
+    - name: analyze
+      agent: logic
+      action: EVALUATE
+      description: "Analyze and synthesize findings"
+      input: "raw_data"
+      output: "analysis"
+    - name: report
+      agent: agent
+      action: COMPOSE
+      description: "Generate research report"
+      input: "analysis"
+      output: "final_report"
+
+- name: feature_implementation
+  description: End-to-end feature development workflow
+  stages:
+    - name: requirements
+      agent: logic
+      action: DEFINE
+      description: "Clarify requirements and acceptance criteria"
+      input: "feature_request"
+      output: "requirements_doc"
+    - name: design
+      agent: logic
+      action: DEFINE
+      description: "Design implementation approach"
+      input: "requirements_doc"
+      output: "design_doc"
+    - name: implement
+      agent: code
+      action: EXECUTE
+      description: "Write the code"
+      tools: ["list_files", "dependency_checker"]
+      input: "design_doc"
+      output: "implementation"
+    - name: test
+      agent: code
+      action: EVALUATE
+      description: "Test the implementation"
+      tools: ["list_files", "log_analyzer"]
+      input: "implementation"
+      output: "test_results"
+    - name: deploy
+      agent: agent
+      action: COMPOSE
+      description: "Deploy and verify"
+      input: "implementation,test_results"
+      output: "deployed_feature"
+
+- name: debug_fix_cycle
+  description: Systematic debugging and fix workflow
+  stages:
+    - name: reproduce
+      agent: logic
+      action: DEFINE
+      description: "Understand and reproduce the bug"
+      input: "bug_report"
+      output: "reproduction_steps"
+    - name: isolate
+      agent: logic
+      action: EXECUTE
+      description: "Isolate root cause"
+      tools: ["log_analyzer", "list_files"]
+      input: "reproduction_steps"
+      output: "root_cause"
+    - name: fix
+      agent: code
+      action: EXECUTE
+      description: "Implement the fix"
+      input: "root_cause"
+      output: "fix"
+    - name: verify
+      agent: code
+      action: EVALUATE
+      description: "Verify fix and check for regressions"
+      input: "fix"
+      output: "verification"
+
+- name: security_audit_full
+  description: Complete security audit workflow
+  stages:
+    - name: recon
+      agent: agent
+      action: DEFINE
+      description: "Network reconnaissance"
+      tools: ["system_monitor"]
+      input: "target"
+      output: "recon_data"
+    - name: vuln_scan
+      agent: agent
+      action: EXECUTE
+      description: "Vulnerability scanning"
+      tools: ["system_monitor", "dependency_checker"]
+      input: "recon_data"
+      output: "vulnerabilities"
+    - name: assess
+      agent: logic
+      action: EVALUATE
+      description: "Risk assessment and prioritization"
+      input: "vulnerabilities"
+      output: "risk_report"
+    - name: remediate
+      agent: agent
+      action: COMPOSE
+      description: "Generate remediation plan"
+      input: "risk_report"
+      output: "remediation_plan"
+
+- name: data_pipeline
+  description: End-to-end data processing and analysis
+  stages:
+    - name: ingest
+      agent: agent
+      action: DEFINE
+      description: "Discover and load data sources"
+      tools: ["list_files"]
+      input: "data_source"
+      output: "raw_data"
+    - name: clean
+      agent: logic
+      action: EXECUTE
+      description: "Clean and validate data"
+      input: "raw_data"
+      output: "clean_data"
+    - name: analyze
+      agent: logic
+      action: EVALUATE
+      description: "Statistical analysis"
+      input: "clean_data"
+      output: "analysis_results"
+    - name: visualize
+      agent: agent
+      action: COMPOSE
+      description: "Generate insights and visualizations"
+      input: "analysis_results"
+      output: "final_report"

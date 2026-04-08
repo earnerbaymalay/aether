@@ -14,6 +14,8 @@
     {"name": "model_router", "description": "Display and manage AI model routing configuration and optimization", "script": "model_router.sh", "enabled": true},
     {"name": "config_manager", "description": "Manage Aether configuration profiles and settings", "script": "config_manager.sh", "enabled": true},
     {"name": "backup_manager", "description": "Comprehensive backup and restore for Aether and related projects", "script": "backup_manager.sh", "enabled": true},
-    {"name": "system_monitor", "description": "Real-time system monitoring with alerts and metrics history", "script": "system_monitor.sh", "enabled": true}
+    {"name": "system_monitor", "description": "Real-time system monitoring with alerts and metrics history", "script": "system_monitor.sh", "enabled": true},
+    {"name": "lsp_server", "description": "Language Server Protocol for code intelligence (diagnostics, symbols, definitions)", "script": "../lsp/lsp_server.sh", "enabled": true},
+    {"name": "token_optimizer", "description": "Token compression and context optimization (60-90% token savings)", "script": "../scripts/token_optimizer.sh", "enabled": true}
   ]
 }
