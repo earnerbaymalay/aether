@@ -9,7 +9,7 @@ import os, sys, json, subprocess
 from pathlib import Path
 
 DIR = Path.home() / "aether"
-CONTEXT7_DIR = DIR / "knowledge" / "context7"
+CONTEXT7_DIR = DIR / "knowledge" / "aethervault"
 LLAMA_BIN = Path.home() / "llama.cpp" / "build" / "bin" / "llama-cli"
 MODEL_PATH = DIR / "models" / "deepseek-r1-1.5b.gguf"
 

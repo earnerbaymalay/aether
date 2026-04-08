@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🌌 Aether-AI Neural Agent Core // V 19.0 (Server Edition)
+🌌 Aether-AI Neural Agent Core // V 26.04.2 (Server Edition)
 High-performance Python agent utilizing a persistent llama-server backend.
 Optimized for instant responses and robust error handling on Android.
 """
@@ -14,11 +14,19 @@ DIR = Path.home() / "aether"
 MODELS_DIR = DIR / "models"
 TOOLBOX_DIR = DIR / "toolbox"
 KNOWLEDGE_DIR = DIR / "knowledge"
-CONTEXT7_DIR = KNOWLEDGE_DIR / "context7"
+CONTEXT7_DIR = KNOWLEDGE_DIR / "aethervault"  # Legacy path (AetherVault)
 SESSION_DIR = Path.home() / ".aether" / "sessions"
 SERVER_LOG = SESSION_DIR / "llama_server.log"
 LLAMA_SERVER_BIN = Path.home() / "llama.cpp" / "build" / "bin" / "llama-server"
 API_URL = "http://127.0.0.1:8080/completion"
+
+# Add knowledge loader to path
+sys.path.insert(0, str(KNOWLEDGE_DIR))
+try:
+    from knowledge_loader import AetherVault
+    HAS_VAULT_LOADER = True
+except ImportError:
+    HAS_VAULT_LOADER = False
 
 # Colors (ANSI)
 C_AI = "\033[38;5;39m"
@@ -84,12 +92,25 @@ def run_tool(name, args=""):
         try:
             if "|" not in args: return "Error: Format is 'filename|content'"
             filename, content = args.split("|", 1)
-            filepath = CONTEXT7_DIR / f"{filename.strip()}.md"
+            
+            # Try AetherVault smart storage first
+            if HAS_VAULT_LOADER:
+                try:
+                    vault = AetherVault()
+                    # Infer category from filename
+                    safe_name = filename.strip().replace(" ", "_").lower()
+                    path = vault.add_entry(safe_name, content.strip(), category="memory")
+                    return f"Successfully learned: {safe_name} in AetherVault ({path})."
+                except:
+                    pass
+            
+            # Fallback: legacy direct storage
+            filepath = CONTEXT7_DIR / "memories" / f"{filename.strip()}.md"
             filepath.parent.mkdir(parents=True, exist_ok=True)
             filepath.write_text(content.strip())
             subprocess.run(["git", "-C", str(CONTEXT7_DIR), "add", "."], capture_output=True)
-            subprocess.run(["git", "-C", str(CONTEXT7_DIR), "commit", "-m", f"AI Learned: {filename}"], capture_output=True)
-            return f"Successfully learned: {filename} in Context7."
+            subprocess.run(["git", "-C", str(CONTEXT7_DIR), "commit", "-m", f"vault: learned {filename}"], capture_output=True)
+            return f"Successfully learned: {filename} in AetherVault."
         except Exception as e:
             return f"Learning Error: {str(e)}"
 
@@ -109,38 +130,116 @@ def run_tool(name, args=""):
         return f"Execution Error: {str(e)}"
 
 # --- Inference Engine ---
-def build_system_prompt(knowledge="", skills=""):
-    manifest = load_manifest()
-    tool_list = "\n".join([f"- **{t['name']}**: {t['description']}" for t in manifest["tools"]])
-    
+def load_skill_content(skill_name):
+    """Load full SKILL.md content instead of just the name."""
+    skill_path = DIR / "skills" / skill_name / "SKILL.md"
+    if skill_path.exists():
+        try:
+            return skill_path.read_text()[:2000]  # Cap at 2000 chars per skill
+        except:
+            return f"[Skill: {skill_name} - content unreadable]"
+    return f"[Skill: {skill_name} - not found]"
+
+def _legacy_knowledge_load():
+    """Fallback: legacy naive Context7 loading for backward compatibility."""
     c7_knowledge = ""
     if CONTEXT7_DIR.exists():
-        for p in list(CONTEXT7_DIR.glob("**/*.md"))[:5]:
+        for p in list(CONTEXT7_DIR.glob("**/*.md"))[:8]:
             try:
-                c7_knowledge += f"### {p.name}\n{p.read_text()[:300]}\n\n"
+                c7_knowledge += f"### {p.name}\n{p.read_text()[:500]}\n\n"
             except:
                 continue
+    return c7_knowledge
+
+def build_system_prompt(knowledge="", skills="", query=""):
+    manifest = load_manifest()
+    tool_list = "\n".join([f"- **{t['name']}**: {t['description']}" for t in manifest["tools"]])
+
+    # Load actual SKILL.md content, not just names
+    skills_dir = DIR / "skills"
+    skill_content = ""
+    if skills_dir.exists():
+        for skill_dir in skills_dir.iterdir():
+            if skill_dir.is_dir():
+                content = load_skill_content(skill_dir.name)
+                skill_content += f"\n## Skill: {skill_dir.name}\n{content}\n"
+
+    # AETHERVAULT: Smart knowledge loading with relevance scoring
+    vault_knowledge = ""
+    if HAS_VAULT_LOADER:
+        try:
+            vault = AetherVault()
+            # Calculate budget based on model context size
+            settings_file = DIR / "settings" / "config.json"
+            ctx_size = 2048  # default
+            if settings_file.exists():
+                try:
+                    cfg = json.loads(settings_file.read_text())
+                    ctx_size = cfg.get('model', {}).get('context_size', 2048)
+                except:
+                    pass
+            
+            # Allocate ~40% of context window for knowledge
+            budget = int(ctx_size * 4 * 0.4)  # 4 chars per token * 40%
+            budget = min(budget, 8000)  # Cap at 8000 chars
+            
+            vault_knowledge = vault.load_for_query(query or "", budget)
+        except Exception as e:
+            # Fallback to legacy loading if smart loader fails
+            vault_knowledge = _legacy_knowledge_load()
+    else:
+        # Fallback: legacy naive loading
+        vault_knowledge = _legacy_knowledge_load()
+
+    # Load settings if available
+    settings_info = ""
+    settings_file = DIR / "settings" / "config.json"
+    if settings_file.exists():
+        try:
+            cfg = json.loads(settings_file.read_text())
+            settings_info = f"## Configuration\nProfile: {cfg.get('profile', 'balanced')}\n"
+            model_cfg = cfg.get('model', {})
+            settings_info += f"Context: {model_cfg.get('context_size', 2048)} tokens, "
+            settings_info += f"Temperature: {model_cfg.get('temperature', 0.7)}, "
+            settings_info += f"Threads: {model_cfg.get('threads', 4)}\n\n"
+        except:
+            pass
+
+    # Load active memory slot if present
+    memory_slot_info = ""
+    memory_file = Path.home() / ".aether" / "sessions" / "loaded_memory.txt"
+    if memory_file.exists():
+        try:
+            memory_content = memory_file.read_text()[:2000]
+            memory_slot_info = f"## Active Memory Slot\n{memory_content}\n\n"
+        except:
+            pass
 
     return f"""You are AetherAI, a local-first neural interface running on Android.
+Your phone. Your AI. Your rules. No cloud. No tracking. No limits.
 Current Date: {datetime.now().strftime('%A, %d %B %Y')}
 
-## Context7 Knowledge
-{c7_knowledge}
+{settings_info}
+## AetherVault Knowledge
+{vault_knowledge}
 
-## Skills Available
-{skills}
+## Skills (Full Instructions)
+{skill_content}
 
+{memory_slot_info}
 ## Tool Protocol
 Execute tools via: <tool>name(args)</tool>
-Special: <tool>learn(filename|content)</tool>
+Special: <tool>learn(filename|content)</tool> — Save to AetherVault
 
 Available tools:
 {tool_list}
 
 Rules:
-1. Be technical and concise. No conversational filler.
-2. Use tools immediately if they help.
-3. If you find a better way, use <tool>learn()</tool>.
+1. Be technical and concise. No conversational filler, no AI-isms.
+2. Use tools immediately if they help answer the query.
+3. Read and follow skill instructions from the Skills section above.
+4. If you discover something valuable, use <tool>learn()</tool> to save it to AetherVault.
+5. NEVER mention being an AI, language model, or assistant.
 """
 
 def generate_completion(prompt, stream=True):
@@ -188,7 +287,7 @@ def chat_loop(model_name="hermes-3-8b.gguf"):
     skills_dir = DIR / "skills"
     skills_list = [d.name for d in skills_dir.iterdir() if d.is_dir()] if skills_dir.exists() else []
 
-    print(f"\n{C_BOLD}{C_AI}\uD83C\uDF0C AETHER-AI OPERATOR {C_RST}{C_DIM}// V 19.0 (STABLE){C_RST}")
+    print(f"\n{C_BOLD}{C_AI}\uD83C\uDF0C AETHER-AI OPERATOR {C_RST}{C_DIM}// V 26.04.2 (STABLE){C_RST}")
     print(f"  Engine: llama-server | Model: {model_name}")
     print(f"  Type 'exit' or 'tools' | ^C to save & quit\n")
 
