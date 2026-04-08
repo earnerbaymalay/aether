@@ -29,3 +29,41 @@ Thumbs.db
 knowledge/user_profile.txt
 knowledge/user_profile.bak
 knowledge/system.env
+
+# Sibling projects (should never be tracked in aether repo)
+aether-apple/
+aether-desktop/
+aether-desktop.git/
+edge-sentinel/
+sideload/
+gloam/
+e2eecc/
+meshtouch/
+ai-hub-widget/
+cascad-mobile/
+maskphish/
+CYBERSEC-AI-TAFE-PROJECTS/
+Termux-Vault/
+multi-ai-terminal-setup/
+nexus11-optimizer.py/
+ollama-source/
+Documents-Link/
+
+# Outer repo root files (should never leak into inner repo)
+.bashrc
+.gitconfig
+build_repo.sh
+generate_repo.sh
+repo_builder.py
+sentinel.sh
+start.sh
+stop.sh
+vault-scan.sh
+hardware_report.txt
+plugins/
+user_commands/
+user_tools/
+
+# IDE
+.vscode/
+.idea/
