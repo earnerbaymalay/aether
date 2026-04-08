@@ -17,6 +17,26 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Python syntax check
+        run: |
+          FAILURES=0
+          for script in aether/agent/*.py aether/scripts/*.py aether/knowledge/*.py; do
+            if [ -f "$script" ]; then
+              python3 -m py_compile "$script" 2>&1
+              if [ $? -eq 0 ]; then
+                echo "  OK $script"
+              else
+                echo "  FAIL $script"
+                FAILURES=$((FAILURES+1))
+              fi
+            fi
+          done
+          if [ $FAILURES -gt 0 ]; then
+            echo "$FAILURES Python files have syntax errors"
+            exit 1
+          fi
+          echo "All Python files pass syntax check"
+
       - name: Validate toolbox manifest
         run: python3 -c "import json; data=json.load(open('aether/toolbox/manifest.json')); assert 'tools' in data; print(f'✓ {len(data[\"tools\"])} tools registered')"
 
