@@ -105,6 +105,21 @@ launch_ai() {
 
 # --- Main Entry ---
 check_deps
+
+# Session startup flow
+SESSION_ID=""
+if [ -f "$SESSION_DIR/session_registry.json" ] || [ -f "$ACTIVE_SESSION_FILE" ]; then
+  # User has session history — offer resume/slot options
+  startup_output=$(bash "$DIR/scripts/session_manager.sh" startup 2>/dev/null)
+  startup_exit=$?
+  if [ $startup_exit -ne 0 ]; then
+    exit 0
+  fi
+  
+  # Extract session ID if created (last line)
+  SESSION_ID=$(echo "$startup_output" | grep -E "^AETHER-" | tail -1)
+fi
+
 boot_sequence
 
 BATT=$(termux-battery-status 2>/dev/null | grep percentage | cut -d: -f2 | tr -d ' ,%')
@@ -122,8 +137,12 @@ while true; do
     echo -e "\033[0;34m   NEURAL OPERATING INTERFACE // V 20.0\033[0m\n"
 
     # SYSTEM STATUS COMPACT
-    gum style --foreground "$ACCENT" --border rounded --border-foreground "$DIM" --padding "0 2" --width 50 \
-      " 🔋 BATT: ${BATT:-N/A}%  •  💾 STR: $STR  •  🧠 VAULT: ACTIVE "
+    STATUS_LINE=" 🔋 BATT: ${BATT:-N/A}%  •  💾 STR: $STR  •  🧠 VAULT: ACTIVE"
+    if [ -n "$SESSION_ID" ]; then
+      STATUS_LINE="$STATUS_LINE  •  📋 $SESSION_ID"
+    fi
+    gum style --foreground "$ACCENT" --border rounded --border-foreground "$DIM" --padding "0 2" --width 60 \
+      "$STATUS_LINE"
 
     echo -e "\n"
     CHOICE=$(gum choose --cursor.foreground "$ACCENT" --header "      [ SELECT NEURAL PATHWAY ]" \
@@ -152,6 +171,8 @@ while true; do
                 " 📦 CONTEXT IMPORT " \
                 " 🔄 WORKFLOWS " \
                 " 🗜 TOKEN OPTIMIZER " \
+                " 📋 SESSION MANAGER " \
+                " 🧠 MEMORY SLOTS " \
                 " 🐞 DEBUG CONSOLE (Self-Healing) " \
                 " 🔙 BACK ")
             case "$TOOL" in
@@ -163,6 +184,8 @@ while true; do
                 *"CONTEXT"*) bash "$DIR/contexts/context_manager.sh" list ;;
                 *"WORKFLOWS"*) bash "$DIR/scripts/workflow_engine.sh" list ;;
                 *"TOKEN"*) bash "$DIR/scripts/token_optimizer.sh" stats ;;
+                *"SESSION"*) bash "$DIR/scripts/session_manager.sh" list ;;
+                *"MEMORY"*) bash "$DIR/scripts/session_manager.sh" slots ;;
                 *"DEBUG"*) ./scripts/debug_console.sh ;;
             esac
             ;;

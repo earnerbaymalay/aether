@@ -56,6 +56,7 @@ EXTRAS["custom_commands"]="label:Custom Commands|desc:User-defined command syste
 EXTRAS["context_import"]="label:Context Import|desc:Gemini-style context import/export|deps:bash|install:install_context|cat:Development|size:~0MB"
 EXTRAS["workflow_engine"]="label:Workflow Engine|desc:Multi-stage workflow automation|deps:bash|install:install_workflows|cat:Development|size:~0MB"
 EXTRAS["testing_framework"]="label:Testing Framework|desc:Automated testing for Aether components|deps:bash,python3|install:install_tests|cat:Development|size:~0MB"
+EXTRAS["session_manager"]="label:Session Manager|desc:Session IDs, transcript archive, memory slots|deps:bash,python3|install:install_session_mgr|cat:Development|size:~0MB"
 
 # ============================================================
 # INSTALL FUNCTIONS
@@ -232,7 +233,7 @@ echo "Knowledge:"
 
 # Script tests
 echo "Scripts:"
-for script in workflow_engine.sh logic_engine.sh auto_scaler.sh task_decomposer.sh agent_matrix.sh project_orchestrator.sh token_optimizer.sh; do
+for script in workflow_engine.sh logic_engine.sh auto_scaler.sh task_decomposer.sh agent_matrix.sh project_orchestrator.sh token_optimizer.sh session_manager.sh; do
   [ -f "$HOME/aether/scripts/$script" ] && test_case "$script exists" 0 || test_case "$script exists" 1
 done
 
@@ -250,6 +251,13 @@ TESTEOF
   chmod +x "$HOME/aether/tests/run_tests.sh"
   echo "✓ Testing framework installed"
   echo "  Run: ~/aether/tests/run_tests.sh"
+}
+
+install_session_mgr() {
+  echo "Enabling Session Manager..."
+  echo "  Already installed: ~/aether/scripts/session_manager.sh"
+  echo "  Features: Session IDs, transcript archive, memory slots"
+  echo "  Integrated into aether.sh startup/exit flows"
 }
 
 # ============================================================

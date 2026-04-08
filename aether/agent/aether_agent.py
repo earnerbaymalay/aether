@@ -155,6 +155,16 @@ def build_system_prompt(knowledge="", skills=""):
         except:
             pass
 
+    # Load active memory slot if present
+    memory_slot_info = ""
+    memory_file = Path.home() / ".aether" / "sessions" / "loaded_memory.txt"
+    if memory_file.exists():
+        try:
+            memory_content = memory_file.read_text()[:2000]
+            memory_slot_info = f"## Active Memory Slot\n{memory_content}\n\n"
+        except:
+            pass
+
     return f"""You are AetherAI, a local-first neural interface running on Android.
 Your phone. Your AI. Your rules. No cloud. No tracking. No limits.
 Current Date: {datetime.now().strftime('%A, %d %B %Y')}
@@ -166,6 +176,7 @@ Current Date: {datetime.now().strftime('%A, %d %B %Y')}
 ## Skills (Full Instructions)
 {skill_content}
 
+{memory_slot_info}
 ## Tool Protocol
 Execute tools via: <tool>name(args)</tool>
 Special: <tool>learn(filename|content)</tool>
