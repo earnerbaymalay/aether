@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 🌌 Aether-AI Neural Interface System // V 18.0
+# 🌌 Aether-AI Neural Interface System // V 26.04.2
 # Optimized for ARM64 / Termux / Nokia & Pixel Devices
 # Repository: https://github.com/earnerbaymalay/aether
 
@@ -134,7 +134,7 @@ while true; do
     
     echo -e "\n\033[1;34m"
     figlet -f small "   AETHER"
-    echo -e "\033[0;34m   NEURAL OPERATING INTERFACE // V 20.0\033[0m\n"
+    echo -e "\033[0;34m   NEURAL OPERATING INTERFACE // V 26.04.2\033[0m\n"
 
     # SYSTEM STATUS COMPACT
     STATUS_LINE=" 🔋 BATT: ${BATT:-N/A}%  •  💾 STR: $STR  •  🧠 VAULT: ACTIVE"

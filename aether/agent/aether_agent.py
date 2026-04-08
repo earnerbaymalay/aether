@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-🌌 Aether-AI Neural Agent Core // V 19.0 (Server Edition)
+🌌 Aether-AI Neural Agent Core // V 26.04.2 (Server Edition)
 High-performance Python agent utilizing a persistent llama-server backend.
 Optimized for instant responses and robust error handling on Android.
 """
@@ -287,7 +287,7 @@ def chat_loop(model_name="hermes-3-8b.gguf"):
     skills_dir = DIR / "skills"
     skills_list = [d.name for d in skills_dir.iterdir() if d.is_dir()] if skills_dir.exists() else []
 
-    print(f"\n{C_BOLD}{C_AI}\uD83C\uDF0C AETHER-AI OPERATOR {C_RST}{C_DIM}// V 19.0 (STABLE){C_RST}")
+    print(f"\n{C_BOLD}{C_AI}\uD83C\uDF0C AETHER-AI OPERATOR {C_RST}{C_DIM}// V 26.04.2 (STABLE){C_RST}")
     print(f"  Engine: llama-server | Model: {model_name}")
     print(f"  Type 'exit' or 'tools' | ^C to save & quit\n")
 
