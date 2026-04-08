@@ -131,11 +131,11 @@ Unlike chat-only AI, Aether's agent can **interact with your actual device**:
 | `obsidian_*` | Full Obsidian vault integration (list, search, read) |
 | `learn` | **Teach the AI** — knowledge persists across sessions |
 
-### 📂 Context7 Persistent Memory
+### 📂 AetherVault Persistent Memory
 
 > **Most AI forgets everything when you close the tab. Not this one.**
 
-Every insight you teach Aether is saved as a Markdown file in `knowledge/context7/`. The AI reads these files on every session — building a personalized knowledge base that grows with you.
+Every insight you teach Aether is saved as a Markdown file in `knowledge/aethervault/`. The AI reads these files on every session — building a personalized knowledge base that grows with you.
 
 Connect it to [Obsidian](https://obsidian.md/) on Android and **watch your AI's brain visually grow** as a networked knowledge graph.
 
@@ -151,7 +151,7 @@ Real scenarios people use Aether for right now:
 | 🔍 **Debugging a script** | Paste the error into CODE → get a fix with explanation. |
 | 📱 **Checking system health** | AGENT runs toolbox tools → "What's my battery? Storage?" |
 | 📚 **Learning a new technology** | "Teach me Rust" → LOGIC tier gives deep explanations. |
-| 🗂️ **Managing knowledge** | Tell the AI to `learn` something → saved forever in Context7. |
+| 🗂️ **Managing knowledge** | Tell the AI to `learn` something → saved forever in AetherVault. |
 | 🛡️ **Security auditing** | Launch Sentinel → scan your Termux environment. |
 | 🤖 **Automating tasks** | AGENT chains tools → search web → read page → summarize. |
 
@@ -178,7 +178,7 @@ aether/
 │   └── launch_sentinel.sh ← Security scanner
 ├── skills/                ← Drop-in AI behavior modules
 ├── knowledge/
-│   └── context7/          ← Persistent AI memory (Markdown)
+│   └── aethervault/          ← Persistent AI memory (Markdown)
 └── docs/
     └── terminal-setup/    ← Setup guides for Claude, Gemini, etc.
 ```
@@ -223,7 +223,7 @@ All our apps are available through **[Sideload](https://earnerbaymalay.github.io
 
 | Phase | Status | What's Done |
 |---|---|---|
-| **Phase 1: Foundations** | ✅ Complete | 4-tier routing, Context7 vault, premium TUI, Librarian |
+| **Phase 1: Foundations** | ✅ Complete | 4-tier routing, AetherVault vault, premium TUI, Librarian |
 | **Phase 2: Orchestration** | ✅ Complete | Self-healing, skill marketplace, guided installer |
 | **Phase 3: Agency** | 🔄 In Progress | Swarm orchestrator, web integration, advanced RAG |
 | **Phase 4: Autonomy** | 🔮 Vision | Distributed mesh, NPU/GPU acceleration, self-coding |
@@ -236,7 +236,7 @@ See [ROADMAP.md](ROADMAP.md) for full details.
 
 | Document | What It Covers |
 |---|---|
-| [**Usage Guide**](USAGE.md) | Start-to-finish: install, first conversation, toolbox, Context7 vault, troubleshooting |
+| [**Usage Guide**](USAGE.md) | Start-to-finish: install, first conversation, toolbox, AetherVault vault, troubleshooting |
 | [**Roadmap**](ROADMAP.md) | Development phases, what's done, what's next |
 | [**Contributing**](CONTRIBUTING.md) | How to contribute, coding standards |
 | [**Security Policy**](SECURITY.md) | Vulnerability disclosure |

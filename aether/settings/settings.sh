@@ -534,7 +534,7 @@ import_context_ui() {
   echo "2. URL (fetch and load web page content)"
   echo "3. Clipboard (import from clipboard)"
   echo "4. Directory (load all text files)"
-  echo "5. Context7 Vault (add to knowledge base)"
+  echo "5. AetherVault (add to knowledge base)"
   echo ""
   read -p "Select (1-5): " choice
   
@@ -597,8 +597,8 @@ import_context_ui() {
       echo "Content (Ctrl+D to finish):"
       content=$(cat)
       if [ -n "$name" ] && [ -n "$content" ]; then
-        echo "$content" > "$HOME/aether/knowledge/context7/${name,,}.md"
-        echo "✓ Added to Context7 vault as ${name,,}.md"
+        echo "$content" > "$HOME/aether/knowledge/aethervault/${name,,}.md"
+        echo "✓ Added to AetherVault vault as ${name,,}.md"
       fi
       ;;
   esac
@@ -611,7 +611,7 @@ export_context_ui() {
   echo ""
   echo "1. File"
   echo "2. Clipboard"
-  echo "3. Context7 Vault"
+  echo "3. AetherVault"
   echo ""
   read -p "Select (1-3): " choice
   
@@ -636,8 +636,8 @@ export_context_ui() {
       echo "Entry name:"
       read -r name
       if [ -n "$name" ]; then
-        cp "$HOME/.aether/sessions/last_session.log" "$HOME/aether/knowledge/context7/${name,,}.md" 2>/dev/null
-        echo "✓ Saved to Context7 vault"
+        cp "$HOME/.aether/sessions/last_session.log" "$HOME/aether/knowledge/aethervault/${name,,}.md" 2>/dev/null
+        echo "✓ Saved to AetherVault vault"
       fi
       ;;
   esac
@@ -838,7 +838,7 @@ show_system_info() {
   echo "  Skills: $(find "$HOME/aether/skills" -name "SKILL.md" 2>/dev/null | wc -l)"
   echo "  Tools: $(python3 -c "import json; print(len(json.load(open('$HOME/aether/toolbox/manifest.json'))['tools']))" 2>/dev/null)"
   echo "  Models: $(find "$HOME/.aether/models" -name "*.gguf" 2>/dev/null | wc -l)"
-  echo "  Context7 Docs: $(find "$HOME/aether/knowledge/context7" -name "*.md" 2>/dev/null | wc -l)"
+  echo "  AetherVault Docs: $(find "$HOME/aether/knowledge/aethervault" -name "*.md" 2>/dev/null | wc -l)"
   echo "  Custom Commands: $(python3 -c "import json; print(len(json.load(open('$CMDS_FILE'))))" 2>/dev/null || echo 0)"
   echo "  Plugins: $(find "$HOME/aether/plugins" -name "plugin.json" 2>/dev/null | wc -l)"
   echo ""

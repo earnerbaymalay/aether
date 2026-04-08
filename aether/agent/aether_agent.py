@@ -14,11 +14,19 @@ DIR = Path.home() / "aether"
 MODELS_DIR = DIR / "models"
 TOOLBOX_DIR = DIR / "toolbox"
 KNOWLEDGE_DIR = DIR / "knowledge"
-CONTEXT7_DIR = KNOWLEDGE_DIR / "context7"
+CONTEXT7_DIR = KNOWLEDGE_DIR / "context7"  # Legacy path (AetherVault)
 SESSION_DIR = Path.home() / ".aether" / "sessions"
 SERVER_LOG = SESSION_DIR / "llama_server.log"
 LLAMA_SERVER_BIN = Path.home() / "llama.cpp" / "build" / "bin" / "llama-server"
 API_URL = "http://127.0.0.1:8080/completion"
+
+# Add knowledge loader to path
+sys.path.insert(0, str(KNOWLEDGE_DIR))
+try:
+    from knowledge_loader import AetherVault
+    HAS_VAULT_LOADER = True
+except ImportError:
+    HAS_VAULT_LOADER = False
 
 # Colors (ANSI)
 C_AI = "\033[38;5;39m"
@@ -84,12 +92,25 @@ def run_tool(name, args=""):
         try:
             if "|" not in args: return "Error: Format is 'filename|content'"
             filename, content = args.split("|", 1)
-            filepath = CONTEXT7_DIR / f"{filename.strip()}.md"
+            
+            # Try AetherVault smart storage first
+            if HAS_VAULT_LOADER:
+                try:
+                    vault = AetherVault()
+                    # Infer category from filename
+                    safe_name = filename.strip().replace(" ", "_").lower()
+                    path = vault.add_entry(safe_name, content.strip(), category="memory")
+                    return f"Successfully learned: {safe_name} in AetherVault ({path})."
+                except:
+                    pass
+            
+            # Fallback: legacy direct storage
+            filepath = CONTEXT7_DIR / "memories" / f"{filename.strip()}.md"
             filepath.parent.mkdir(parents=True, exist_ok=True)
             filepath.write_text(content.strip())
             subprocess.run(["git", "-C", str(CONTEXT7_DIR), "add", "."], capture_output=True)
-            subprocess.run(["git", "-C", str(CONTEXT7_DIR), "commit", "-m", f"AI Learned: {filename}"], capture_output=True)
-            return f"Successfully learned: {filename} in Context7."
+            subprocess.run(["git", "-C", str(CONTEXT7_DIR), "commit", "-m", f"vault: learned {filename}"], capture_output=True)
+            return f"Successfully learned: {filename} in AetherVault."
         except Exception as e:
             return f"Learning Error: {str(e)}"
 
@@ -119,7 +140,18 @@ def load_skill_content(skill_name):
             return f"[Skill: {skill_name} - content unreadable]"
     return f"[Skill: {skill_name} - not found]"
 
-def build_system_prompt(knowledge="", skills=""):
+def _legacy_knowledge_load():
+    """Fallback: legacy naive Context7 loading for backward compatibility."""
+    c7_knowledge = ""
+    if CONTEXT7_DIR.exists():
+        for p in list(CONTEXT7_DIR.glob("**/*.md"))[:8]:
+            try:
+                c7_knowledge += f"### {p.name}\n{p.read_text()[:500]}\n\n"
+            except:
+                continue
+    return c7_knowledge
+
+def build_system_prompt(knowledge="", skills="", query=""):
     manifest = load_manifest()
     tool_list = "\n".join([f"- **{t['name']}**: {t['description']}" for t in manifest["tools"]])
 
@@ -132,14 +164,32 @@ def build_system_prompt(knowledge="", skills=""):
                 content = load_skill_content(skill_dir.name)
                 skill_content += f"\n## Skill: {skill_dir.name}\n{content}\n"
 
-    # Load Context7 knowledge with relevance awareness
-    c7_knowledge = ""
-    if CONTEXT7_DIR.exists():
-        for p in list(CONTEXT7_DIR.glob("**/*.md"))[:8]:  # Increased from 5 to 8
-            try:
-                c7_knowledge += f"### {p.name}\n{p.read_text()[:500]}\n\n"  # Increased from 300 to 500
-            except:
-                continue
+    # AETHERVAULT: Smart knowledge loading with relevance scoring
+    vault_knowledge = ""
+    if HAS_VAULT_LOADER:
+        try:
+            vault = AetherVault()
+            # Calculate budget based on model context size
+            settings_file = DIR / "settings" / "config.json"
+            ctx_size = 2048  # default
+            if settings_file.exists():
+                try:
+                    cfg = json.loads(settings_file.read_text())
+                    ctx_size = cfg.get('model', {}).get('context_size', 2048)
+                except:
+                    pass
+            
+            # Allocate ~40% of context window for knowledge
+            budget = int(ctx_size * 4 * 0.4)  # 4 chars per token * 40%
+            budget = min(budget, 8000)  # Cap at 8000 chars
+            
+            vault_knowledge = vault.load_for_query(query or "", budget)
+        except Exception as e:
+            # Fallback to legacy loading if smart loader fails
+            vault_knowledge = _legacy_knowledge_load()
+    else:
+        # Fallback: legacy naive loading
+        vault_knowledge = _legacy_knowledge_load()
 
     # Load settings if available
     settings_info = ""
@@ -170,8 +220,8 @@ Your phone. Your AI. Your rules. No cloud. No tracking. No limits.
 Current Date: {datetime.now().strftime('%A, %d %B %Y')}
 
 {settings_info}
-## Context7 Knowledge Vault
-{c7_knowledge}
+## AetherVault Knowledge
+{vault_knowledge}
 
 ## Skills (Full Instructions)
 {skill_content}
@@ -179,7 +229,7 @@ Current Date: {datetime.now().strftime('%A, %d %B %Y')}
 {memory_slot_info}
 ## Tool Protocol
 Execute tools via: <tool>name(args)</tool>
-Special: <tool>learn(filename|content)</tool>
+Special: <tool>learn(filename|content)</tool> — Save to AetherVault
 
 Available tools:
 {tool_list}
@@ -188,7 +238,7 @@ Rules:
 1. Be technical and concise. No conversational filler, no AI-isms.
 2. Use tools immediately if they help answer the query.
 3. Read and follow skill instructions from the Skills section above.
-4. If you discover something valuable, use <tool>learn()</tool> to save it.
+4. If you discover something valuable, use <tool>learn()</tool> to save it to AetherVault.
 5. NEVER mention being an AI, language model, or assistant.
 """
 

@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 - Multi-tier AI routing: TURBO (Llama-3.2-3B), AGENT (Hermes-3-8B), CODE (Qwen-Coder-3B), LOGIC (DeepSeek-R1)
-- Context7 persistent memory vault (Markdown-based, Obsidian-compatible)
+- AetherVault persistent memory vault (Markdown-based, Obsidian-compatible)
 - Python agent core with tool-use execution (`aether_agent.py`)
 - Toolbox with 10+ tools: battery, date, file listing, Obsidian integration, web search/read
 - Skill Marketplace for drop-in AI behavior modules

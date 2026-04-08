@@ -163,7 +163,7 @@ Aether's architecture is genuinely impressive:
 • AES-256-GCM encrypted sessions
 • Double Ratchet for forward secrecy
 • 4 models auto-routed by task type
-• Context7 persistent memory vault
+• AetherVault persistent memory vault
 • SimpleX transport (identity-free)
 • SQLCipher at-rest encryption
 
@@ -284,7 +284,7 @@ I've been working on something I think this community will appreciate.
 - Runs 4 different AI models locally (Llama-3.2-3B, Hermes-3-8B, Qwen-Coder-3B, DeepSeek-R1)
 - Auto-routes your request to the optimal model for the task
 - Has a toolbox of 10+ tools the AI can execute (file listing, battery status, web search, Obsidian integration, etc.)
-- Features Context7 — a persistent memory vault that stores knowledge as Markdown and loads it every session
+- Features AetherVault — a persistent memory vault that stores knowledge as Markdown and loads it every session
 - Includes swarm orchestration for multi-agent task solving
 - All encrypted: AES-256-GCM sessions, SQLCipher at-rest, Android Keystore key management
 
@@ -541,7 +541,7 @@ The architecture is:
 - llama.cpp as the inference engine (native C++, ARM NEON optimized)
 - A bash orchestrator (aether.sh) that routes to 4 models based on task type
 - A Python agent (aether_agent.py) with tool-use capability for the Hermes model
-- Context7: a Markdown-based persistent memory vault
+- AetherVault: a Markdown-based persistent memory vault
 - SQLCipher for encrypted session storage
 
 The key insight: modern phones are powerful enough to run 3B-8B models at interactive speeds. A Snapdragon 8 Gen 2 can hit 25+ t/s on Llama-3.2-3B.

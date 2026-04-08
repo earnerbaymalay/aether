@@ -11,7 +11,7 @@
 We proved that **local AI on a phone isn't just possible — it's powerful.**
 
 - [x] **Neural Tier Routing** — Four models, one interface. TURBO, AGENT, CODE, LOGIC. Each optimized for its specialty.
-- [x] **Context7 Vault** — Persistent, Markdown-based memory. Your AI remembers everything you teach it.
+- [x] **AetherVault Vault** — Persistent, Markdown-based memory. Your AI remembers everything you teach it.
 - [x] **Premium TUI** — Unified terminal orchestrator with real-time health metrics (battery, storage, vault status).
 - [x] **The Librarian** — Automated knowledge deduplication and vault auditing.
 - [x] **Guided Installer** — One command. Zero configuration. Works on first try.
@@ -41,7 +41,7 @@ This is where Aether becomes **more than a chatbot** — it becomes an autonomou
 
 - [x] **Swarm Orchestrator** — Multi-agent missions using tiered neural reasoning. TURBO plans, LOGIC thinks, AGENT executes, CODE reviews.
 - [x] **Web Integration** — Privacy-first DuckDuckGo search and webpage reading from within the agent.
-- [ ] **Advanced RAG** — Vector-based semantic search across massive Context7 knowledge vaults (not just file globbing).
+- [ ] **Advanced RAG** — Vector-based semantic search across massive AetherVault knowledge vaults (not just file globbing).
 - [ ] **Voice Interface** — Local STT (Whisper.cpp) and TTS (Piper) for hands-free command execution.
 - [ ] **Scheduled Tasks** — "Run a security scan every night at 2am" via cron + Sentinel integration.
 - [ ] **Multi-File Codebase Understanding** — AGENT can read, understand, and refactor entire project directories autonomously.

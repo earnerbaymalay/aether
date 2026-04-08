@@ -16,7 +16,7 @@
 ### 🟡 Intermediate Track (I want to customize & explore)
 5. [Understanding the Four AI Tiers](#-5-understanding-the-four-ai-tiers)
 6. [Using the Toolbox](#-6-using-the-toolbox)
-7. [Teaching Aether — The Context7 Vault](#-7-teaching-aether--the-context7-vault)
+7. [Teaching Aether — The AetherVault Vault](#-7-teaching-aether--the-aethervault-vault)
 8. [Connecting to Obsidian](#-8-connecting-to-obsidian)
 9. [Running the Benchmark](#-9-running-the-benchmark)
 
@@ -187,7 +187,7 @@ From the main menu, select `🛠 TOOLS` to access:
 | Tool | What It Does |
 |---|---|
 | 🧹 **PURGE** | Clears the current session memory. Start fresh. |
-| 📖 **LIBRARIAN** | Audits your Context7 knowledge vault for duplicates and organization |
+| 📖 **LIBRARIAN** | Audits your AetherVault knowledge vault for duplicates and organization |
 | 📏 **BENCHMARK** | Tests your phone's AI performance (tokens/sec) |
 | 🛒 **SKILL MARKET** | Browse and install community-made AI skills |
 | 🐞 **DEBUG CONSOLE** | View logs and run self-healing diagnostics |
@@ -224,15 +224,15 @@ AI: Here are the top results: ...
 | `obsidian_read_note` | Reads a specific Obsidian note |
 | `web_search` | Searches DuckDuckGo (privacy-first) |
 | `web_read` | Reads any webpage as text |
-| `learn` | Saves new knowledge to the Context7 vault |
+| `learn` | Saves new knowledge to the AetherVault vault |
 
 ---
 
-### 📚 7. Teaching Aether — The Context7 Vault
+### 📚 7. Teaching Aether — The AetherVault Vault
 
 > **This is what makes Aether fundamentally different from ChatGPT or Claude.**
 
-Every AI you've used before **forgets everything** when you close the chat. Aether doesn't. It has a persistent memory system called **Context7**.
+Every AI you've used before **forgets everything** when you close the chat. Aether doesn't. It has a persistent memory system called **AetherVault**.
 
 #### How it works:
 
@@ -241,9 +241,9 @@ Every AI you've used before **forgets everything** when you close the chat. Aeth
    You: Learn this: python_tips|Use list comprehensions for faster Python code. Example: [x*2 for x in range(10)]
    ```
 
-2. **Aether saves it** as a Markdown file in `knowledge/context7/python_tips.md`
+2. **Aether saves it** as a Markdown file in `knowledge/aethervault/python_tips.md`
 
-3. **Every future session** — the AI reads your Context7 files before chatting. It *knows* what you've taught it.
+3. **Every future session** — the AI reads your AetherVault files before chatting. It *knows* what you've taught it.
 
 #### Why this is powerful:
 
@@ -256,25 +256,25 @@ Every AI you've used before **forgets everything** when you close the chat. Aeth
 
 ```bash
 # View all learned knowledge
-ls ~/aether/knowledge/context7/
+ls ~/aether/knowledge/aethervault/
 
 # Read a specific file
-cat ~/aether/knowledge/context7/python_tips.md
+cat ~/aether/knowledge/aethervault/python_tips.md
 
 # Edit knowledge manually
-nano ~/aether/knowledge/context7/python_tips.md
+nano ~/aether/knowledge/aethervault/python_tips.md
 ```
 
 ---
 
 ### 📓 8. Connecting to Obsidian
 
-[Obsidian](https://obsidian.md/) is a powerful knowledge management app. Aether's Context7 vault is designed to work with it seamlessly.
+[Obsidian](https://obsidian.md/) is a powerful knowledge management app. Aether's AetherVault vault is designed to work with it seamlessly.
 
 **Setup steps:**
 
 1. Install Obsidian on Android from the Play Store
-2. Open Obsidian → Create a new vault → Point it to `~/aether/knowledge/context7/`
+2. Open Obsidian → Create a new vault → Point it to `~/aether/knowledge/aethervault/`
 3. Your AI's learned knowledge now appears as notes in Obsidian
 4. Use Obsidian's graph view to **visualize your AI's brain growing**
 
@@ -328,7 +328,7 @@ The AGENT (Hermes-8B) runs on a **persistent llama-server backend** that provide
 #### How the agent works internally:
 
 1. **Server startup** — When you select AGENT, `aether_agent.py` starts `llama-server` on port 8080
-2. **System prompt** — The AI receives a rich system prompt including Context7 knowledge, available tools, and skills
+2. **System prompt** — The AI receives a rich system prompt including AetherVault knowledge, available tools, and skills
 3. **Tool detection** — When the AI outputs `<tool>name(args)</tool>`, the Python agent intercepts and executes it
 4. **Result injection** — The tool output is fed back to the AI for analysis
 5. **Conversation history** — Last 8 messages are kept in context for coherent multi-turn dialogue
@@ -496,7 +496,7 @@ cmake .. -G Ninja -DGGML_OPENMP=OFF  # OpenMP disabled for Android stability
 | **`ai` command not found** | Re-run `./install.sh` to recreate the shortcut |
 | **Session context not persisting** | Check that `~/.aether/sessions/last_session.log` exists |
 | **Agent server crashes** | Run the Debug Console from TOOLS menu |
-| **Obsidian can't find vault** | Make sure the path is exactly `~/aether/knowledge/context7/` |
+| **Obsidian can't find vault** | Make sure the path is exactly `~/aether/knowledge/aethervault/` |
 
 ### ❓ Frequently Asked Questions
 
@@ -524,8 +524,8 @@ A: Run `git pull` in the `~/aether` directory, then re-run `./install.sh` if new
 **Q: Can I use this for commercial work?**
 A: Yes. The code is MIT licensed. The models have their own licenses (check each model's HuggingFace page).
 
-**Q: What happens to my Context7 knowledge if I reinstall?**
-A: It's stored in `knowledge/context7/` which is part of the git repo. If you back up the folder, your AI's memory is preserved.
+**Q: What happens to my AetherVault knowledge if I reinstall?**
+A: It's stored in `knowledge/aethervault/` which is part of the git repo. If you back up the folder, your AI's memory is preserved.
 
 **Q: Can I run multiple instances?**
 A: The AGENT tier uses a single server on port 8080. Running two simultaneously would cause conflicts. Use one at a time.
@@ -545,7 +545,7 @@ A: The AGENT tier uses a single server on port 8080. Running two simultaneously 
 | `scripts/debug_console.sh` | Diagnostics and self-healing |
 | `scripts/launch_sentinel.sh` | Security scanner |
 | `knowledge/bio.txt` | User profile and preferences |
-| `knowledge/context7/` | Persistent AI memory (Markdown) |
+| `knowledge/aethervault/` | Persistent AI memory (Markdown) |
 | `skills/*/SKILL.md` | AI behavior modules |
 | `hardware_report.txt` | Benchmark history |
 | `~/.aether/sessions/` | Chat session logs |

@@ -24,11 +24,11 @@ while true; do
         gum toast --background "$ERR" "Aether Vault Storage Critical: $STR GB remaining."
     fi
 
-    # Check for new Context7 notes (Knowledge growth)
-    NEW_NOTES=$(find ~/aether/knowledge/context7/ -mmin -10 | wc -l)
+    # Check for new AetherVault entries (Knowledge growth)
+    NEW_NOTES=$(find ~/aether/knowledge/context7/ -mmin -10 -name "*.md" | wc -l)
     if [ "$NEW_NOTES" -gt 0 ]; then
-        echo "$(date): [+] Knowledge Growth: $NEW_NOTES new insights archived." >> "$SENTINEL_LOG"
-        gum toast --background "$SUC" "Aether evolved: $NEW_NOTES new neural nodes established."
+        echo "$(date): [+] AetherVault Growth: $NEW_NOTES new entries archived." >> "$SENTINEL_LOG"
+        gum toast --background "$SUC" "AetherVault evolved: $NEW_NOTES new knowledge entries."
     fi
 
     sleep 300 # Run every 5 minutes

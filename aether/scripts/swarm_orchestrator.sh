@@ -27,7 +27,7 @@ execute_swarm() {
 
     # PHASE 3: AGENT Tier Executes
     gum spin --title "🤖 AGENT (Hermes) | Tool Execution & Vaulting..." -- sleep 2
-    echo -e "\033[1;32m[✓] Task archived to Context7.\033[0m"
+    echo -e "\033[1;32m[✓] Task archived to AetherVault.\033[0m"
 
     gum style --foreground "$SUC" --border double "SWARM MISSION COMPLETE"
     read -p "Press Enter to view results..."

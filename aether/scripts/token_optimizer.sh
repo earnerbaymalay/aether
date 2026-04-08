@@ -410,12 +410,12 @@ show_stats() {
   echo "  Knowledge Base: $knowledge_tokens tokens"
   
   context7_tokens=0
-  for f in "$HOME/aether/knowledge/context7/"*.md; do
+  for f in "$HOME/aether/knowledge/context7/"*.md "$HOME/aether/knowledge/context7/"**/*.md; do
     if [ -f "$f" ]; then
       context7_tokens=$((context7_tokens + $(estimate_file_tokens "$f")))
     fi
   done
-  echo "  Context7 Vault: $context7_tokens tokens"
+  echo "  AetherVault: $context7_tokens tokens"
   
   total=$((session_tokens + knowledge_tokens + context7_tokens))
   echo "  Total Context: $total tokens"

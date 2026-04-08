@@ -59,7 +59,7 @@ boot_sequence() {
     figlet -f small "  AETHER" | gum style --foreground "$ACCENT"
     echo -e "   \033[1;30mNEURAL OPERATING INTERFACE // INITIALIZING\033[0m\n"
     
-    local steps=("Kernel Check" "Neural Pathways" "Context7 Vault" "Hardware Sync")
+    local steps=("Kernel Check" "Neural Pathways" "AetherVault" "Hardware Sync")
     for step in "${steps[@]}"; do
         echo -ne "  \033[1;34m[●]\033[0m $step..."
         sleep 0.2
