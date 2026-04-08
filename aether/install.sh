@@ -92,7 +92,7 @@ fi
 # ============================================================
 header
 echo "[*] Scaffolding neural environment..."
-mkdir -p "$DIR/models" "$DIR/knowledge/context7" "$DIR/scripts" "$DIR/skills"
+mkdir -p "$DIR/models" "$DIR/knowledge/aethervault" "$DIR/scripts" "$DIR/skills"
 mkdir -p "$DIR/toolbox" "$DIR/settings" "$DIR/lsp" "$DIR/contexts"
 mkdir -p "$DIR/plugins" "$DIR/workflows/registry" "$DIR/user_commands"
 mkdir -p "$HOME/.aether/sessions" "$HOME/.aether/config" "$HOME/.aether/backups"

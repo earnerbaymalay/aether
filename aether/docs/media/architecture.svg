@@ -92,7 +92,7 @@
   <rect x="540" y="190" width="220" height="110" class="card-border"/>
   <text x="650" y="212" class="title purple" text-anchor="middle">🧠 Context7 Vault</text>
   <text x="650" y="234" class="text dim" text-anchor="middle">Persistent AI Memory</text>
-  <text x="650" y="252" class="text dim" text-anchor="middle">knowledge/context7/*.md</text>
+  <text x="650" y="252" class="text dim" text-anchor="middle">knowledge/aethervault/*.md</text>
   <text x="650" y="274" class="text small dim" text-anchor="middle">• Markdown format (Obsidian-ready)</text>
   <text x="650" y="290" class="text small dim" text-anchor="middle">• Auto-loaded each session</text>
 

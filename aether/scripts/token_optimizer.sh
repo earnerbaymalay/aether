@@ -410,7 +410,7 @@ show_stats() {
   echo "  Knowledge Base: $knowledge_tokens tokens"
   
   context7_tokens=0
-  for f in "$HOME/aether/knowledge/context7/"*.md "$HOME/aether/knowledge/context7/"**/*.md; do
+  for f in "$HOME/aether/knowledge/aethervault/"*.md "$HOME/aether/knowledge/aethervault/"**/*.md; do
     if [ -f "$f" ]; then
       context7_tokens=$((context7_tokens + $(estimate_file_tokens "$f")))
     fi

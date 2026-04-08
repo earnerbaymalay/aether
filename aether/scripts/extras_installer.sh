@@ -229,7 +229,7 @@ skill_count=$(find "$HOME/aether/skills" -name "SKILL.md" 2>/dev/null | wc -l)
 # Knowledge tests
 echo "Knowledge:"
 [ -f "$HOME/aether/knowledge/bio.txt" ] && test_case "bio.txt exists" 0 || test_case "bio.txt exists" 1
-[ -d "$HOME/aether/knowledge/context7" ] && test_case "aethervault exists" 0 || test_case "aethervault exists" 1
+[ -d "$HOME/aether/knowledge/aethervault" ] && test_case "aethervault exists" 0 || test_case "aethervault exists" 1
 
 # Script tests
 echo "Scripts:"

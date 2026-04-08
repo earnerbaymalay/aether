@@ -25,7 +25,7 @@ while true; do
     fi
 
     # Check for new AetherVault entries (Knowledge growth)
-    NEW_NOTES=$(find ~/aether/knowledge/context7/ -mmin -10 -name "*.md" | wc -l)
+    NEW_NOTES=$(find ~/aether/knowledge/aethervault/ -mmin -10 -name "*.md" | wc -l)
     if [ "$NEW_NOTES" -gt 0 ]; then
         echo "$(date): [+] AetherVault Growth: $NEW_NOTES new entries archived." >> "$SENTINEL_LOG"
         gum toast --background "$SUC" "AetherVault evolved: $NEW_NOTES new knowledge entries."

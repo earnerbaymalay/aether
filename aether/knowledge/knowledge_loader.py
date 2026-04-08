@@ -26,7 +26,7 @@ class AetherVault:
     """Smart knowledge vault with categorized, relevance-scored loading."""
 
     # Vault location (legacy path support)
-    VAULT_DIR = Path.home() / "aether" / "knowledge" / "context7"
+    VAULT_DIR = Path.home() / "aether" / "knowledge" / "aethervault"
     METADATA_FILE = Path.home() / "aether" / "knowledge" / "vault_index.json"
 
     # Category definitions

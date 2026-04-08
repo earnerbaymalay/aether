@@ -253,9 +253,9 @@ show_upgrade_options() {
   echo ""
   
   echo "5. Expand Knowledge Base"
-  echo "   Add documentation to Context7 vault"
-  echo "   Location: ~/aether/knowledge/context7 (AetherVault)/"
-  echo "   Current Docs: $(find "$HOME/aether/knowledge/context7 (AetherVault)" -name "*.md" 2>/dev/null | wc -l)"
+  echo "   Add documentation to AetherVault"
+  echo "   Location: ~/aether/knowledge/aethervault/"
+  echo "   Current Docs: $(find "$HOME/aether/knowledge/aethervault" -name "*.md" 2>/dev/null | wc -l)"
   echo ""
   
   echo "6. Enable Auto-Scaling"

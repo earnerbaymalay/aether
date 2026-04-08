@@ -2,7 +2,7 @@
 # vault_manager.sh - AetherVault management CLI
 # Usage: vault_manager.sh [stats|list|search|add|reindex|clean|browse]
 
-VAULT_DIR="$HOME/aether/knowledge/context7"
+VAULT_DIR="$HOME/aether/knowledge/aethervault"
 LOADER="$HOME/aether/knowledge/knowledge_loader.py"
 ACTION="${1:-stats}"
 
