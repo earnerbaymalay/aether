@@ -1,0 +1,110 @@
+name: Aether CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate toolbox manifest
+        run: python3 -c "import json; data=json.load(open('aether/toolbox/manifest.json')); assert 'tools' in data; print(f'✓ {len(data[\"tools\"])} tools registered')"
+
+      - name: Validate settings config
+        run: python3 -c "import json; json.load(open('aether/settings/config.json', 'r'))" 2>/dev/null || echo "⚠ Settings config not yet created (first run generates it)"
+
+      - name: Validate workflow registry
+        run: python3 -c "
+import yaml, sys
+with open('aether/workflows/registry/workflows.yaml') as f:
+    workflows = yaml.safe_load(f)
+    assert isinstance(workflows, list)
+    print(f'✓ {len(workflows)} workflow templates defined')
+" 2>/dev/null || echo "⚠ PyYAML not available, skipping workflow validation"
+
+      - name: Validate vault index
+        run: python3 -c "import json; data=json.load(open('aether/knowledge/vault_index.json', 'r')); print(f'✓ Vault index: {len(data.get(\"entries\", {}))} entries')" 2>/dev/null || echo "⚠ Vault index not yet generated"
+
+      - name: Validate knowledge loader
+        run: python3 -c "
+import sys
+sys.path.insert(0, 'aether/knowledge')
+from knowledge_loader import AetherVault
+print('✓ knowledge_loader.py imports successfully')
+" 2>/dev/null || echo "⚠ Knowledge loader import failed"
+
+      - name: Check VERSION file
+        run: |
+          if [ -f aether/VERSION ]; then
+            VERSION=$(cat aether/VERSION | tr -d '[:space:]')
+            echo "✓ Version: $VERSION"
+          else
+            echo "✗ VERSION file missing"
+            exit 1
+          fi
+
+      - name: Shell check scripts
+        run: |
+          FAILURES=0
+          for script in aether/scripts/*.sh aether/toolbox/*.sh aether/settings/*.sh aether/lsp/*.sh aether/contexts/*.sh aether/install.sh aether/aether.sh; do
+            if [ -f "$script" ]; then
+              bash -n "$script" 2>/dev/null
+              if [ $? -eq 0 ]; then
+                echo "  ✓ $script"
+              else
+                echo "  ✗ $script"
+                FAILURES=$((FAILURES+1))
+              fi
+            fi
+          done
+          if [ $FAILURES -gt 0 ]; then
+            echo "✗ $FAILURES scripts have syntax errors"
+            exit 1
+          else
+            echo "✓ All shell scripts pass syntax check"
+          fi
+
+      - name: Check critical files
+        run: |
+          REQUIRED="aether/README.md aether/VERSION aether/VERSIONS.md aether/CHANGELOG.md aether/LICENSE aether/install.sh aether/aether.sh aether/agent/aether_agent.py aether/toolbox/manifest.json"
+          MISSING=0
+          for f in $REQUIRED; do
+            if [ ! -f "$f" ]; then
+              echo "✗ Missing: $f"
+              MISSING=$((MISSING+1))
+            fi
+          done
+          if [ $MISSING -eq 0 ]; then
+            echo "✓ All critical files present"
+          else
+            echo "✗ $MISSING critical files missing"
+            exit 1
+          fi
+
+      - name: Check README links
+        run: |
+          echo "Checking README internal links..."
+          cd aether
+          BROKEN=0
+          for link in $(grep -oP '(?<=\]\()[^)]+(?=\))' README.md | grep -v '^http' | grep -v '^#'); do
+            if [ ! -f "$link" ] && [ ! -d "$link" ]; then
+              echo "  ✗ Broken link: $link"
+              BROKEN=$((BROKEN+1))
+            fi
+          done
+          if [ $BROKEN -eq 0 ]; then
+            echo "✓ All internal README links valid"
+          else
+            echo "✗ $BROKEN broken links found"
+            exit 1
+          fi

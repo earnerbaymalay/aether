@@ -1,10 +1,12 @@
-# 🚀 AETHER — MARKETING LAUNCH PACK
+# 🚀 AETHER ECOSYSTEM — MARKETING LAUNCH PACK
 
 > **Goal:** Make Aether go viral. Advertise the full ecosystem. Build a movement around local-first AI.
 >
 > **Timeline:** 21-day launch window (Day -7 to Day +14)
 >
 > **Core message:** "Your phone runs AI locally. Free. Offline. Nobody's watching."
+>
+> **Version:** 26.04.2 — Updated with Phase 1-3 features (Voice, Swarm, Sessions, Settings, LSP, Token Optimization, Workflows, Memory Slots, CalVer)
 
 ---
 
@@ -24,6 +26,7 @@
 12. [Cross-Project Promotion](#cross-project-promotion)
 13. [Image Assets](#image-assets)
 14. [Metrics to Track](#metrics-to-track)
+15. [Updated Ecosystem Feature List](#updated-ecosystem-feature-list)
 
 ---
 
@@ -113,19 +116,21 @@ github.com/earnerbaymalay
 
 ### TWEET 4: LAUNCH DAY 🚀 (Day 0)
 ```
-AETHER IS LIVE. 🌌
+AETHER 26.04 IS LIVE. 🌌
 
 Your phone. Your AI. Your rules.
 
 ✅ 4 AI models running locally (no cloud)
-✅ 10+ toolbox tools (battery, files, web search)
-✅ Persistent memory (it learns from you)
-✅ Swarm orchestration (multi-AI teamwork)
+✅ 17 toolbox tools + 17 skill modules
+✅ Voice I/O — speak questions, hear answers
+✅ Real 3-stage swarm (LOGIC→CODE→AGENT)
+✅ Session IDs + transcript archive + memory slots
+✅ Smart knowledge vault with relevance scoring
+✅ Settings hub with 5 profiles
+✅ Token optimizer (60-90% compression)
 ✅ 100% free, open source, zero tracking
 
 Install: git clone → ./install.sh → ai
-
-That's it.
 
 github.com/earnerbaymalay/aether
 ```
@@ -160,12 +165,14 @@ We forgot what our phones can do.
 ```
 Aether's architecture is genuinely impressive:
 
-• AES-256-GCM encrypted sessions
-• Double Ratchet for forward secrecy
 • 4 models auto-routed by task type
-• AetherVault persistent memory vault
-• SimpleX transport (identity-free)
-• SQLCipher at-rest encryption
+• AetherVault — smart knowledge with relevance scoring
+• 3-stage swarm: LOGIC plans → CODE writes → AGENT executes
+• Voice I/O: Whisper.cpp STT + Piper TTS
+• Session manager: IDs, compressed transcripts, memory slots
+• Token optimizer: 60-90% context compression
+• LSP server for code intelligence
+• Settings hub with 5 profiles
 
 All on a phone. All local.
 
@@ -283,10 +290,15 @@ I've been working on something I think this community will appreciate.
 
 - Runs 4 different AI models locally (Llama-3.2-3B, Hermes-3-8B, Qwen-Coder-3B, DeepSeek-R1)
 - Auto-routes your request to the optimal model for the task
-- Has a toolbox of 10+ tools the AI can execute (file listing, battery status, web search, Obsidian integration, etc.)
-- Features AetherVault — a persistent memory vault that stores knowledge as Markdown and loads it every session
-- Includes swarm orchestration for multi-agent task solving
-- All encrypted: AES-256-GCM sessions, SQLCipher at-rest, Android Keystore key management
+- Voice I/O — speak questions (Whisper.cpp), hear answers (Piper TTS)
+- 17 toolbox tools the AI can execute (file listing, battery, web search, Obsidian, log analysis, dependency checks, system monitoring, LSP diagnostics, and more)
+- 17 skill modules (code review, security audit, data analysis, system optimization, architecture design, project planning, and more)
+- Real 3-stage swarm orchestrator — LOGIC plans → CODE implements → AGENT executes (actual model invocations, not simulation)
+- AetherVault — smart knowledge vault with relevance scoring, 6 categorized tiers, dynamic token budgeting
+- Session manager with unique IDs, compressed transcript archive, and project-isolated memory slots
+- Token optimizer achieving 60-90% context compression
+- Settings hub with 5 profiles (performance/reasoning/coding/conservative/balanced)
+- LSP server for code intelligence across 10+ languages
 
 **The setup is genuinely simple:**
 ```
@@ -795,20 +807,61 @@ CasCad Mobile:       https://github.com/earnerbaymalay/cascad-mobile
 
 ---
 
+## UPDATED ECOSYSTEM FEATURE LIST (v26.04.2)
+
+Use these updated feature counts and names in ALL social posts:
+
+### Aether Core (Android/Termux)
+| Feature | Count | Notes |
+|---------|-------|-------|
+| AI Models | 4 | TURBO, AGENT, CODE, LOGIC |
+| Toolbox Tools | 17 | Including LSP, token optimizer, system monitor |
+| Skill Modules | 17 | Code review, security audit, data analysis, etc. |
+| Optional Extras | 17 | Voice, LSP, Android shortcuts, testing, etc. |
+| Workflow Templates | 6 | Code review, research, implementation, debug, security, data |
+| Memory Slot Types | 6 | Protocol, guide, reference, troubleshooting, template, memory |
+| Scripts | 16 | Swarm, session manager, voice handler, vault manager, etc. |
+
+### Key Selling Points (Updated)
+- Voice I/O — speak questions, hear answers (NEW)
+- Real 3-stage swarm — not simulation, actual model calls (NEW)
+- Session IDs — resume any past conversation (NEW)
+- Memory slots — project-isolated knowledge (NEW)
+- Token optimizer — 60-90% context compression (NEW)
+- Settings hub — 5 profiles, import/export (NEW)
+- LSP server — code intelligence for 10+ languages (NEW)
+- AetherVault — smart knowledge with relevance scoring (REBRANDED)
+- CalVer versioning — 26.04.2 (NEW system)
+
+### Cross-Project Links (Updated)
+| Project | URL | Version |
+|---------|-----|---------|
+| Aether (Android) | https://github.com/earnerbaymalay/aether | 26.04.2 |
+| Aether (Apple) | https://github.com/earnerbaymalay/aether-apple | 26.04 |
+| Aether (Desktop) | https://github.com/earnerbaymalay/aether-desktop | In Progress |
+| Cypherchat/E2EECC | https://github.com/earnerbaymalay/e2eecc | Alpha |
+| Gloam | https://github.com/earnerbaymalay/Gloam | 2.0 |
+| Edge Sentinel | https://github.com/earnerbaymalay/edge-sentinel | Consolidated |
+| Sideload Hub | https://earnerbaymalay.github.io/sideload/ | Active |
+| Termux-Vault | https://github.com/earnerbaymalay/Termux-Vault | Complete |
+
+---
+
 ## LAUNCH DAY CHECKLIST
 
 - [ ] Push final commits to all repos (clean state)
 - [ ] Verify all links in READMEs work
 - [ ] Verify Sideload GitHub Pages is live
 - [ ] Convert SVG assets to PNG for platforms that need it
-- [ ] Record a 15-second screen capture of Aether in action
+- [ ] Record a 15-second screen capture of Aether in action (including voice demo)
+- [ ] Record swarm orchestrator in action (3-stage pipeline)
 - [ ] Schedule all tweets for Week -1 and Week 0
 - [ ] Prepare Reddit accounts with enough karma to post
 - [ ] Join relevant Discord servers
 - [ ] Set GitHub Discussions "Show us your setup" thread
 - [ ] Prepare HN submission (title + URL ready)
 - [ ] Have your phone charged and ready for demo recording
-
----
+- [ ] Update Sideload hub with new Aether features and version numbers
+- [ ] Verify VERSIONS.md links work from all READMEs
 
 *This is your playbook. Execute it. The work speaks for itself.*
