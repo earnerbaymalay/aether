@@ -1,0 +1,21 @@
+{
+  "tools": [
+    {"name": "get_date", "description": "Current date/time", "script": "get_date.sh", "enabled": true},
+    {"name": "get_battery", "description": "Battery status", "script": "get_battery.sh", "enabled": true},
+    {"name": "list_files", "description": "Lists files in a dir", "script": "list_files.sh", "enabled": true},
+    {"name": "gh_status", "description": "Check git/gh status", "script": "gh_status.sh", "enabled": true},
+    {"name": "web_search", "description": "Privacy-first web search using DuckDuckGo", "script": "web_search.sh", "enabled": true},
+    {"name": "web_read", "description": "Read content of a URL as plain text", "script": "web_read.sh", "enabled": true},
+    {"name": "obsidian_list_notes", "description": "List all markdown notes in Obsidian vault", "script": "obsidian_list_notes.sh", "enabled": true},
+    {"name": "obsidian_read_note", "description": "Read a specific note from Obsidian", "script": "obsidian_read_note.sh", "enabled": true},
+    {"name": "obsidian_search_notes", "description": "Search Obsidian vault for a keyword", "script": "obsidian_search_notes.sh", "enabled": true},
+    {"name": "log_analyzer", "description": "Analyze system, application, and security logs for patterns and errors", "script": "log_analyzer.sh", "enabled": true},
+    {"name": "dependency_checker", "description": "Check project dependencies and flag missing/outdated packages", "script": "dependency_checker.sh", "enabled": true},
+    {"name": "model_router", "description": "Display and manage AI model routing configuration and optimization", "script": "model_router.sh", "enabled": true},
+    {"name": "config_manager", "description": "Manage Aether configuration profiles and settings", "script": "config_manager.sh", "enabled": true},
+    {"name": "backup_manager", "description": "Comprehensive backup and restore for Aether and related projects", "script": "backup_manager.sh", "enabled": true},
+    {"name": "system_monitor", "description": "Real-time system monitoring with alerts and metrics history", "script": "system_monitor.sh", "enabled": true},
+    {"name": "lsp_server", "description": "Language Server Protocol for code intelligence (diagnostics, symbols, definitions)", "script": "../lsp/lsp_server.sh", "enabled": true},
+    {"name": "token_optimizer", "description": "Token compression and context optimization (60-90% token savings)", "script": "../scripts/token_optimizer.sh", "enabled": true}
+  ]
+}

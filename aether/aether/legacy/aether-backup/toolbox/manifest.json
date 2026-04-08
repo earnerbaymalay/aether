@@ -1,0 +1,8 @@
+{
+  "tools": [
+    {"name": "get_date", "description": "Current date/time", "script": "get_date.sh", "enabled": true},
+    {"name": "get_battery", "description": "Battery status", "script": "get_battery.sh", "enabled": true},
+    {"name": "list_files", "description": "Lists files in a dir", "script": "list_files.sh", "enabled": true},
+    {"name": "gh_status", "description": "Check git/gh status", "script": "gh_status.sh", "enabled": true}
+  ]
+}

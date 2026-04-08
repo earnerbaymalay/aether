@@ -1,0 +1,17 @@
+# Aether User Profile
+
+This file stores user-specific context for the AI.
+Edit this file to teach Aether about your workflows, preferences, and projects.
+
+## Preferences
+- Preferred programming languages:
+- Common development tasks:
+- Favorite tools:
+
+## Active Projects
+- Project name: 
+  Description:
+  Tech stack:
+
+## Notes
+- Add anything you want the AI to remember.

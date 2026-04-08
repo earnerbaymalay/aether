@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# kimi-swarm — wrapper to invoke kimi_swarm.py from anywhere
+# Requires MOONSHOT_API_KEY to be set.
+#
+# Usage:
+#   kimi-swarm "your task here"
+#   kimi-swarm --task tasks/my_task.txt
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SWARM_PY="$SCRIPT_DIR/../kimi_swarm.py"
+
+if [[ ! -f "$SWARM_PY" ]]; then
+    echo "ERROR: kimi_swarm.py not found at $SWARM_PY" >&2
+    exit 1
+fi
+
+if [[ -z "${MOONSHOT_API_KEY:-}" ]]; then
+    # Try sourcing keys.env if not already exported
+    KEYS_ENV="$HOME/.config/ai-workspace/keys.env"
+    if [[ -f "$KEYS_ENV" ]]; then
+        # shellcheck source=/dev/null
+        source "$KEYS_ENV"
+    fi
+fi
+
+if [[ -z "${MOONSHOT_API_KEY:-}" ]]; then
+    echo "ERROR: MOONSHOT_API_KEY is not set." >&2
+    echo "Set it in ~/.config/ai-workspace/keys.env or export it in your shell." >&2
+    exit 1
+fi
+
+exec python3 "$SWARM_PY" "$@"

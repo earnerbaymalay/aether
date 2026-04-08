@@ -1,0 +1,77 @@
+{
+  "entries": {
+    "README.md": {
+      "path": "README.md",
+      "category": "guide",
+      "tags": [],
+      "created": "2026-04-08T18:37:42.584165",
+      "last_accessed": null,
+      "access_count": 0,
+      "size": 4104
+    },
+    "protocols/coding_standard.md": {
+      "path": "protocols/coding_standard.md",
+      "category": "protocols",
+      "tags": [],
+      "created": "2026-04-08T18:37:42.586089",
+      "last_accessed": null,
+      "access_count": 0,
+      "size": 356
+    },
+    "protocols/librarian_protocol.md": {
+      "path": "protocols/librarian_protocol.md",
+      "category": "protocols",
+      "tags": [],
+      "created": "2026-04-08T18:37:42.586705",
+      "last_accessed": null,
+      "access_count": 0,
+      "size": 1072
+    },
+    "protocols/agent_tool_use.md": {
+      "path": "protocols/agent_tool_use.md",
+      "category": "protocols",
+      "tags": [],
+      "created": "2026-04-08T18:37:42.587327",
+      "last_accessed": null,
+      "access_count": 0,
+      "size": 4688
+    },
+    "templates/skill_format.md": {
+      "path": "templates/skill_format.md",
+      "category": "templates",
+      "tags": [],
+      "created": "2026-04-08T18:37:42.588554",
+      "last_accessed": null,
+      "access_count": 0,
+      "size": 89
+    },
+    "guides/performance_tuning.md": {
+      "path": "guides/performance_tuning.md",
+      "category": "guides",
+      "tags": [],
+      "created": "2026-04-08T18:37:42.588978",
+      "last_accessed": null,
+      "access_count": 0,
+      "size": 4383
+    },
+    "guides/security_best_practices.md": {
+      "path": "guides/security_best_practices.md",
+      "category": "guides",
+      "tags": [],
+      "created": "2026-04-08T18:37:42.589999",
+      "last_accessed": null,
+      "access_count": 0,
+      "size": 1896
+    },
+    "troubleshooting/troubleshooting.md": {
+      "path": "troubleshooting/troubleshooting.md",
+      "category": "troubleshooting",
+      "tags": [],
+      "created": "2026-04-08T18:37:42.590662",
+      "last_accessed": null,
+      "access_count": 0,
+      "size": 5151
+    }
+  },
+  "last_scan": "2026-04-08T18:38:21.445079"
+}

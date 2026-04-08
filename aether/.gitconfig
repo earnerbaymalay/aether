@@ -1,0 +1,7 @@
+[user]
+	name = earnerbaymalay
+	email = earnerbaymalay@gmail.com
+[init]
+	defaultBranch = main
+[credential]
+	helper = store
