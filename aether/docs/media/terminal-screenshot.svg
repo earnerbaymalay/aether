@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480" viewBox="0 0 800 480">
+  <style>
+    .bg { fill: #0d1117; }
+    .terminal-bg { fill: #161b22; }
+    .teal { fill: #58a6ff; }
+    .green { fill: #3fb950; }
+    .dim { fill: #8b949e; }
+    .white { fill: #e6edf3; }
+    .blue { fill: #79c0ff; }
+    .orange { fill: #ffa657; }
+    .purple { fill: #d2a8ff; }
+    .red { fill: #ff7b72; }
+    .cursor { fill: #e6edf3; }
+    .title { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 20px; font-weight: 700; }
+    .subtitle { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 10px; }
+    .mono { font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 13px; }
+    .mono-sm { font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 11px; }
+  </style>
+
+  <!-- Terminal background -->
+  <rect width="800" height="480" rx="10" class="bg"/>
+
+  <!-- Title bar -->
+  <rect x="0" y="0" width="800" height="32" rx="10" fill="#1c2129"/>
+  <rect x="0" y="16" width="800" height="16" fill="#1c2129"/>
+  <circle cx="18" cy="16" r="6" fill="#ff5f57"/>
+  <circle cx="38" cy="16" r="6" fill="#febc2e"/>
+  <circle cx="58" cy="16" r="6" fill="#28c840"/>
+  <text x="400" y="21" class="subtitle dim" text-anchor="middle">Termux — aether — bash — 80×24</text>
+
+  <!-- ASCII Art Header -->
+  <text x="20" y="72" class="mono blue">   ╔══════════════════════════════════════════╗</text>
+  <text x="20" y="96" class="mono blue">   ║          🌌  A E T H E R  🌌            ║</text>
+  <text x="20" y="120" class="mono dim">   ║    NEURAL OPERATING INTERFACE // V 18.0   ║</text>
+  <text x="20" y="144" class="mono blue">   ╚══════════════════════════════════════════╝</text>
+
+  <!-- Status Bar -->
+  <rect x="80" y="160" width="640" height="32" rx="8" fill="#0d1117" stroke="#21262d" stroke-width="1"/>
+  <text x="100" y="181" class="mono-sm green"> 🔋 BATT: 78%  •  💾 STR: 42G  •  🧠 VAULT: ACTIVE </text>
+
+  <!-- Menu -->
+  <text x="80" y="220" class="mono-sm dim">      ┌────────────────────────────────────────────┐</text>
+  <text x="80" y="240" class="mono-sm dim">      │  [ SELECT NEURAL PATHWAY ]                 │</text>
+  <text x="80" y="260" class="mono-sm dim">      │                                            │</text>
+
+  <!-- Menu Items -->
+  <text x="100" y="284" class="mono-sm white">  <tspan fill="#ffa657">▸</tspan> <tspan fill="#d2a8ff">🤖 AGENT</tspan><tspan fill="#8b949e">   (Hermes-8B)  </tspan><tspan fill="#3fb950">Smartest. Writes code, uses tools.</tspan></text>
+  <text x="100" y="308" class="mono-sm dim">      <tspan fill="#8b949e">🤖 AGENT   (Hermes-8B)  </tspan><tspan fill="#3fb950">Smartest. Writes code, uses tools.</tspan></text>
+  <text x="100" y="332" class="mono-sm dim">      <tspan fill="#8b949e">⚡ TURBO   (Llama-3B)   </tspan><tspan fill="#3fb950">Fastest. Daily questions, summaries.</tspan></text>
+  <text x="100" y="356" class="mono-sm dim">      <tspan fill="#8b949e">🧠 LOGIC   (DeepSeek)   </tspan><tspan fill="#3fb950">Deep thinker. Architecture &amp; planning.</tspan></text>
+  <text x="100" y="380" class="mono-sm dim">      <tspan fill="#8b949e">💻 CODE    (Qwen-3B)    </tspan><tspan fill="#3fb950">Coding specialist. Refactor, debug.</tspan></text>
+  <text x="100" y="404" class="mono-sm dim">      <tspan fill="#8b949e">🛡️ SECURITY (Sentinel)  </tspan><tspan fill="#3fb950">System auditor. Scan for issues.</tspan></text>
+  <text x="100" y="428" class="mono-sm dim">      <tspan fill="#8b949e">🛠 TOOLS   (Skills)     </tspan><tspan fill="#3fb950">Plugins, maintenance, benchmark.</tspan></text>
+  <text x="100" y="452" class="mono-sm dim">      <tspan fill="#8b949e">❌ EXIT                                       </tspan></text>
+  <text x="80" y="472" class="mono-sm dim">      └────────────────────────────────────────────┘</text>
+
+  <!-- Cursor blink -->
+  <rect x="100" y="268" width="8" height="16" class="cursor" opacity="0.8"/>
+</svg>

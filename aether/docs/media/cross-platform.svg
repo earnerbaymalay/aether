@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <style>
+    .bg { fill: #0d1117; }
+    .card { fill: #161b22; rx: 8; }
+    .card-border { stroke: #30363d; stroke-width: 1; fill: none; rx: 8; }
+    .title { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; font-weight: 600; }
+    .mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; }
+    .small { font-family: -apple-system, sans-serif; font-size: 10px; }
+    .teal { fill: #3fb950; }
+    .blue { fill: #58a6ff; }
+    .white { fill: #e6edf3; }
+    .dim { fill: #8b949e; }
+    .green { fill: #3fb950; }
+    .orange { fill: #ffa657; }
+    .purple { fill: #bc8cff; }
+  </style>
+
+  <rect width="800" height="400" class="bg"/>
+  <text x="400" y="30" class="title white" text-anchor="middle" font-size="16">Aether Across Platforms — One Philosophy, Every Device</text>
+
+  <!-- Android Card -->
+  <rect x="20" y="50" width="240" height="330" class="card"/>
+  <rect x="20" y="50" width="240" height="330" class="card-border" stroke="#58a6ff" stroke-width="2"/>
+
+  <text x="140" y="80" class="title blue" text-anchor="middle" font-size="16">📱 Android (Flagship)</text>
+  <text x="140" y="100" class="small dim" text-anchor="middle">Termux · Full Power</text>
+
+  <line x1="40" y1="112" x2="240" y2="112" stroke="#21262d" stroke-width="1"/>
+
+  <text x="40" y="134" class="small teal">✓ 4 AI Tiers (TURBO/AGENT/CODE/LOGIC)</text>
+  <text x="40" y="154" class="small teal">✓ 10+ Toolbox tools (Termux:API)</text>
+  <text x="40" y="174" class="small teal">✓ Python Agent with tool execution</text>
+  <text x="40" y="194" class="small teal">✓ Swarm Orchestrator</text>
+  <text x="40" y="214" class="small teal">✓ Background Sentinel</text>
+  <text x="40" y="234" class="small teal">✓ Debug Console + Self-healing</text>
+  <text x="40" y="254" class="small teal">✓ Skill Marketplace</text>
+  <text x="40" y="274" class="small teal">✓ Librarian (vault auditor)</text>
+  <text x="40" y="294" class="small teal">✓ Hardware Benchmark</text>
+  <text x="40" y="314" class="small teal">✓ Context7 Persistent Memory</text>
+
+  <line x1="40" y1="328" x2="240" y2="328" stroke="#21262d" stroke-width="1"/>
+  <text x="140" y="350" class="small dim" text-anchor="middle">Min: Android 7.0 · 4 GB RAM</text>
+  <text x="140" y="368" class="mono blue" text-anchor="middle">Install: ./install.sh → ai</text>
+
+  <!-- macOS Card -->
+  <rect x="280" y="50" width="240" height="330" class="card"/>
+  <rect x="280" y="50" width="240" height="330" class="card-border" stroke="#3fb950" stroke-width="2"/>
+
+  <text x="400" y="80" class="title green" text-anchor="middle" font-size="16">🖥️ Mac (Full)</text>
+  <text x="400" y="100" class="small dim" text-anchor="middle">Homebrew · Native Speed</text>
+
+  <line x1="300" y1="112" x2="500" y2="112" stroke="#21262d" stroke-width="1"/>
+
+  <text x="300" y="134" class="small teal">✓ 2 Modes (CHAT / TURBO)</text>
+  <text x="300" y="154" class="small teal">✓ 6 Toolbox tools (macOS native)</text>
+  <text x="300" y="174" class="small teal">✓ llama-cli via Homebrew</text>
+  <text x="300" y="194" class="small teal">✓ Battery status (pmset)</text>
+  <text x="300" y="214" class="small teal">✓ System info (sysctl)</text>
+  <text x="300" y="234" class="small teal">✓ Context7 Persistent Memory</text>
+  <text x="300" y="254" class="small teal">✓ Platform-adaptive UX</text>
+  <text x="300" y="274" class="small teal">✓ Full thread utilization</text>
+
+  <line x1="300" y1="288" x2="500" y2="288" stroke="#21262d" stroke-width="1"/>
+  <text x="400" y="310" class="small dim" text-anchor="middle">Min: macOS 12 · Apple Silicon</text>
+  <text x="400" y="328" class="small dim" text-anchor="middle">Speed: 15-50 t/s on M1/M2</text>
+  <text x="400" y="350" class="small dim" text-anchor="middle">Setup: ~5 minutes</text>
+  <text x="400" y="368" class="mono green" text-anchor="middle">Install: ./install-apple.sh → ai</text>
+
+  <!-- iPad Card -->
+  <rect x="540" y="50" width="240" height="330" class="card"/>
+  <rect x="540" y="50" width="240" height="330" class="card-border" stroke="#bc8cff" stroke-width="2"/>
+
+  <text x="660" y="80" class="title purple" text-anchor="middle" font-size="16">📱 iPad (iSH / a-Shell)</text>
+  <text x="660" y="100" class="small dim" text-anchor="middle">Free from App Store</text>
+
+  <line x1="560" y1="112" x2="760" y2="112" stroke="#21262d" stroke-width="1"/>
+
+  <text x="560" y="134" class="small teal">✓ 2 Modes (same models as Mac)</text>
+  <text x="560" y="154" class="small teal">✓ 5 Toolbox tools (sandboxed)</text>
+  <text x="560" y="174" class="small orange">⚡ iSH: builds llama.cpp (~20 min)</text>
+  <text x="560" y="194" class="small orange">⚡ a-Shell: Python fallback mode</text>
+  <text x="560" y="214" class="small teal">✓ Context7 Persistent Memory</text>
+  <text x="560" y="234" class="small teal">✓ Graceful hardware fallback</text>
+  <text x="560" y="254" class="small teal">✓ Cross-platform knowledge</text>
+
+  <line x1="560" y1="268" x2="760" y2="268" stroke="#21262d" stroke-width="1"/>
+  <text x="660" y="290" class="small dim" text-anchor="middle">Min: iPad iOS 14 · Any iPad 8yr+</text>
+  <text x="660" y="308" class="small dim" text-anchor="middle">Speed: 3-15 t/s (platform dep.)</text>
+  <text x="660" y="328" class="small dim" text-anchor="middle">Setup: 5-20 minutes</text>
+  <text x="660" y="350" class="small dim" text-anchor="middle">Get: iSH or a-Shell from App Store</text>
+  <text x="660" y="368" class="mono purple" text-anchor="middle">Install: ./install-apple.sh → ai</text>
+</svg>

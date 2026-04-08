@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="340" viewBox="0 0 800 340">
+  <style>
+    .bg { fill: #0d1117; }
+    .card { fill: #161b22; rx: 8; }
+    .card-border { stroke: #30363d; stroke-width: 1; fill: none; rx: 8; }
+    .card-highlight { stroke: #58a6ff; stroke-width: 2; fill: none; rx: 8; }
+    .title { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 13px; font-weight: 600; }
+    .mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; }
+    .small { font-family: -apple-system, sans-serif; font-size: 10px; }
+    .teal { fill: #3fb950; }
+    .blue { fill: #58a6ff; }
+    .purple { fill: #bc8cff; }
+    .orange { fill: #ffa657; }
+    .white { fill: #e6edf3; }
+    .dim { fill: #8b949e; }
+    .green { fill: #3fb950; }
+  </style>
+
+  <rect width="800" height="340" class="bg"/>
+  <text x="400" y="30" class="title white" text-anchor="middle" font-size="16">Neural Tier System — AI Model Routing</text>
+  <text x="400" y="48" class="small dim" text-anchor="middle">Aether automatically routes your request to the optimal model for the task</text>
+
+  <!-- TURBO Card -->
+  <rect x="20" y="70" width="180" height="250" class="card"/>
+  <rect x="20" y="70" width="180" height="250" class="card-border"/>
+  <text x="110" y="100" class="title teal" text-anchor="middle" font-size="18">⚡ TURBO</text>
+  <text x="110" y="124" class="mono dim" text-anchor="middle">Llama-3.2-3B</text>
+
+  <line x1="40" y1="138" x2="180" y2="138" stroke="#21262d" stroke-width="1"/>
+  <text x="40" y="160" class="small dim">Speed:</text>  <text x="120" y="160" class="mono green" font-weight="bold">25+ t/s</text>
+  <text x="40" y="180" class="small dim">RAM:</text>  <text x="120" y="180" class="mono dim">~2 GB</text>
+  <text x="40" y="200" class="small dim">Size:</text>  <text x="120" y="200" class="mono dim">~2 GB</text>
+
+  <line x1="40" y1="214" x2="180" y2="214" stroke="#21262d" stroke-width="1"/>
+  <text x="40" y="238" class="small dim">Best for:</text>
+  <text x="40" y="258" class="small dim">• Quick questions</text>
+  <text x="40" y="276" class="small dim">• Summaries</text>
+  <text x="40" y="294" class="small dim">• Translations</text>
+  <text x="40" y="312" class="small dim">• Creative writing</text>
+
+  <!-- AGENT Card -->
+  <rect x="220" y="70" width="180" height="250" class="card"/>
+  <rect x="220" y="70" width="180" height="250" class="card-highlight"/>
+  <rect x="300" y="74" width="96" height="16" rx="4" fill="#58a6ff"/>
+  <text x="348" y="85" class="small white" text-anchor="middle" font-weight="bold">RECOMMENDED</text>
+
+  <text x="310" y="100" class="title orange" text-anchor="middle" font-size="18">🤖 AGENT</text>
+  <text x="310" y="124" class="mono dim" text-anchor="middle">Hermes-3-8B</text>
+
+  <line x1="240" y1="138" x2="380" y2="138" stroke="#21262d" stroke-width="1"/>
+  <text x="240" y="160" class="small dim">Speed:</text>  <text x="320" y="160" class="mono green" font-weight="bold">10-15 t/s</text>
+  <text x="240" y="180" class="small dim">RAM:</text>  <text x="320" y="180" class="mono dim">~6 GB</text>
+  <text x="240" y="200" class="small dim">Size:</text>  <text x="320" y="200" class="mono dim">~5 GB</text>
+
+  <line x1="240" y1="214" x2="380" y2="214" stroke="#21262d" stroke-width="1"/>
+  <text x="240" y="238" class="small dim">Best for:</text>
+  <text x="240" y="258" class="small dim">• Complex reasoning</text>
+  <text x="240" y="276" class="small dim">• Tool execution</text>
+  <text x="240" y="294" class="small dim">• Code writing</text>
+  <text x="240" y="312" class="small dim">• Multi-step tasks</text>
+
+  <!-- CODE Card -->
+  <rect x="420" y="70" width="180" height="250" class="card"/>
+  <rect x="420" y="70" width="180" height="250" class="card-border"/>
+  <text x="510" y="100" class="title purple" text-anchor="middle" font-size="18">💻 CODE</text>
+  <text x="510" y="124" class="mono dim" text-anchor="middle">Qwen-Coder-3B</text>
+
+  <line x1="440" y1="138" x2="580" y2="138" stroke="#21262d" stroke-width="1"/>
+  <text x="440" y="160" class="small dim">Speed:</text>  <text x="520" y="160" class="mono green" font-weight="bold">18+ t/s</text>
+  <text x="440" y="180" class="small dim">RAM:</text>  <text x="520" y="180" class="mono dim">~2 GB</text>
+  <text x="440" y="200" class="small dim">Size:</text>  <text x="520" y="200" class="mono dim">~2 GB</text>
+
+  <line x1="440" y1="214" x2="580" y2="214" stroke="#21262d" stroke-width="1"/>
+  <text x="440" y="238" class="small dim">Best for:</text>
+  <text x="440" y="258" class="small dim">• Code review</text>
+  <text x="440" y="276" class="small dim">• Refactoring</text>
+  <text x="440" y="294" class="small dim">• Debugging</text>
+  <text x="440" y="312" class="small dim">• Writing functions</text>
+
+  <!-- LOGIC Card -->
+  <rect x="620" y="70" width="160" height="250" class="card"/>
+  <rect x="620" y="70" width="160" height="250" class="card-border"/>
+  <text x="700" y="100" class="title blue" text-anchor="middle" font-size="18">🧠 LOGIC</text>
+  <text x="700" y="124" class="mono dim" text-anchor="middle">DeepSeek-R1</text>
+
+  <line x1="640" y1="138" x2="760" y2="138" stroke="#21262d" stroke-width="1"/>
+  <text x="640" y="160" class="small dim">Speed:</text>  <text x="710" y="160" class="mono green" font-weight="bold">22+ t/s</text>
+  <text x="640" y="180" class="small dim">RAM:</text>  <text x="710" y="180" class="mono dim">~1 GB</text>
+  <text x="640" y="200" class="small dim">Size:</text>  <text x="710" y="200" class="mono dim">~1 GB</text>
+
+  <line x1="640" y1="214" x2="760" y2="214" stroke="#21262d" stroke-width="1"/>
+  <text x="640" y="238" class="small dim">Best for:</text>
+  <text x="640" y="258" class="small dim">• Architecture</text>
+  <text x="640" y="276" class="small dim">• Deep reasoning</text>
+  <text x="640" y="294" class="small dim">• System design</text>
+  <text x="640" y="312" class="small dim">• Complex planning</text>
+</svg>

@@ -1,0 +1,14 @@
+FROM sam860/dolphin3-llama3.2:3b
+
+# RAM/Speed Tuning for Mobile
+PARAMETER num_ctx 2048
+PARAMETER num_thread 4
+PARAMETER temperature 0.1
+
+SYSTEM """
+You are a concise, uncensored autonomous agent.
+1. No conversational filler or moralizing.
+2. If tool use is required, output the command or JSON exactly.
+3. Be direct and technical. 
+4. Use 4-core processing to maintain system stability.
+"""

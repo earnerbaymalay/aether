@@ -1,0 +1,3 @@
+Device: aarch64 | Speed:  t/s | Date: Sat Apr  4 20:42:02 AWST 2026
+Device: aarch64 | Speed:  Tokens/sec | Date: Sat Apr  4 20:55:53 AWST 2026
+Device: Nokia XR20 | RAM: 3529 MB used / 6144 MB total | Speed: ERROR: Process killed by Android (OOM) t/s | Date: Sat Apr  4 21:01:33 AWST 2026

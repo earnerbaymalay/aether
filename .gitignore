@@ -1,7 +1,31 @@
-models/
+# Sensitive
+.env
+.git-credentials
+.ssh/
+.qwen/
+.openclaw/
+
+# Large dirs
 llama.cpp/
+stable-diffusion.cpp/
+models/
+SecLists/
+storage/
+.npm/
+.cargo/
+.ollama/
+
+# Generated
+*.log
+*.pyc
+__pycache__/
+.session.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Aether
 knowledge/user_profile.txt
 knowledge/user_profile.bak
 knowledge/system.env
-__pycache__/
-*.pyc
