@@ -2,23 +2,10 @@
 
 Local AI workstation for Android. No cloud, no API keys, and no internet required after setup.
 
-[![Version](https://img.shields.io/badge/version-26.04.2-50fa7b?style=for-the-badge)](VERSIONS.md)
+[![Version](https://img.shields.io/badge/version-26.04.2-50fa7b?style=for-the-badge)](../VERSIONS.md)
 [![License](https://img.shields.io/badge/license-MIT-f1fa8c?style=for-the-badge)](LICENSE)
 
-[Quick start](#quick-start) · [Architecture](#architecture) · [Version history](VERSIONS.md) · [Usage guide](USAGE.md)
-
----
-
-## Quick start
-
-```bash
-git clone https://github.com/earnerbaymalay/aether.git
-cd aether
-./install.sh
-ai
-```
-
-Requires Android with Termux (from F-Droid). 4GB+ RAM and 3-5GB free storage recommended.
+[Quick start](#quick-start) · [Architecture](#architecture) · [Related projects](#related-projects)
 
 ---
 
@@ -87,15 +74,7 @@ aether/
 
 ## Version history
 
-Uses CalVer (YY.MM.patch). Details in [VERSIONS.md](VERSIONS.md).
-
-| Version | Focus |
-|---------|-------|
-| [26.04.2](VERSIONS.md) | Voice I/O and swarm mode |
-| [26.04.1](VERSIONS.md) | Settings and optimization |
-| [26.04.0](VERSIONS.md) | Skills and tools |
-| [26.03.0](VERSIONS.md) | AetherVault and sessions |
-| [1.0.0-alpha](VERSIONS.md) | Foundation |
+Uses CalVer (YY.MM.patch). Details in the main repository's [VERSIONS.md](../VERSIONS.md).
 
 ---
 
