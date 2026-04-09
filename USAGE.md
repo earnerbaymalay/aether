@@ -1,20 +1,19 @@
-# Aether -- Usage Guide
+# Aether usage guide
 
-From installation to advanced features.
+Instructions for setup, first launch, and advanced features.
 
 ---
 
-## Beginner Track
+## Beginner guide
 
-### What You Need
+### Requirements
 
-- Android phone from the last 5+ years
-- Termux from [F-Droid](https://f-droid.org/en/packages/com.termux/) (not the Play Store version)
+- Android phone from the last 5 years
+- Termux from [F-Droid](https://f-droid.org/en/packages/com.termux/)
 - 3-5GB free storage
 - 4GB+ RAM
-- Wifi for initial setup only
 
-### Install
+### Installation
 
 ```bash
 git clone https://github.com/earnerbaymalay/aether.git
@@ -22,155 +21,88 @@ cd aether
 ./install.sh
 ```
 
-The installer updates packages, compiles llama.cpp, creates workspace folders, and sets up the `ai` shortcut. First install takes 10-15 minutes.
+The installer updates packages, compiles llama.cpp, and creates your workspace. Setup takes 10-15 minutes.
 
-### First Conversation
+### First launch
 
-After installation:
+Run:
 ```
 ai
 ```
 
-Select TURBO for your first chat -- it is the fastest tier. If the model has not been downloaded, Aether will offer to download it (~2GB).
+Select Turbo for your first chat. It is the fastest tier. Aether will download the model if it is missing.
 
 Type anything:
 ```
-You: What is quantum computing? Explain it simply.
+You: Explain list comprehensions in Python simply.
 ```
 
-Type `exit` or Ctrl+C to leave.
-
-### Tips
-
-- Be specific. "Explain Python list comprehensions with examples" works better than "tell me about Python"
-- Ask for formats. "Give me a table comparing..." or "Show me code that..."
-- Follow up. Aether remembers the current conversation
+Type `exit` or use Ctrl+C to leave.
 
 ---
 
-## Intermediate Track
+## Intermediate guide
 
-### The Four AI Tiers
+### AI tiers
 
-| Tier | Model | Speed | Best for |
-|------|-------|-------|----------|
-| TURBO | Llama-3.2-3B | 25+ t/s | Quick questions, summaries, translations |
-| AGENT | Hermes-3-8B | 10-15 t/s | Complex reasoning, code, tool use |
-| CODE | Qwen-Coder-3B | 18+ t/s | Code review, debugging, refactoring |
-| LOGIC | DeepSeek-R1 | 22+ t/s | Architecture design, system planning |
-
-Start with TURBO for quick tasks. Switch to AGENT for tools or complex reasoning. Use CODE for programming. Use LOGIC for deep thinking.
+| Tier | Model | Best for |
+|------|-------|----------|
+| Turbo | Llama-3.2-3B | Quick questions and summaries |
+| Agent | Hermes-3-8B | Reasoning, code, and tools |
+| Code | Qwen-Coder-3B | Programming and review |
+| Logic | DeepSeek-R1 | Architecture and deep thinking |
 
 ### Toolbox
 
-From the main menu select TOOLS. You can purge sessions, run the librarian to audit your knowledge vault, run benchmarks, browse the skill market, or open the debug console.
+Select TOOLS from the main menu to run benchmarks, audit your knowledge, or open the debug console.
 
-The AGENT tier can also execute tools automatically. Ask it to check battery status, list files, or search the web, and it will run the appropriate script.
+The Agent tier runs tools automatically. Ask it to check battery status or search the web.
 
-Available tools: get_date, get_battery, list_files, gh_status, obsidian_list_notes, obsidian_search_notes, obsidian_read_note, web_search, web_read, learn (saves knowledge to AetherVault).
+Available tools: get_date, get_battery, list_files, gh_status, obsidian_notes, web_search, learn (saves memory).
 
-### Persistent Memory (AetherVault)
+### Persistent memory (AetherVault)
 
-Knowledge is stored as Markdown files in `knowledge/aethervault/`. The AI reads these files at the start of each session.
+Knowledge is stored as Markdown in `knowledge/aethervault/`. The AI reads these files during every session.
 
-Tell the AGENT to learn something:
+Tell the Agent to learn something:
 ```
-You: Learn this: python_tips|Use list comprehensions for faster Python code.
-```
-
-Or add files manually:
-```bash
-echo "# Python Tips" > ~/aether/knowledge/aethervault/python_tips.md
+You: Learn this: python_tips | Use list comprehensions for speed.
 ```
 
-### Connecting to Obsidian
+### Obsidian integration
 
-1. Install Obsidian on Android
-2. Create a new vault pointing to `~/aether/knowledge/aethervault/`
-3. Your AI's knowledge now appears as notes in Obsidian
-
-### Running the Benchmark
-
-```bash
-./bench.sh
-```
-
-Reports tokens per second. 10+ t/s feels responsive. 20+ t/s feels instant. Below 5 t/s and your device may struggle with larger models.
+1. Install Obsidian on Android.
+2. Open a new vault pointing to `~/aether/knowledge/aethervault/`.
+3. Your AI's memory appears as editable notes.
 
 ---
 
-## Advanced Track
+## Advanced guide
 
-### The Agent Core
+### Agent core
 
-The AGENT runs on a persistent llama-server backend on port 8080. When the AI outputs `<tool>name(args)</tool>`, the Python agent intercepts and executes it. Tool output is fed back to the AI. The last 8 messages are kept in context.
+The Agent runs on a llama-server on port 8080. When it outputs `<tool>name(args)</tool>`, the Python agent executes the script and feeds the result back.
 
-To build a custom tool, add a shell script to `toolbox/` and register it in `toolbox/manifest.json`. The AGENT auto-discovers it on next launch.
+To add a custom tool, place a shell script in `toolbox/` and update `toolbox/manifest.json`.
 
 ### Skills
 
-Skills are drop-in behavior modules. Each skill is a single `SKILL.md` file in `skills/your-skill-name/`. Place the folder in `skills/`, restart Aether, and the skill is auto-detected.
+Skills are drop-in modules. Place a `SKILL.md` file in `skills/your-skill-name/` to add new behaviors.
 
-### Swarm Orchestrator
+### Swarm orchestrator
 
+Run:
 ```bash
 ./scripts/swarm_orchestrator.sh
 ```
 
-Chains multiple AI models together. TURBO handles query breakdown, LOGIC deep-thinks on architecture, AGENT executes the plan using tools, CODE reviews the output.
+This chains models together: Logic plans, Agent executes, Code reviews.
 
-### Debug Console
+### Background sentinel
 
-```bash
-./scripts/debug_console.sh
-```
-
-Shows real-time system logs, detects missing dependencies, offers self-healing suggestions.
-
-### Background Sentinel
-
+Run:
 ```bash
 ./scripts/launch_sentinel.sh
 ```
 
-Passively monitors your Termux environment. Scans for security misconfigurations, checks for outdated packages, monitors resource usage.
-
-### Manual Configuration
-
-Key variables in `aether.sh`:
-```bash
-THREADS=6          # CPU threads for inference
-SESSION_DIR="$HOME/.aether/sessions"  # Chat history storage
-```
-
-Model files are stored in `~/aether/models/`.
-
----
-
-## Troubleshooting
-
-| Problem | Solution |
-|---------|----------|
-| Missing dependencies | Run `./install.sh` again |
-| Model missing | Select the tier in the main menu and confirm download |
-| Engine failed to start | Check `~/.aether/sessions/llama_server.log` |
-| AI is very slow | Run `./bench.sh` -- below 5 t/s, try smaller models or free RAM |
-| Out of memory | Close other apps. Reduce THREADS to 4 |
-| `ai` command not found | Re-run `./install.sh` |
-| Obsidian can't find vault | Path must be exactly `~/aether/knowledge/aethervault/` |
-
-## FAQ
-
-**Is this really offline?** After the initial model download, everything runs on-device. No data leaves your phone unless you explicitly use web_search or web_read.
-
-**How much does it cost?** Nothing. Models are open source and free.
-
-**Are the models censored?** No. Raw, unfiltered models.
-
-**How do I update Aether?** `git pull` in the `~/aether` directory, then re-run `./install.sh` if new dependencies were added.
-
-**What happens to my knowledge if I reinstall?** It is stored in `knowledge/aethervault/`. Back up that folder and your AI's memory is preserved.
-
----
-
-[MIT License](LICENSE)
+Monitors system health and security.
