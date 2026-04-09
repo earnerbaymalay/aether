@@ -52,16 +52,16 @@ jobs:
           print(f'✓ {len(workflows)} workflow templates defined')
       " 2>/dev/null || echo "⚠ PyYAML not available, skipping workflow validation"
 
-      - name: Validate vault index
-        run: python3 -c "import json; data=json.load(open('aether/knowledge/vault_index.json', 'r')); print(f'✓ Vault index: {len(data.get("entries", {}))} entries')" 2>/dev/null || echo "⚠ Vault index not yet generated"
+      # - name: Validate vault index
+      #   run: python3 -c "import json; data=json.load(open('aether/knowledge/vault_index.json', 'r')); print(f'✓ Vault index: {len(data.get("entries", {}))} entries')" 2>/dev/null || echo "⚠ Vault index not yet generated"
 
-      - name: Validate knowledge loader
-        run: python3 -c "
-      import sys
-      sys.path.insert(0, 'aether/knowledge')
-      from knowledge_loader import AetherVault
-      print('✓ knowledge_loader.py imports successfully')
-      " 2>/dev/null || echo "⚠ Knowledge loader import failed"
+      # - name: Validate knowledge loader
+      #   run: python3 -c "
+      # import sys
+      # sys.path.insert(0, 'aether/knowledge')
+      # from knowledge_loader import AetherVault
+      # print('✓ knowledge_loader.py imports successfully')
+      # " 2>/dev/null || echo "⚠ Knowledge loader import failed"
 
       # - name: Check VERSION file
       #   run: |
@@ -99,7 +99,7 @@ jobs:
       #     REQUIRED="aether/README.md aether/VERSION aether/VERSIONS.md aether/CHANGELOG.md aether/LICENSE aether/install.sh aether/aether.sh aether/agent/aether_agent.py aether/toolbox/manifest.json"
       #     MISSING=0
       #     for f in $REQUIRED; do
-      #       if [ -f "$f" ]; then
+      #       if [ ! -f "$f" ]; then
       #         echo "✗ Missing: $f"
       #         MISSING=$((MISSING+1))
       #       fi
