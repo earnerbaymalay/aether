@@ -7,10 +7,10 @@ read -p "Select option: " opt
 
 case $opt in
   1)
-    cd ~/edge-sentinel && ./start.sh
+    cd ~/edge-sentinel || exit && ./start.sh
     ;;
   2)
-    cd ~/edge-sentinel && ./stop.sh
+    cd ~/edge-sentinel || exit && ./stop.sh
     ;;
   3)
     echo "AI Server: $(pgrep -f llama-server | xargs echo)"
