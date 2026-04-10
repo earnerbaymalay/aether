@@ -1,11 +1,15 @@
-# Aether
+<div align="center">
 
-Local AI workstation for Android. No cloud, no API keys, and no internet required after setup.
+# ⬡ A E T H E R
+### *Offline AI Workstation for Android.*
 
-[![Version](https://img.shields.io/badge/version-26.04.2-50fa7b?style=for-the-badge)](../VERSIONS.md)
+[![Version](https://img.shields.io/badge/version-26.04.2-50fa7b?style=for-the-badge)](VERSIONS.md)
 [![License](https://img.shields.io/badge/license-MIT-f1fa8c?style=for-the-badge)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Active-50fa7b?style=for-the-badge)]()
 
-[Quick start](#quick-start) · [Architecture](#architecture) · [Related projects](#related-projects)
+**[🌐 View the Hub](https://earnerbaymalay.github.io/sideload/)**
+
+</div>
 
 ---
 
