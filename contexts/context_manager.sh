@@ -310,7 +310,7 @@ smart_context() {
     fi
   done
   
-  if [ "$matches" -eq 0 ]; no
+  if [ "$matches" -eq 0 ]; then
     echo "  No matching contexts found"
   else
     echo ""
