@@ -4,6 +4,19 @@ Common issues and solutions.
 
 ---
 
+## Common Termux Issues
+
+1. **Storage Access:** Run `termux-setup-storage` before installation to enable file and directory access.
+2. **Package Conflicts:** Run `pkg update && pkg upgrade` before install to ensure all package versions are compatible.
+3. **Build Failures:** If `llama.cpp` build fails with "ninja: command not found" — run `pkg install ninja`.
+4. **Model Compatibility (ARM64):**
+   - **6GB+ RAM:** Q4_K_M quantisation is recommended for optimal balance.
+   - **4GB RAM:** Use Q2_K quantisation.
+   - **8B+ models:** Do not attempt on devices with less than 6GB RAM.
+5. **Command Not Found:** If `ai` command not found after install — run `source ~/.bashrc` or restart Termux.
+
+---
+
 ## Installation issues
 
 ### Missing dependencies

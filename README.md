@@ -25,6 +25,12 @@
 
 ### Install on Android
 
+**Prerequisites:** Android + [Termux](https://f-droid.org/en/packages/com.termux/) (from F-Droid). 4GB+ RAM, 3-5GB storage.
+
+> ⚠️ **Install Termux from F-Droid only** ([https://f-droid.org/en/packages/com.termux/](https://f-droid.org/en/packages/com.termux/)).
+> The Play Store version has restricted permissions that will cause failures during
+> package installation and file access.
+
 ```bash
 git clone https://github.com/earnerbaymalay/aether.git
 cd aether
@@ -32,7 +38,14 @@ cd aether
 ai             # launch
 ```
 
-Requires: Android + [Termux](https://f-droid.org/en/packages/com.termux/) (from F-Droid). 4GB+ RAM, 3-5GB storage.
+### What install.sh does
+
+The `install.sh` script automates the setup of your neural interface:
+- **Packages:** Installs required system packages via `pkg` (git, cmake, python, etc.).
+- **Engine:** Clones and builds `llama.cpp` at `~/llama.cpp/`.
+- **Models:** Downloads selected GGUF models to `~/aether/models/`.
+- **Shortcut:** Writes a global shortcut to `$PREFIX/bin/ai`.
+- **Config:** Initializes configuration and session state at `~/.aether/`.
 
 ### All Platforms
 
