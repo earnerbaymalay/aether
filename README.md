@@ -81,7 +81,7 @@ Requires: Android + [Termux](https://f-droid.org/en/packages/com.termux/) (from 
 | Project | Platform | Description | Link |
 |---------|----------|-------------|------|
 | 🌗 **Gloam** | 📱 Android / 🖥️ Desktop | Solar-timed CBT journal | [Source →](https://github.com/earnerbaymalay/Gloam) |
-| 🛡️ **Cyph3rChat** | 📱 Android | E2E encrypted messaging | [Source →](https://github.com/earnerbaymalay/e2eecc) |
+| 🛡️ **Cyph3rChat** | 📱 Android | E2E encrypted messaging | [Source →](https://github.com/earnerbaymalay/cyph3rchat) |
 | 🧰 **Termux-Vault** | 📱 Android | Dev environment toolchain | [Source →](https://github.com/earnerbaymalay/Termux-Vault) |
 | 📲 **Sideload Hub** | 🌐 Web / PWA | Central app distribution | [Open Hub →](https://earnerbaymalay.github.io/sideload/) |
 

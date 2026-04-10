@@ -203,7 +203,7 @@ While everyone's arguing about which cloud AI is best, I built a messenger that:
 • Encrypts everything at rest
 • Works completely offline
 
-github.com/earnerbaymalay/e2eecc
+github.com/earnerbaymalay/cyph3rchat
 
 Also has an iPhone PWA → sideload
 ```
@@ -354,7 +354,7 @@ Everything is free, MIT licensed, and on GitHub.
 
 - Aether (Android): https://github.com/earnerbaymalay/aether
 - Aether (Apple): https://github.com/earnerbaymalay/aether-apple
-- Cypherchat: https://github.com/earnerbaymalay/e2eecc
+- Cypherchat: https://github.com/earnerbaymalay/cyph3rchat
 - iPhone PWA: https://earnerbaymalay.github.io/sideload/cypherchat/
 
 Happy to answer questions about the architecture, threat model, or anything else.
@@ -731,7 +731,7 @@ Each project should promote the others naturally:
 - Add to top nav: `[🌌 Aether](https://github.com/earnerbaymalay/aether) · [🌗 Gloam](https://github.com/earnerbaymalay/Gloam) · [📲 Sideload](https://earnerbaymalay.github.io/sideload/)`
 
 ### Gloam README → promotes ecosystem
-- Add to top nav: `[🌌 Aether](https://github.com/earnerbaymalay/aether) · [🛡️ Cypherchat](https://github.com/earnerbaymalay/e2eecc) · [📲 Sideload](https://earnerbaymalay.github.io/sideload/)`
+- Add to top nav: `[🌌 Aether](https://github.com/earnerbaymalay/aether) · [🛡️ Cypherchat](https://github.com/earnerbaymalay/cyph3rchat) · [📲 Sideload](https://earnerbaymalay.github.io/sideload/)`
 
 ### Sideload Hub → central node
 - Already done: lists all 13 projects with variant cards
@@ -793,7 +793,7 @@ rsvg-convert -w 1200 -h 630 hero-banner.svg > hero-banner.png
 ```
 Aether (Android):    https://github.com/earnerbaymalay/aether
 Aether (Apple):      https://github.com/earnerbaymalay/aether-apple
-Cypherchat:          https://github.com/earnerbaymalay/e2eecc
+Cypherchat:          https://github.com/earnerbaymalay/cyph3rchat
 Gloam:               https://github.com/earnerbaymalay/Gloam
 Sideload Hub:        https://earnerbaymalay.github.io/sideload/
 Sideload Repo:       https://github.com/earnerbaymalay/sideload
@@ -839,7 +839,7 @@ Use these updated feature counts and names in ALL social posts:
 | Aether (Android) | https://github.com/earnerbaymalay/aether | 26.04.2 |
 | Aether (Apple) | https://github.com/earnerbaymalay/aether-apple | 26.04 |
 | Aether (Desktop) | https://github.com/earnerbaymalay/aether-desktop | In Progress |
-| Cypherchat/E2EECC | https://github.com/earnerbaymalay/e2eecc | Alpha |
+| Cypherchat/E2EECC | https://github.com/earnerbaymalay/cyph3rchat | Alpha |
 | Gloam | https://github.com/earnerbaymalay/Gloam | 2.0 |
 | Edge Sentinel | https://github.com/earnerbaymalay/edge-sentinel | Consolidated |
 | Sideload Hub | https://earnerbaymalay.github.io/sideload/ | Active |
