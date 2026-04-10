@@ -44,30 +44,103 @@ prompt() {
 }
 
 # ============================================================
-# 1. WELCOME
+# 1. WELCOME — EXISTING INSTALL DETECTION
 # ============================================================
 header
-echo "Welcome to the Aether Ecosystem."
-echo "This installer sets up a local-first AI neural interface"
-echo "that runs entirely on-device. No cloud. No tracking."
-echo ""
 
-if ! prompt "Begin installation?"; then
-    echo "Installation cancelled."
-    exit 0
+# Detect existing Aether install
+AETHER_INSTALLED=false
+LLAMA_INSTALLED=false
+SHORTCUT_EXISTS=false
+INSTALL_TYPE=""
+
+if [ -d "$DIR" ] && [ -f "$DIR/aether.sh" ]; then
+    AETHER_INSTALLED=true
+    # Read existing version
+    if [ -f "$DIR/VERSION" ]; then
+        OLD_VER=$(cat "$DIR/VERSION" 2>/dev/null || echo "unknown")
+    else
+        OLD_VER="pre-26.04"
+    fi
+fi
+[ -f "$HOME/llama.cpp/build/bin/llama-cli" ] && LLAMA_INSTALLED=true
+[ -f "$PREFIX/bin/ai" ] && SHORTCUT_EXISTS=true
+
+if [ "$AETHER_INSTALLED" = true ]; then
+    echo ""
+    echo "  An existing Aether installation was found (v$OLD_VER)."
+    echo "  llama.cpp: $(if $LLAMA_INSTALLED; then echo '✅'; else echo '❌'; fi)    Shortcut: $(if $SHORTCUT_EXISTS; then echo '✅'; else echo '❌'; fi)"
+    echo ""
+    echo "  What would you like to do?"
+    echo ""
+    if $HAS_GUM; then
+        INSTALL_TYPE=$(gum choose "Update (refresh scripts & config)" "Reinstall (full clean install)" "Quick fix (repair only)" "Exit")
+    else
+        echo "  1) Update (refresh scripts & config)"
+        echo "  2) Reinstall (full clean install)"
+        echo "  3) Quick fix (repair only)"
+        echo "  4) Exit"
+        read -p "  Choose [1-4]: " choice
+        case "$choice" in
+            1) INSTALL_TYPE="Update (refresh scripts & config)" ;;
+            2) INSTALL_TYPE="Reinstall (full clean install)" ;;
+            3) INSTALL_TYPE="Quick fix (repair only)" ;;
+            *) exit 0 ;;
+        esac
+    fi
+
+    case "$INSTALL_TYPE" in
+        *"Update"*)
+            info "Refreshing Aether installation..."
+            # Only refresh scripts, shortcuts, and config — skip heavy deps
+            SKIP_HEAVY=true
+            ;;
+        *"Reinstall"*)
+            info "Full reinstall — all components will be rebuilt..."
+            SKIP_HEAVY=false
+            ;;
+        *"Quick fix"*)
+            info "Running repairs only..."
+            SKIP_HEAVY=true
+            # Fix shortcut
+            cat << 'SHORTCUT' > $PREFIX/bin/ai
+#!/usr/bin/env bash
+cd ~/aether && ./aether.sh
+SHORTCUT
+            chmod +x $PREFIX/bin/ai
+            info "Shortcut repaired"
+            echo ""
+            echo "Done. Type 'ai' to launch Aether."
+            exit 0
+            ;;
+        *) exit 0 ;;
+    esac
+else
+    echo "Welcome to the Aether Ecosystem."
+    echo "This installer sets up a local-first AI neural interface"
+    echo "that runs entirely on-device. No cloud. No tracking."
+    echo ""
+    SKIP_HEAVY=false
+    if ! prompt "Begin installation?"; then
+        echo "Installation cancelled."
+        exit 0
+    fi
 fi
 
 # ============================================================
-# 2. SYSTEM UPDATE
+# 2. SYSTEM UPDATE (skip on update/repair)
 # ============================================================
+if [ "$SKIP_HEAVY" != "true" ]; then
 header
 spin "Initializing package manager"
 echo "[*] Synchronizing repositories..."
 pkg update -y 2>&1 | tail -3
+fi
 
 # ============================================================
-# 3. CORE DEPENDENCIES
+# 3. CORE DEPENDENCIES (skip on update/repair)
 # ============================================================
+if [ "$SKIP_HEAVY" != "true" ]; then
 header
 CORE_DEPS="git build-essential cmake ninja termux-api figlet ncurses-utils wget curl python"
 echo "[*] Installing core dependencies..."
@@ -86,6 +159,10 @@ if ! command -v gum &>/dev/null; then
         warn "Using text-based UI (gum not installed)"
     fi
 fi
+else
+header
+info "Skipping core dependencies (already installed)"
+fi
 
 # ============================================================
 # 4. DIRECTORY STRUCTURE
@@ -99,8 +176,9 @@ mkdir -p "$HOME/.aether/sessions" "$HOME/.aether/config" "$HOME/.aether/backups"
 info "Directory structure created"
 
 # ============================================================
-# 5. LLAMA.CPP ENGINE
+# 5. LLAMA.CPP ENGINE (skip on update/repair)
 # ============================================================
+if [ "$SKIP_HEAVY" != "true" ]; then
 header
 if [ ! -f "$HOME/llama.cpp/build/bin/llama-cli" ]; then
     echo "[*] Building llama.cpp inference engine..."
@@ -116,7 +194,7 @@ if [ ! -f "$HOME/llama.cpp/build/bin/llama-cli" ]; then
     info "llama.cpp engine built successfully"
 else
     info "llama.cpp engine already exists"
-    
+
     # Offer to update
     if prompt "Update llama.cpp to latest version?"; then
         cd ~/llama.cpp
@@ -125,6 +203,14 @@ else
         cd "$DIR"
         info "llama.cpp updated"
     fi
+fi
+else
+header
+if [ -f "$HOME/llama.cpp/build/bin/llama-cli" ]; then
+    info "llama.cpp engine is ready ($(~/llama.cpp/build/bin/llama-cli --version 2>&1 | head -1 || echo 'ok'))"
+else
+    warn "llama.cpp not found — run a full install to build it"
+fi
 fi
 
 # ============================================================
