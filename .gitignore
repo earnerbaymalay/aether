@@ -57,3 +57,6 @@ multi-ai-terminal-setup/
 nexus11-optimizer.py/
 ollama-source/
 Documents-Link/
+*.pyo
+*.tmp
+*/.git
