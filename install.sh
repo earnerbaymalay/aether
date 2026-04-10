@@ -4,6 +4,11 @@
 
 set -e
 
+if [ -z "$PREFIX" ]; then
+    echo "[ERROR] \$PREFIX is not set. This script must be run inside Termux."
+    exit 1
+fi
+
 # --- Configuration ---
 ACCENT="#00ff9d"; SUC="#50fa7b"; ERR="#ff5555"; DIM="#888"
 DIR="$HOME/aether"
@@ -233,8 +238,13 @@ if prompt "Download the lightweight Llama-3.2-3B model now? (~2GB)"; then
     
     if [ ! -f "$MODEL_FILE" ]; then
         echo "[*] Downloading Llama-3.2-3B..."
-        wget -O "$MODEL_FILE" "https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q4_K_M.gguf" 2>&1 | tail -5
-        info "Model downloaded to $MODEL_FILE"
+        MODEL_URL="https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q4_K_M.gguf"
+        if ! wget -O "$MODEL_FILE" "$MODEL_URL" 2>&1 | tail -5; then
+            warn "Model download failed. You can retry later with Aether's model manager."
+            rm -f "$MODEL_FILE"
+        else
+            info "Model downloaded to $MODEL_FILE"
+        fi
     else
         info "Model already exists"
     fi
@@ -298,7 +308,11 @@ fi
 # Install enabled extras
 if [ -n "$EXTRAS_ENABLED" ]; then
     for extra in $EXTRAS_ENABLED; do
-        bash "$DIR/scripts/extras_installer.sh" enable "$extra" 2>/dev/null
+        if [ -f "$DIR/scripts/extras_installer.sh" ]; then
+            bash "$DIR/scripts/extras_installer.sh" enable "$extra" 2>/dev/null || true
+        else
+            warn "extras_installer.sh not found — skipping extra: $extra"
+        fi
     done
 fi
 
@@ -322,10 +336,18 @@ header
 echo "[*] Setting up configuration..."
 
 # Create default config
-bash "$DIR/settings/settings.sh" ui 2>/dev/null || echo "  (Settings available at: ~/aether/settings/settings.sh)"
+if [ -f "$DIR/settings/settings.sh" ]; then
+    bash "$DIR/settings/settings.sh" ui 2>/dev/null || echo "  (Settings available at: ~/aether/settings/settings.sh)"
+else
+    warn "settings.sh not found — skipping UI configuration"
+fi
 
 # Initialize extras config
-bash "$DIR/scripts/extras_installer.sh" status 2>/dev/null || true
+if [ -f "$DIR/scripts/extras_installer.sh" ]; then
+    bash "$DIR/scripts/extras_installer.sh" status 2>/dev/null || true
+else
+    warn "extras_installer.sh not found — skipping status check"
+fi
 
 info "Configuration initialized"
 
@@ -355,7 +377,11 @@ echo "  ~/aether/USAGE.md           Usage examples"
 echo ""
 
 if prompt "Run hardware benchmark now?"; then
-    bash "$DIR/bench.sh"
+    if [ -f "$DIR/bench.sh" ]; then
+        bash "$DIR/bench.sh"
+    else
+        warn "bench.sh not found — skipping benchmark"
+    fi
 fi
 
 echo ""
