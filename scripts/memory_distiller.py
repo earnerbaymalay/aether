@@ -89,18 +89,19 @@ def run_distillation():
     fragments = []
     fragment_files = []
     
-    # Existing fragments are memory_*.md in VAULT_DIR
-    for f in VAULT_DIR.glob("memory_*.md"):
-        try:
-            content = f.read_text()
-            # Extract content after frontmatter or header
-            lines = content.split('\n')
-            data = "\n".join([l for l in lines if not l.startswith('#') and not l.startswith('---') and l.strip()])
-            if data.strip():
-                fragments.append(data.strip())
-                fragment_files.append(f)
-        except:
-            continue
+    # Existing fragments are memory_*.md and shadow_*.md in VAULT_DIR
+    for pattern in ["memory_*.md", "shadow_*.md", "auto_*.md"]:
+        for f in VAULT_DIR.glob(pattern):
+            try:
+                content = f.read_text()
+                # Extract content after frontmatter or header
+                lines = content.split('\n')
+                data = "\n".join([l for l in lines if not l.startswith('#') and not l.startswith('---') and l.strip()])
+                if data.strip():
+                    fragments.append(data.strip())
+                    fragment_files.append(f)
+            except:
+                continue
 
     if not fragments:
         print("✓ No memory fragments found to distill.")
